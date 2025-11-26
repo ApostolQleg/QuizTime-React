@@ -2,6 +2,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: "Pixelify Sans", sans-serif;
 }
 
 #root {
@@ -13,13 +14,14 @@
 html {
 	--background-color: rgb(80, 12, 63);
 	--primary-color: rgb(146, 6, 146);
+	--secondary-color: rgb(233, 14, 178);
 	--text-color: rgb(27, 0, 25);
 }
 
 body {
 	display: flex;
 	flex-direction: column;
-	font-family: "Pixelify Sans", sans-serif;
+	
 	background-color: var(--background-color);
 	color: var(--text-color);
 	min-height: 100vh;

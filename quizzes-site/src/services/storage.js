@@ -1,4 +1,4 @@
-import { defaultTests } from "./default-tests.js";
+import { defaultQuizzes } from "./default-quizzes.js";
 
 const STORAGE_KEY = "storage";
 const SELECTED_KEY = "selected";
@@ -6,12 +6,12 @@ const SELECTED_KEY = "selected";
 // Initialize storage if not present
 export function initStorage() {
 	if (!localStorage.getItem(STORAGE_KEY)) {
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTests));
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultQuizzes));
 	}
 }
 
-// Getting all tests (always fresh data)
-export function getTests() {
+// Getting all quizzes (always fresh data)
+export function getQuizzes() {
 	initStorage();
 	const storage = localStorage.getItem(STORAGE_KEY);
 	return storage ? JSON.parse(storage) : [];

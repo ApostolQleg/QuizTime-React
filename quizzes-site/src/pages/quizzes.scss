@@ -1,0 +1,28 @@
+@import "../styles.scss";
+
+.quiz-button {
+	margin: 10px;
+	background-color: var(--secondary-color);
+	aspect-ratio: 1/1;
+	border-radius: 20px;
+	max-height: 400px;
+	width: 20vw;
+	font-size: 20px;
+	image-rendering: pixelated;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+
+.quiz-button img {
+	width: 40%;
+	height: 40%;
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+}
