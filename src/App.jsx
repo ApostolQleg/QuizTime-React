@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header.jsx";
-import Footer from "./components/Footer/Footer.jsx";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 import Quizzes from "./pages/Quizzes.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Result from "./pages/Result.jsx";
@@ -16,7 +16,7 @@ export default function App() {
 			<Header />
 			<Routes>
 				<Route exact path="/" element={<Quizzes />} />
-				<Route path="/quiz" element={<Quiz />} />
+				<Route path="/quiz/:quizId" element={<Quiz />} />
 				<Route path="/result" element={<Result />} />
 				<Route path="/results" element={<Results />} />
 				<Route path="/create" element={<Create />} />

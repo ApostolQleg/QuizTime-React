@@ -5,8 +5,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з англійської мови (A1)",
 			description: "Перевір свої базові знання англійських слів і граматики.",
+			id: "0",
 			questions: [
 				{
+					id: 0,
 					text: "Як сказати 'яблуко' англійською?",
 					options: [
 						{ text: "pear", id: 0, isCorrect: false },
@@ -16,6 +18,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Оберіть правильне дієслово: 'They ___ from Ukraine.'",
 					options: [
 						{ text: "is", id: 0, isCorrect: false },
@@ -30,8 +33,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з англійської мови (A2)",
 			description: "Перевір свої знання часів та структури речень.",
+			id: "1",
 			questions: [
 				{
+					id: 0,
 					text: "Яке слово означає 'подорож'?",
 					options: [
 						{ text: "Journey", id: 0, isCorrect: true },
@@ -41,6 +46,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Оберіть минулу форму дієслова 'go':",
 					options: [
 						{ text: "goed", id: 0, isCorrect: false },
@@ -50,6 +56,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Як сказати 'веселий' або 'радісний'?",
 					options: [
 						{ text: "sad", id: 0, isCorrect: false },
@@ -64,8 +71,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з англійської мови (B1)",
 			description: "Перевір свої знання Present Perfect та умовних речень.",
+			id: "2",
 			questions: [
 				{
+					id: 0,
 					text: "Оберіть правильну форму: 'I ___ (live) in this city for ten years.'",
 					options: [
 						{ text: "lived", id: 0, isCorrect: false },
@@ -75,6 +84,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Доповніть речення: 'If I were rich, I ___ a mansion.'",
 					options: [
 						{ text: "will buy", id: 0, isCorrect: false },
@@ -88,6 +98,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Що означає 'reliable'?",
 					options: [
 						{ text: "швидкий", id: 0, isCorrect: false },
@@ -102,8 +113,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест: Історія України (Базовий)",
 			description: "Перевірте знання ключових подій української історії.",
+			id: "3",
 			questions: [
 				{
+					id: 0,
 					text: "В якому році було проголошено незалежність України?",
 					options: [
 						{ text: "1989", id: 0, isCorrect: false },
@@ -113,6 +126,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Хто був автором слів гімну України?",
 					options: [
 						{
@@ -138,6 +152,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Коли відбулася Помаранчева революція?",
 					options: [
 						{ text: "1991", id: 0, isCorrect: false },
@@ -152,8 +167,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Математики (Алгебра)",
 			description: "Перевірка базових знань з алгебри.",
+			id: "4",
 			questions: [
 				{
+					id: 0,
 					text: "Який результат виразу: 5 * (4 + 2) - 10?",
 					options: [
 						{ text: "20", id: 0, isCorrect: true },
@@ -163,6 +180,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Чому дорівнює $\\sqrt{81}$?",
 					options: [
 						{ text: "7", id: 0, isCorrect: false },
@@ -172,6 +190,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Розв'яжіть рівняння: 2x + 5 = 15",
 					options: [
 						{ text: "x = 10", id: 0, isCorrect: false },
@@ -186,8 +205,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Географії (Світ)",
 			description: "Перевір свої знання столиць та континентів.",
+			id: "5",
 			questions: [
 				{
+					id: 0,
 					text: "Яка столиця Канади?",
 					options: [
 						{ text: "Торонто", id: 0, isCorrect: false },
@@ -197,6 +218,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Який найменший континент?",
 					options: [
 						{ text: "Європа", id: 0, isCorrect: false },
@@ -210,6 +232,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Яка річка є найдовшою у світі?",
 					options: [
 						{ text: "Ніл", id: 0, isCorrect: false },
@@ -224,8 +247,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з JavaScript (Основи)",
 			description: "Перевірка знань базового синтаксису JavaScript.",
+			id: "6",
 			questions: [
 				{
+					id: 0,
 					text: "Як оголосити константу в JS?",
 					options: [
 						{ text: "var x = 1;", id: 0, isCorrect: false },
@@ -243,6 +268,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Який метод додає елемент в кінець масиву?",
 					options: [
 						{ text: "shift()", id: 0, isCorrect: false },
@@ -252,6 +278,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 2,
 					text: "Який оператор використовується для строгої рівності (за типом і значенням)?",
 					options: [
 						{ text: "==", id: 0, isCorrect: false },
@@ -266,8 +293,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Біології (Клітина)",
 			description: "Основні знання про будову клітини.",
+			id: "7",
 			questions: [
 				{
+					id: 0,
 					text: "Який органел відповідає за фотосинтез?",
 					options: [
 						{
@@ -281,6 +310,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Що називають 'енергетичною станцією' клітини?",
 					options: [
 						{ text: "Мітохондрії", id: 0, isCorrect: true },
@@ -299,8 +329,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Української Літератури",
 			description: "Твори та автори класичної української літератури.",
+			id: "8",
 			questions: [
 				{
+					id: 0,
 					text: "Хто є автором поеми 'Катерина'?",
 					options: [
 						{
@@ -326,6 +358,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Хто написав 'Лісову пісню'?",
 					options: [
 						{
@@ -356,8 +389,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Фізики (Механіка)",
 			description: "Базові закони Ньютона та кінематика.",
+			id: "9",
 			questions: [
 				{
+					id: 0,
 					text: "Яка одиниця вимірювання сили в системі СІ?",
 					options: [
 						{ text: "Ватт (W)", id: 0, isCorrect: false },
@@ -371,6 +406,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Формула другого закону Ньютона:",
 					options: [
 						{ text: "F = m * a", id: 0, isCorrect: true },
@@ -385,8 +421,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест: Основи Кулінарії",
 			description: "Базові знання про приготування їжі.",
+			id: "10",
 			questions: [
 				{
+					id: 0,
 					text: "Який інгредієнт є основним у борщі?",
 					options: [
 						{ text: "Капуста", id: 0, isCorrect: false },
@@ -396,6 +434,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Як називається процес приготування їжі на гарячій сковороді з невеликою кількістю жиру?",
 					options: [
 						{ text: "Варіння", id: 0, isCorrect: false },
@@ -410,8 +449,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Мереж (Основи)",
 			description: "Перевірка знань про моделі OSI та протоколи.",
+			id: "11",
 			questions: [
 				{
+					id: 0,
 					text: "Скільки рівнів має модель OSI?",
 					options: [
 						{ text: "5", id: 0, isCorrect: false },
@@ -421,6 +462,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Який протокол відповідає за передачу веб-сторінок?",
 					options: [
 						{ text: "FTP", id: 0, isCorrect: false },
@@ -435,8 +477,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест на Логіку",
 			description: "Перевірка логічного мислення.",
+			id: "12",
 			questions: [
 				{
+					id: 0,
 					text: "Продовжіть послідовність: 2, 4, 8, 16, ___",
 					options: [
 						{ text: "24", id: 0, isCorrect: false },
@@ -446,6 +490,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Якщо всі А є Б, а деякі Б є В, чи обов'язково деякі А є В?",
 					options: [
 						{
@@ -476,8 +521,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Мистецтва",
 			description: "Знання відомих картин та художників.",
+			id: "13",
 			questions: [
 				{
+					id: 0,
 					text: "Хто намалював картину 'Мона Ліза'?",
 					options: [
 						{
@@ -503,6 +550,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "В якому стилі творив Сальвадор Далі?",
 					options: [
 						{
@@ -521,8 +569,10 @@ export const defaultQuizzes = {
 		{
 			title: "Тест з Особистих Фінансів",
 			description: "Базові поняття про гроші та інвестиції.",
+			id: "14",
 			questions: [
 				{
+					id: 0,
 					text: "Що таке 'інфляція'?",
 					options: [
 						{
@@ -548,6 +598,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Що таке 'диверсифікація' у інвестиціях?",
 					options: [
 						{
@@ -584,6 +635,7 @@ export const defaultQuizzes = {
 			answers: [[1], [2]],
 			questions: [
 				{
+					id: 0,
 					text: "Як сказати 'яблуко' англійською?",
 					options: [
 						{ text: "pear", id: 0, isCorrect: false },
@@ -593,6 +645,7 @@ export const defaultQuizzes = {
 					],
 				},
 				{
+					id: 1,
 					text: "Оберіть правильне дієслово: 'They ___ from Ukraine.'",
 					options: [
 						{ text: "is", id: 0, isCorrect: false },
