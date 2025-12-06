@@ -11,6 +11,8 @@
 		cursor: url("./assets/cursor-icon.png") 4 4, auto;
 	}
 	button,
+	label,
+	input[type="radio"],
 	a {
 		cursor: url("./assets/cursor-pointer-icon.png") 2 2, pointer;
 	}

@@ -9,8 +9,8 @@ export default function Description({ quiz, onClose }) {
 					flex flex-col min-h-[30vh] max-h-[80vh] w-[80vw] bg-[rgb(233,14,178)] rounded-2xl p-6 z-30 "
 			>
 				<div className="flex-1 overflow-y-auto">
-					<h2 className="text-2xl font-bold mb-2">{quiz.title}</h2>
-					<p className="mb-4">{quiz.description}</p>
+					<div className="text-2xl font-bold mb-2">{quiz.title}</div>
+					<div className="mb-2">{quiz.description}</div>
 				</div>
 
 				<div className="mt-4 flex justify-between">
