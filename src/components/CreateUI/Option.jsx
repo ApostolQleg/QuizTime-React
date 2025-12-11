@@ -1,15 +1,20 @@
 import Radio from "../UI/Radio.jsx";
 import Input from "./Input.jsx";
+import { useState } from "react";
+
 
 export default function Option({ id, name, text, onDelete }) {
+	const [value, setValue] = useState(text || "");
+
 	return (
 		<>
-			<div id={id} className="flex flex-row gap-2 items-center">
+			<div id={id} className="flex flex-row gap-3 items-center">
 				<Radio id={id} name={name} />
 				<Input
 					placeholder="Enter option text here..."
-					className="border border-gray-300 rounded text-white p-1 m-1 w-1/2"
-					value={text ? text : null}
+					className="border border-gray-300 rounded text-white p-1 w-1/2"
+					value={value}
+					onChange={(e) => setValue(e.target.value)}
 				/>
 				<button
 					type="button"

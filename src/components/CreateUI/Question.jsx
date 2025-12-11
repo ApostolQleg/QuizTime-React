@@ -2,31 +2,42 @@ import { useState } from "react";
 import Input from "./Input.jsx";
 import Option from "./Option.jsx";
 
-export default function Question({ id }) {
-	const [options, setOptions] = useState(["Так", "Ні"]);
+export default function Question({ id, onDelete }) {
+	const [options, setOptions] = useState([
+		{ id: 0, text: "Так" },
+		{ id: 1, text: "Ні" },
+	]);
 
 	const handleAddOption = () => {
-		setOptions([...options, ""]);
+		const newId = options.length ? options[options.length - 1].id + 1 : 0;
+		setOptions([...options, { id: newId, text: "" }]);
 	};
 
-	const handleOptionDelete = (index) => {
-		const newOptions = options.filter((_, i) => i !== index);
-		setOptions(newOptions);
+	const handleOptionDelete = (id) => {
+		setOptions(options.filter((option) => option.id !== id));
 	};
 
 	return (
-		<div className="m-4 p-4 border border-gray-300 rounded flex flex-col gap-3">
-			<Input
-				placeholder="Enter question text here..."
-				className="w-full border border-gray-300 rounded text-white p-2"
-			/>
-			{options.map((option, oIndex) => (
+		<div className="p-4 border border-gray-300 rounded flex flex-col gap-2">
+			<div className="flex flex-row justify-between items-center">
+				<Input
+					placeholder="Enter question text here..."
+					className="border border-gray-300 rounded text-white p-2 m-2 w-3/4"
+				/>
+				<button
+					className="bg-pink-600 text-black rounded-2xl transition hover:bg-pink-500 flex items-center justify-center px-4 py-2"
+					onClick={onDelete}
+				>
+					Delete
+				</button>
+			</div>
+			{options.map((option) => (
 				<Option
-					id={oIndex}
+					key={option.id}
+					id={option.id}
 					name={id}
-					key={oIndex}
-					text={option}
-					onDelete={() => handleOptionDelete(oIndex)}
+					text={option.text}
+					onDelete={() => handleOptionDelete(option.id)}
 				/>
 			))}
 			<button

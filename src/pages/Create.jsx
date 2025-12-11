@@ -1,24 +1,49 @@
 import { containerStyle } from "./Quizzes";
-import { useNavigate } from "react-router";
-import { setStorage } from "../services/storage.js";
+// import { useNavigate } from "react-router";
+// import { setStorage } from "../services/storage.js";
 import Question from "../components/CreateUI/Question";
 import Input from "../components/CreateUI/Input.jsx";
 import Textarea from "../components/CreateUI/Textarea.jsx";
+import { useState } from "react";
 
 export default function Create() {
-	const navigate = useNavigate();
+	const [questions, setQuestions] = useState(["0"]);
+
+	const handleAddQuestions = () => {
+		setQuestions([...questions, ""]);
+	};
+
+	const handleDeleteQuestion = (id) => {
+		setQuestions(questions.filter((question) => question.id !== id));
+	};
+
 	return (
 		<>
-			<div className={containerStyle}>
+			<div className={containerStyle + " flex flex-col gap-4"}>
 				<Input
 					placeholder="Enter quiz title here..."
-					className="w-full border border-gray-300 rounded text-white p-2 mb-4 text-[20px]"	
+					className="w-full border border-gray-300 rounded text-white p-2 text-[20px]"
 				/>
 				<Textarea
 					placeholder="Enter quiz description here..."
-					className="w-full border border-gray-300 rounded text-white p-2 mb-4 h-10 resize-handle	"
+					className="w-full border border-gray-300 rounded text-white p-2 h-10 resize-handle	"
 				/>
-				<Question id={0}></Question>
+				<button
+					type="button"
+					className="bg-pink-600 text-black rounded-2xl transition hover:bg-pink-500 flex items-center justify-center px-4 py-2"
+					onClick={handleAddQuestions}
+				>
+					Add Question
+				</button>
+				{questions.map((_, qIndex) => (
+					<Question
+						id={qIndex}
+						key={qIndex}
+						onDelete={() => {
+							handleDeleteQuestion(qIndex);
+						}}
+					/>
+				))}
 			</div>
 		</>
 	);
