@@ -18,7 +18,7 @@ export default function Question({ id, onDelete }) {
 	};
 
 	return (
-		<div className="p-4 border border-gray-300 rounded flex flex-col gap-2">
+		<div className="p-4 border border-gray-300 rounded flex flex-col gap-2" id={id}>
 			<div className="flex flex-row justify-between items-center">
 				<Input
 					placeholder="Enter question text here..."
