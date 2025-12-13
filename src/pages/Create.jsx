@@ -1,9 +1,9 @@
-import { containerStyle } from "./Quizzes";
-import Question from "../components/CreateUI/Question";
-import Input from "../components/CreateUI/Input.jsx";
-import Button from "../components/UI/Button.jsx";
-import Textarea from "../components/CreateUI/Textarea.jsx";
 import { useState } from "react";
+import Question from "../components/Create/Question.jsx";
+import Input from "../components/UI/Input.jsx";
+import Button from "../components/UI/Button.jsx";
+import Textarea from "../components/UI/Textarea.jsx";
+import Container from "../components/UI/Container.jsx";
 
 export default function Create() {
 	const [questions, setQuestions] = useState([{ id: 0 }]);
@@ -18,7 +18,7 @@ export default function Create() {
 	};
 
 	return (
-		<div className={containerStyle + " flex flex-col gap-4"}>
+		<Container className={"flex flex-col gap-4"}>
 			<Input placeholder="Enter quiz title here..." className="text-[20px]" />
 			<Textarea placeholder="Enter quiz description here..." className="h-10 resize-handle" />
 			<Button onClick={handleAddQuestions}>Add Question</Button>
@@ -29,6 +29,6 @@ export default function Create() {
 					onDelete={() => handleDeleteQuestion(question.id)}
 				/>
 			))}
-		</div>
+		</Container>
 	);
 }

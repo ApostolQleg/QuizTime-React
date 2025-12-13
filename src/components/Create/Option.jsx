@@ -1,6 +1,6 @@
 import Radio from "../UI/Radio.jsx";
 import Button from "../UI/Button.jsx";
-import Input from "./Input.jsx";
+import Input from "../UI/Input.jsx";
 import { useState } from "react";
 
 export default function Option({ id, name, text, onDelete }) {

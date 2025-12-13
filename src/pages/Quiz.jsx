@@ -1,8 +1,8 @@
-import Question from "../components/QuizUI/Question.jsx";
-import Button from "../components/UI/Button.jsx";
 import { useParams, useNavigate } from "react-router";
 import { getStorage, setStorage } from "../services/storage.js";
-import { containerStyle } from "./Quizzes.jsx";
+import Question from "../components/Quiz/Question.jsx";
+import Button from "../components/UI/Button.jsx";
+import Container from "../components/UI/Container.jsx";
 
 export default function Quiz() {
 	const params = useParams();
@@ -10,7 +10,7 @@ export default function Quiz() {
 	const quiz = getStorage().quizzes.find((quiz) => quiz.id === params.quizId);
 	return (
 		<>
-			<div className={containerStyle + " flex flex-col items-center"}>
+			<Container className={"flex flex-col items-center"}>
 				<div className="text-white pb-5 text-[18px] text-center">{quiz.title}</div>
 				{quiz.questions.map((question, index) => (
 					<Question
@@ -78,7 +78,7 @@ export default function Quiz() {
 				>
 					Submit
 				</Button>
-			</div>
+			</Container>
 		</>
 	);
 }

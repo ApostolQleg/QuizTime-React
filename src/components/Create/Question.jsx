@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Input from "./Input.jsx";
 import Option from "./Option.jsx";
+import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
 
 export default function Question({ id, onDelete }) {

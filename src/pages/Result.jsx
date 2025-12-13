@@ -1,11 +1,11 @@
-import { containerStyle } from "./Quizzes";
+import Container from "../components/UI/Container.jsx";
 
 export default function Result() {
 	return (
 		<>
-			<div className={containerStyle}>
+			<Container>
 				<div>Result</div>
-			</div>
+			</Container>
 		</>
 	);
 }

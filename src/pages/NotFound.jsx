@@ -1,11 +1,11 @@
-import { containerStyle } from "./Quizzes";
+import Container from "../components/UI/Container.jsx";
 
 export default function NotFound() {
 	return (
 		<>
-			<div className={containerStyle}>
+			<Container>
 				<h1>404 Not Found</h1>
-			</div>
+			</Container>
 		</>
 	);
 }
