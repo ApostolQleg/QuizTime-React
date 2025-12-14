@@ -1,7 +1,22 @@
-export default function Radio({ label, className = "", id, name, ...props }) {
+export default function Radio({
+	label,
+	className = "",
+	id,
+	name,
+	checked = false,
+	onChange = () => {},
+	...props
+}) {
 	return (
 		<div className={className}>
-			<input type="radio" id={id} name={name} {...props} />
+			<input
+				type="radio"
+				id={id}
+				name={name}
+				checked={checked}
+				onChange={onChange}
+				{...props}
+			/>
 			<label htmlFor={id}>{label}</label>
 		</div>
 	);

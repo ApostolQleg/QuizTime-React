@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { setStorage } from "../services/storage.js";
 import Question from "../components/Create/Question.jsx";
 import Input from "../components/UI/Input.jsx";
 import Button from "../components/UI/Button.jsx";
@@ -13,8 +14,8 @@ export default function Create() {
 			id: 0,
 			text: "",
 			options: [
-				{ id: 0, text: "Так" },
-				{ id: 1, text: "Ні" },
+				{ id: 0, text: "Так", isCorrect: false },
+				{ id: 1, text: "Ні", isCorrect: false },
 			],
 		},
 	]);
@@ -32,8 +33,8 @@ export default function Create() {
 				id: newId,
 				text: "",
 				options: [
-					{ id: 0, text: "Так" },
-					{ id: 1, text: "Ні" },
+					{ id: 0, text: "Так", isCorrect: false },
+					{ id: 1, text: "Ні", isCorrect: false },
 				],
 			},
 		]);
@@ -53,39 +54,62 @@ export default function Create() {
 
 	const handleOptionAdd = (questionId) => {
 		setQuestions(
-			questions.map((q) => {
-				if (q.id === questionId) {
-					const newOptionId = q.options.length
-						? q.options[q.options.length - 1].id + 1
+			questions.map((question) => {
+				if (question.id === questionId) {
+					const newOptionId = question.options.length
+						? question.options[question.options.length - 1].id + 1
 						: 0;
-					return { ...q, options: [...q.options, { id: newOptionId, text: "" }] };
+					return {
+						...question,
+						options: [
+							...question.options,
+							{ id: newOptionId, text: "", isCorrect: false },
+						],
+					};
 				}
-				return q;
+				return question;
 			})
 		);
 	};
 
 	const handleOptionDelete = (questionId, optionId) => {
 		setQuestions(
-			questions.map((q) => {
-				if (q.id === questionId) {
-					return { ...q, options: q.options.filter((o) => o.id !== optionId) };
+			questions.map((question) => {
+				if (question.id === questionId) {
+					return {
+						...question,
+						options: question.options.filter((option) => option.id !== optionId),
+					};
 				}
-				return q;
+				return question;
 			})
 		);
 	};
 
 	const handleOptionUpdate = (questionId, optionId, newValue) => {
 		setQuestions(
-			questions.map((q) => {
-				if (q.id === questionId) {
-					const updatedOptions = q.options.map((o) =>
-						o.id === optionId ? { ...o, text: newValue } : o
+			questions.map((question) => {
+				if (question.id === questionId) {
+					const updatedOptions = question.options.map((option) =>
+						option.id === optionId ? { ...option, text: newValue } : option
 					);
-					return { ...q, options: updatedOptions };
+					return { ...question, options: updatedOptions };
 				}
-				return q;
+				return question;
+			})
+		);
+	};
+
+	const handleCorrectOption = (questionId, optionId) => {
+		setQuestions(
+			questions.map((q) => {
+				if (q.id !== questionId) return q;
+				const updatedOptions = q.options.map((opt) => ({
+					...opt,
+					isCorrect: opt.id === optionId,
+				}));
+
+				return { ...q, options: updatedOptions };
 			})
 		);
 	};
@@ -94,12 +118,16 @@ export default function Create() {
 		const newErrors = {
 			title: title.trim() === "",
 			description: description.trim() === "",
-			questions: questions.map((question) => ({
-				hasError: question.text.trim() === "",
-				options: question.options.map((option) => ({
-					hasError: option.text.trim() === "",
-				})),
-			})),
+			questions: questions.reduce((acc, question) => {
+				acc[question.id] = {
+					hasError: question.text.trim() === "",
+					options: question.options.reduce((optAcc, option) => {
+						optAcc[option.id] = { hasError: option.text.trim() === "" };
+						return optAcc;
+					}, {}),
+				};
+				return acc;
+			}, {}),
 		};
 
 		setErrors(newErrors);
@@ -107,14 +135,17 @@ export default function Create() {
 		const hasErrors =
 			newErrors.title ||
 			newErrors.description ||
-			newErrors.questions.some(
+			Object.values(newErrors.questions).some(
 				(question) =>
-					question.hasError || question.options.some((option) => option.hasError)
+					question.hasError ||
+					Object.values(question.options).some((option) => option.hasError)
 			);
 
-		if (hasErrors) return console.log("Errors:", JSON.stringify(newErrors));
+		if (hasErrors) return;
 
-		console.log("Quiz saved");
+		const quiz = { title, description, id: Date.now().toString(), questions };
+
+		setStorage(quiz, "quizzes");
 	};
 
 	return (
@@ -136,7 +167,8 @@ export default function Create() {
 				<Question
 					id={question.id}
 					key={question.id}
-					hasError={errors.questions[question.id]}
+					text={question.text}
+					errors={errors.questions?.[question.id] || {}}
 					options={question.options}
 					onDelete={() => handleQuestionDelete(question.id)}
 					onChange={(e) => handleQuestionUpdate(question.id, e.target.value)}
@@ -145,9 +177,10 @@ export default function Create() {
 					onOptionChange={(optionId, val) =>
 						handleOptionUpdate(question.id, optionId, val)
 					}
+					onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
 				/>
 			))}
-			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz}>
+			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz} to="/">
 				Save Quiz
 			</Button>
 		</Container>

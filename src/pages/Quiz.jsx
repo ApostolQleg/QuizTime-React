@@ -7,7 +7,12 @@ import Container from "../components/UI/Container.jsx";
 export default function Quiz() {
 	const params = useParams();
 	const navigate = useNavigate();
-	const quiz = getStorage().quizzes.find((quiz) => quiz.id === params.quizId);
+	const quiz = getStorage().quizzes.find((quiz) => quiz.id.toString() === params.quizId);
+
+	if (!quiz) {
+		return navigate("/not-found");
+	}
+
 	return (
 		<>
 			<Container className={"flex flex-col items-center"}>
