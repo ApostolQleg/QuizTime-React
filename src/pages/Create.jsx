@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { setStorage } from "../services/storage.js";
 import Question from "../components/Create/Question.jsx";
 import Input from "../components/UI/Input.jsx";
@@ -7,6 +8,8 @@ import Textarea from "../components/UI/Textarea.jsx";
 import Container from "../components/UI/Container.jsx";
 
 export default function Create() {
+	const navigate = useNavigate();
+
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [questions, setQuestions] = useState([
@@ -146,6 +149,8 @@ export default function Create() {
 		const quiz = { title, description, id: Date.now().toString(), questions };
 
 		setStorage(quiz, "quizzes");
+
+		navigate("/");
 	};
 
 	return (
@@ -180,7 +185,7 @@ export default function Create() {
 					onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
 				/>
 			))}
-			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz} to="/">
+			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz}>
 				Save Quiz
 			</Button>
 		</Container>
