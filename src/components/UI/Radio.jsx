@@ -3,7 +3,7 @@ export default function Radio({
 	className = "",
 	id,
 	name,
-	checked = false,
+	checked = null,
 	onChange = () => {},
 	...props
 }) {
