@@ -6,21 +6,35 @@ import Textarea from "../components/UI/Textarea.jsx";
 import Container from "../components/UI/Container.jsx";
 
 export default function Create() {
-	const [questions, setQuestions] = useState([{ id: 0 }]);
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState("");
+	const [questions, setQuestions] = useState([{ id: 0, text: "", options: [] }]);
 
 	const handleAddQuestions = () => {
 		const newId = questions.length ? questions[questions.length - 1].id + 1 : 0;
-		setQuestions([...questions, { id: newId }]);
+		setQuestions([...questions, { id: newId, text: "", options: [] }]);
 	};
 
 	const handleDeleteQuestion = (id) => {
 		setQuestions(questions.filter((question) => question.id !== id));
 	};
 
+	const handleSaveQuiz = () => {};
+
 	return (
-		<Container className={"flex flex-col gap-4"}>
-			<Input placeholder="Enter quiz title here..." className="text-[20px]" />
-			<Textarea placeholder="Enter quiz description here..." className="h-10 resize-handle" />
+		<Container className={"flex flex-col gap-4 flex-1"}>
+			<Input
+				placeholder="Enter quiz title here..."
+				className="text-[20px]"
+				value={title}
+				onChange={(e) => setTitle(e.target.value)}
+			/>
+			<Textarea
+				placeholder="Enter quiz description here..."
+				className="h-10 resize-handle"
+				value={description}
+				onChange={(e) => setDescription(e.target.value)}
+			/>
 			<Button onClick={handleAddQuestions}>Add Question</Button>
 			{questions.map((question) => (
 				<Question
@@ -29,6 +43,9 @@ export default function Create() {
 					onDelete={() => handleDeleteQuestion(question.id)}
 				/>
 			))}
+			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz} to="/">
+				Save Quiz
+			</Button>
 		</Container>
 	);
 }

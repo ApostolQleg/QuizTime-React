@@ -19,7 +19,7 @@ export default function Question({ id, onDelete }) {
 	};
 
 	return (
-		<div className="p-4 border border-gray-300 rounded flex flex-col gap-2" id={id}>
+		<div className="w-[95%] p-4 border border-gray-300 rounded-2xl flex flex-col gap-2" id={id}>
 			<div className="flex flex-row justify-between items-center">
 				<Input placeholder="Enter question text here..." className=" m-2 w-3/4" />
 				<Button onClick={onDelete}>Delete</Button>

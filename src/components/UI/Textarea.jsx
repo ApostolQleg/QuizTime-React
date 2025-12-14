@@ -1,4 +1,4 @@
-export default function Textarea({ placeholder, className = "", ...props }) {
+export default function Textarea({ placeholder, className = "", onChange, ...props }) {
 	return (
 		<>
 			<textarea
@@ -7,6 +7,7 @@ export default function Textarea({ placeholder, className = "", ...props }) {
 				{...props}
 				onChange={(area) => {
 					area.target.style.height = area.target.scrollHeight + "px";
+					onChange(area);
 				}}
 			/>
 		</>
