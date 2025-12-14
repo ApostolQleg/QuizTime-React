@@ -10,13 +10,13 @@ const quizButtonStyle =
 
 export default function Quizzes() {
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
-
+``
 	const quizzes = getStorage().quizzes;
 
 	return (
 		<Container
 			className={
-				"grid gap-[2vw] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+				"grid gap-[2vw] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-center justify-items-center"
 			}
 		>
 			<Link to="/create" id={`quiz-add`} className={quizButtonStyle}>
