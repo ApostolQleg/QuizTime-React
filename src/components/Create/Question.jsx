@@ -9,10 +9,10 @@ export default function Question({
 	options,
 	onDelete,
 	onChange,
+	onCorrect,
 	onOptionAdd,
 	onOptionDelete,
 	onOptionChange,
-	onCorrect,
 }) {
 	return (
 		<div className="w-[95%] p-4 rounded-2xl flex flex-col gap-2 border border-gray-300" id={id}>
@@ -28,14 +28,14 @@ export default function Question({
 
 			{options.map((option) => (
 				<Option
-					key={option.id}
 					id={option.id}
+					key={option.id}
 					name={id}
 					text={option.text}
-					isCorrect={option.isCorrect}
 					errors={errors.options?.[option.id] || {}}
 					onDelete={() => onOptionDelete(option.id)}
 					onChange={(e) => onOptionChange(option.id, e.target.value)}
+					isCorrect={option.isCorrect}
 					onCorrect={() => onCorrect(option.id)}
 				/>
 			))}

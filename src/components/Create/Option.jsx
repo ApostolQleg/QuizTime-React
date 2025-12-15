@@ -6,10 +6,10 @@ export default function Option({
 	id,
 	name,
 	text,
-	isCorrect,
 	errors,
 	onDelete,
 	onChange,
+	isCorrect,
 	onCorrect,
 }) {
 	return (

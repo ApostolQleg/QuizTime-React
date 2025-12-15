@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router";
 import { getStorage, setStorage } from "../services/storage.js";
+import { useState } from "react";
 import Question from "../components/Quiz/Question.jsx";
 import Button from "../components/UI/Button.jsx";
 import Container from "../components/UI/Container.jsx";
@@ -7,11 +8,67 @@ import Container from "../components/UI/Container.jsx";
 export default function Quiz() {
 	const params = useParams();
 	const navigate = useNavigate();
+	const [answers, setAnswers] = useState([]);
 	const quiz = getStorage().quizzes.find((quiz) => quiz.id.toString() === params.quizId);
+
+	const handleSubmit = () => {
+		let allQuestionsAnswered = true;
+		let summary = 0;
+		const newAnswers = [...answers];
+
+		quiz.questions.forEach((question, qIndex) => {
+			question.options.forEach((_, oIndex) => {
+				const optionInput = document.querySelector(
+					`input[name="${qIndex}"][value="${oIndex}"]`
+				);
+
+				if (optionInput.checked) {
+					newAnswers[qIndex] = newAnswers[qIndex] || [];
+					newAnswers[qIndex].push(oIndex);
+				}
+			});
+
+			const correctOptionIds = question.options
+				.filter((option) => option.isCorrect)
+				.map((option) => option.id);
+
+			const selectedOptionIds = newAnswers[qIndex] || [];
+
+			if (newAnswers[qIndex] === undefined) {
+				console.log("Question not answered:", qIndex);
+				allQuestionsAnswered = false;
+			}
+
+			if (
+				correctOptionIds.length === selectedOptionIds.length &&
+				correctOptionIds.every((id) => selectedOptionIds.includes(id))
+			) {
+				summary++;
+			}
+		});
+
+		setAnswers(newAnswers);
+
+		const result = {
+			timestamp: new Date().toISOString(),
+			title: quiz.title,
+			summary: summary,
+			answers: newAnswers,
+			questions: quiz.questions,
+		};
+
+		setStorage(result, "results");
+
+		if (allQuestionsAnswered) {
+			navigate(`/quiz/${params.quizId}/result`);
+		}
+	};
 
 	if (!quiz) {
 		return navigate("/not-found");
 	}
+
+	const isResultPage = window.location.pathname.endsWith("/result");
 
 	return (
 		<>
@@ -26,63 +83,11 @@ export default function Quiz() {
 						{question.text}
 					</Question>
 				))}
-				<Button
-					onClick={() => {
-						let allQuestionsAnswered = true;
-						// gather answers
-						const answers = [];
-						let summary = 0;
-						quiz.questions.forEach((question, qIndex) => {
-							question.options.forEach((option, oIndex) => {
-								const optionInput = document.querySelector(
-									`input[name="${qIndex}"][value="${oIndex}"]`
-								);
-
-								if (optionInput.checked) {
-									answers[qIndex] = answers[qIndex] || [];
-									answers[qIndex].push(oIndex);
-								}
-							});
-
-							// calculate summary
-							const correctOptionIds = question.options
-								.filter((option) => option.isCorrect)
-								.map((option) => option.id);
-
-							const selectedOptionIds = answers[qIndex] || [];
-
-							if (answers[qIndex] === undefined) {
-								console.log("Question not answered:", qIndex);
-								allQuestionsAnswered = false;
-							}
-
-							if (
-								correctOptionIds.length === selectedOptionIds.length &&
-								correctOptionIds.every((id) => selectedOptionIds.includes(id))
-							) {
-								summary++;
-							}
-						});
-
-						// create result object
-						const result = {
-							timestamp: new Date().toISOString(),
-							title: quiz.title,
-							summary: summary,
-							answers: answers,
-							questions: quiz.questions,
-						};
-
-						// store result
-						setStorage(result, "results");
-
-						if (allQuestionsAnswered) {
-							navigate("/result");
-						}
-					}}
-				>
-					Submit
-				</Button>
+				{!isResultPage ? (
+					<Button onClick={handleSubmit}>Submit</Button>
+				) : (
+					<Button onClick={() => navigate("/")}>Back to Home</Button>
+				)}
 			</Container>
 		</>
 	);

@@ -1,27 +1,23 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import Quizzes from "./pages/Quizzes.jsx";
+import Home from "./pages/Home.jsx";
 import Quiz from "./pages/Quiz.jsx";
-import Result from "./pages/Result.jsx";
-import Results from "./pages/Results.jsx";
-import Create from "./pages/Create.jsx";
-import Manage from "./pages/Manage.jsx";
-import Help from "./pages/Help.jsx";
+import Edit from "./pages/Edit.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
 	return (
-		<div className="min-h-screen bg-[rgb(80,12,63)] text-[rgb(27,0,25)] flex flex-col flex-grow">
+		<div className="min-h-screen bg-[rgb(80,12,63)] text-[rgb(27,0,25)] flex flex-col flex-1">
 			<Header />
 			<Routes>
-				<Route exact path="/" element={<Quizzes />} />
+				<Route exact path="/" element={<Home />} />
+				<Route path="/results" element={<Home />} />
+				<Route path="/help" element={<Home />} />
 				<Route path="/quiz/:quizId" element={<Quiz />} />
-				<Route path="/result" element={<Result />} />
-				<Route path="/results" element={<Results />} />
-				<Route path="/create" element={<Create />} />
-				<Route path="/manage" element={<Manage />} />
-				<Route path="/help" element={<Help />} />
+				<Route path="/quiz/:quizId/result" element={<Quiz />} />
+				<Route path="/create" element={<Edit />} />
+				<Route path="/manage" element={<Edit />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 			<Footer />

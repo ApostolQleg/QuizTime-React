@@ -105,14 +105,15 @@ export default function Create() {
 
 	const handleCorrectOption = (questionId, optionId) => {
 		setQuestions(
-			questions.map((q) => {
-				if (q.id !== questionId) return q;
-				const updatedOptions = q.options.map((opt) => ({
-					...opt,
-					isCorrect: opt.id === optionId,
-				}));
-
-				return { ...q, options: updatedOptions };
+			questions.map((question) => {
+				if (question.id === questionId) {
+					const updatedOptions = question.options.map((option) => ({
+						...option,
+						isCorrect: option.id === optionId,
+					}));
+					return { ...question, options: updatedOptions };
+				}
+				return question;
 			})
 		);
 	};
@@ -124,9 +125,9 @@ export default function Create() {
 			questions: questions.reduce((acc, question) => {
 				acc[question.id] = {
 					hasError: question.text.trim() === "",
-					options: question.options.reduce((optAcc, option) => {
-						optAcc[option.id] = { hasError: option.text.trim() === "" };
-						return optAcc;
+					options: question.options.reduce((optionAcc, option) => {
+						optionAcc[option.id] = { hasError: option.text.trim() === "" };
+						return optionAcc;
 					}, {}),
 				};
 				return acc;
@@ -147,7 +148,6 @@ export default function Create() {
 		if (hasErrors) return;
 
 		const quiz = { title, description, id: Date.now().toString(), questions };
-
 		setStorage(quiz, "quizzes");
 
 		navigate("/");
@@ -177,12 +177,12 @@ export default function Create() {
 					options={question.options}
 					onDelete={() => handleQuestionDelete(question.id)}
 					onChange={(e) => handleQuestionUpdate(question.id, e.target.value)}
+					onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
 					onOptionAdd={() => handleOptionAdd(question.id)}
 					onOptionDelete={(optionId) => handleOptionDelete(question.id, optionId)}
 					onOptionChange={(optionId, val) =>
 						handleOptionUpdate(question.id, optionId, val)
 					}
-					onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
 				/>
 			))}
 			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz}>
