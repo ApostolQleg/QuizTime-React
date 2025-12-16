@@ -34,7 +34,7 @@ export default function Edit() {
 		description: false,
 		questions: [],
 	});
-	const [counter, setCounter] = useState(0);
+	const [counter, setCounter] = useState(title.length);
 
 	const handleQuestionAdd = () => {
 		const newId = questions.length ? questions[questions.length - 1].id + 1 : 0;
@@ -188,6 +188,7 @@ export default function Edit() {
 					}}
 					maxLength="30"
 				/>
+
 				<div className="text-white text-[20px]">{counter}/30</div>
 				<Button
 					onClick={() => {
