@@ -19,6 +19,6 @@ export function getStorage() {
 // Setting all quizzes
 export function setStorage(data, key) {
 	const storage = getStorage();
-	storage[key].push(data);
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
+	key ? storage[key].push(data) : null;
+	localStorage.setItem(STORAGE_KEY, JSON.stringify(key ? storage : data));
 }

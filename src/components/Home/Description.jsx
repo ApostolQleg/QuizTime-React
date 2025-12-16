@@ -1,6 +1,11 @@
+import { getStorage, setStorage } from "../../services/storage.js";
 import Button from "../UI/Button.jsx";
 
 export default function Description({ quiz, onClose }) {
+	const handleDelete = () => {
+		setStorage({ quizzes: getStorage().quizzes.filter((q) => q.id !== quiz.id) });
+		onClose();
+	};
 	return (
 		<>
 			<div className="fixed inset-0 bg-black opacity-50 z-20" onClick={onClose} />
@@ -16,7 +21,7 @@ export default function Description({ quiz, onClose }) {
 				<div className="flex justify-between">
 					<Button to={`/manage/${quiz.id}`}>Manage</Button>
 					<Button to={`/quiz/${quiz.id}`}>Start Quiz</Button>
-					<Button onClick={onClose}>Delete</Button>
+					<Button onClick={handleDelete}>Delete</Button>
 				</div>
 			</div>
 		</>
