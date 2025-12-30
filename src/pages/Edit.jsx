@@ -1,54 +1,72 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import { getStorage, setStorage } from "../services/storage.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Question from "../components/Edit/Question.jsx";
 import Input from "../components/UI/Input.jsx";
 import Button from "../components/UI/Button.jsx";
 import Textarea from "../components/UI/Textarea.jsx";
 import Container from "../components/UI/Container.jsx";
 
+const DEFAULT_QUESTION = {
+	id: 0,
+	text: "",
+	options: [
+		{ id: 0, text: "Так", isCorrect: false },
+		{ id: 1, text: "Ні", isCorrect: false },
+	],
+};
+
 export default function Edit() {
 	const navigate = useNavigate();
-	const params = useParams();
-	const isManagePage = window.location.pathname.startsWith("/manage");
-	const quiz = getStorage().quizzes.find((quiz) => quiz.id.toString() === params.quizId);
+	const { quizId } = useParams();
+	const location = useLocation();
 
-	const [title, setTitle] = useState(quiz ? quiz.title : "");
-	const [description, setDescription] = useState(quiz ? quiz.description : "");
-	const [questions, setQuestions] = useState(
-		quiz
-			? quiz.questions
-			: [
-					{
-						id: 0,
-						text: "",
-						options: [
-							{ id: 0, text: "Так", isCorrect: false },
-							{ id: 1, text: "Ні", isCorrect: false },
-						],
-					},
-			  ]
-	);
+	const isManagePage = location.pathname.startsWith("/manage");
+
+	const [storage, setLocalStorage] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState("");
+	const [questions, setQuestions] = useState([DEFAULT_QUESTION]);
+	const [counter, setCounter] = useState(0);
+
 	const [errors, setErrors] = useState({
 		title: false,
 		description: false,
-		questions: [],
+		questions: {},
 	});
-	const [counter, setCounter] = useState(title.length);
+
+	useEffect(() => {
+		getStorage()
+			.then((data) => {
+				setLocalStorage(data);
+
+				if (isManagePage && quizId) {
+					const foundQuiz = data.quizzes.find((q) => q.id.toString() === quizId);
+
+					if (foundQuiz) {
+						setTitle(foundQuiz.title);
+						setDescription(foundQuiz.description);
+						setQuestions(foundQuiz.questions);
+						setCounter(foundQuiz.title.length);
+					} else {
+						navigate("/not-found");
+						return;
+					}
+				}
+
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.error(err);
+				navigate("/not-found");
+			});
+	}, [isManagePage, quizId, navigate]);
 
 	const handleQuestionAdd = () => {
-		const newId = questions.length ? questions[questions.length - 1].id + 1 : 0;
-		setQuestions([
-			...questions,
-			{
-				id: newId,
-				text: "",
-				options: [
-					{ id: 0, text: "Так", isCorrect: false },
-					{ id: 1, text: "Ні", isCorrect: false },
-				],
-			},
-		]);
+		const newId = questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 0;
+		setQuestions([...questions, { ...DEFAULT_QUESTION, id: newId }]);
 	};
 
 	const handleQuestionDelete = (id) => {
@@ -56,20 +74,17 @@ export default function Edit() {
 	};
 
 	const handleQuestionUpdate = (id, newValue) => {
-		setQuestions(
-			questions.map((question) =>
-				question.id === id ? { ...question, text: newValue } : question
-			)
-		);
+		setQuestions(questions.map((q) => (q.id === id ? { ...q, text: newValue } : q)));
 	};
 
 	const handleOptionAdd = (questionId) => {
 		setQuestions(
 			questions.map((question) => {
 				if (question.id === questionId) {
-					const newOptionId = question.options.length
-						? question.options[question.options.length - 1].id + 1
-						: 0;
+					const newOptionId =
+						question.options.length > 0
+							? Math.max(...question.options.map((o) => o.id)) + 1
+							: 0;
 					return {
 						...question,
 						options: [
@@ -89,7 +104,7 @@ export default function Edit() {
 				if (question.id === questionId) {
 					return {
 						...question,
-						options: question.options.filter((option) => option.id !== optionId),
+						options: question.options.filter((o) => o.id !== optionId),
 					};
 				}
 				return question;
@@ -101,10 +116,12 @@ export default function Edit() {
 		setQuestions(
 			questions.map((question) => {
 				if (question.id === questionId) {
-					const updatedOptions = question.options.map((option) =>
-						option.id === optionId ? { ...option, text: newValue } : option
-					);
-					return { ...question, options: updatedOptions };
+					return {
+						...question,
+						options: question.options.map((o) =>
+							o.id === optionId ? { ...o, text: newValue } : o
+						),
+					};
 				}
 				return question;
 			})
@@ -115,70 +132,86 @@ export default function Edit() {
 		setQuestions(
 			questions.map((question) => {
 				if (question.id === questionId) {
-					const updatedOptions = question.options.map((option) => ({
-						...option,
-						isCorrect: option.id === optionId,
-					}));
-					return { ...question, options: updatedOptions };
+					return {
+						...question,
+						options: question.options.map((o) => ({
+							...o,
+							isCorrect: o.id === optionId,
+						})),
+					};
 				}
 				return question;
 			})
 		);
 	};
 
-	const handleSaveQuiz = () => {
-		// validate inputs
+	const handleSaveQuiz = async () => {
+		// Validation logic
 		const newErrors = {
 			title: title.trim() === "",
 			description: description.trim() === "",
-			questions: questions.reduce((acc, question) => {
-				acc[question.id] = {
-					hasError: question.text.trim() === "",
-					options: question.options.reduce((optionAcc, option) => {
-						optionAcc[option.id] = { hasError: option.text.trim() === "" };
-						return optionAcc;
-					}, {}),
-				};
-				return acc;
-			}, {}),
+			questions: {},
 		};
-		//validate radio buttons
+
+		let hasError = newErrors.title || newErrors.description;
+
 		questions.forEach((question) => {
-			const hasCorrectOption = question.options.some((option) => option.isCorrect);
-			if (!hasCorrectOption) {
-				newErrors.questions[question.id].hasRadioError = true;
+			const optionsErrors = {};
+			let optionHasError = false;
+
+			question.options.forEach((option) => {
+				if (option.text.trim() === "") {
+					optionsErrors[option.id] = { hasError: true };
+					optionHasError = true;
+				}
+			});
+
+			const hasCorrectOption = question.options.some((o) => o.isCorrect);
+			const questionTextEmpty = question.text.trim() === "";
+
+			if (questionTextEmpty || !hasCorrectOption || optionHasError) {
+				hasError = true;
+				newErrors.questions[question.id] = {
+					hasError: questionTextEmpty,
+					hasRadioError: !hasCorrectOption,
+					options: optionsErrors,
+				};
 			}
 		});
 
 		setErrors(newErrors);
+		if (hasError) return;
 
-		const hasErrors =
-			newErrors.title ||
-			newErrors.description ||
-			Object.values(newErrors.questions).some(
-				(question) =>
-					question.hasError ||
-					question.hasRadioError ||
-					Object.values(question.options).some((option) => option.hasError)
-			);
-
-		if (hasErrors) return;
+		// Save logic
+		let updatedQuizzes;
 
 		if (isManagePage) {
-			const updatedQuizzes = getStorage().quizzes.map((q) =>
-				q.id === quiz.id ? { ...q, title, description, questions } : q
+			// Update existing
+			updatedQuizzes = storage.quizzes.map((q) =>
+				q.id.toString() === quizId ? { ...q, title, description, questions } : q
 			);
-			setStorage({ quizzes: updatedQuizzes });
 		} else {
-			const quiz = { title, description, id: Date.now().toString(), questions };
-			setStorage(quiz, "quizzes");
+			// Create new
+			const newQuiz = {
+				title,
+				description,
+				id: Date.now(),
+				questions,
+				timestamp: Math.floor(Date.now() / 1000),
+			};
+			updatedQuizzes = [...(storage.quizzes || []), newQuiz];
 		}
+
+		const newStorage = { ...storage, quizzes: updatedQuizzes };
+
+		await setStorage(newStorage);
+		setLocalStorage(newStorage);
 
 		navigate("/");
 	};
 
-	if (isManagePage && !quiz) {
-		return navigate("/not-found");
+	if (loading) {
+		return <Container className="text-white text-center">Loading...</Container>;
 	}
 
 	return (
@@ -206,6 +239,7 @@ export default function Edit() {
 					Clear
 				</Button>
 			</div>
+
 			<Textarea
 				placeholder="Enter quiz description here..."
 				className={`h-10 resize-handle w-full ${errors.description ? "error" : ""}`}
@@ -230,7 +264,9 @@ export default function Edit() {
 					}
 				/>
 			))}
+
 			<Button onClick={handleQuestionAdd}>Add Question</Button>
+
 			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz}>
 				Save Quiz
 			</Button>
