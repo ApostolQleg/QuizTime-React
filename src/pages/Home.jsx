@@ -99,14 +99,18 @@ export default function Home() {
 						{isResultsPage ? (
 							<>
 								<div>
-									Score: {item.summary.score}/{item.summary.total}
+									{/* ДОДАНО ПЕРЕВІРКУ: item.summary?.score */}
+									Score: {item.summary?.score ?? 0}/{item.summary?.total ?? 0}
 								</div>
 								<div className="text-xs mt-1 opacity-60">
-									{new Date(item.timestamp).toLocaleDateString()}
+									{/* Додаємо перевірку і для дати, про всяк випадок */}
+									{item.timestamp
+										? new Date(item.timestamp).toLocaleDateString()
+										: ""}
 								</div>
 							</>
 						) : (
-							// Показуємо кількість питань, якщо бекенд її повернув
+							// Показуємо кількість питань
 							<span>
 								{item.questionsCount
 									? `${item.questionsCount} questions`
