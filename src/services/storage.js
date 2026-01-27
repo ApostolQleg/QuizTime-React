@@ -2,8 +2,8 @@ const API_URL = "https://quiztime-react-backend.vercel.app/api";
 
 // QUIZES SERVICES
 
-export async function getQuizzesList(page = 1, limit = 6) {
-	const res = await fetch(`${API_URL}/quizzes?page=${page}&limit=${limit}`);
+export async function getQuizzesList() {
+	const res = await fetch(`${API_URL}/quizzes`);
 	if (!res.ok) throw new Error("Failed to load quizzes");
 	return await res.json();
 }
