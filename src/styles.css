@@ -1,42 +1,38 @@
 @import "tailwindcss";
 
-@layer utilities {
-	.image-pixel {
-		image-rendering: pixelated;
-	}
-	.button {
-		@apply bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/30 rounded-xl transition-all duration-300 flex items-center justify-center px-6 py-3 w-max font-semibold tracking-wide;
-	}
-	.quiz-card {
-		@apply bg-indigo-600 text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl rounded-3xl max-h-[400px] max-w-[400px] aspect-square w-full flex items-center justify-center text-center hover:scale-105 transition-all shadow-xl shadow-indigo-500/40 border border-indigo-400/20;
-	}
-	.input {
-		@apply bg-slate-800 border border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 rounded-lg text-white p-3 min-w-0 outline-none transition-all;
-	}
-	.error {
-		@apply border border-rose-500 bg-rose-500/10 text-rose-200 rounded-lg;
-	}
-	.quiz-error {
-		@apply border border-rose-500 bg-rose-600/20 text-white rounded-lg backdrop-blur-sm;
-	}
-	.container {
-		@apply min-w-[95%] max-w-[95%] m-0 mx-auto mb-5 bg-slate-900 p-6 rounded-2xl shadow-2xl shadow-black/50 border border-slate-700/50;
-	}
-	.option-false {
-		@apply border border-rose-500 bg-rose-600/90 text-white flex shadow-md shadow-rose-900/20;
-	}
-	.option-true {
-		@apply border border-emerald-500 bg-emerald-600/90 text-white flex shadow-md shadow-emerald-900/20;
-	}
-}
-
 @layer base {
+	:root {
+		--col-bg-main: #020617;
+		--col-bg-card: #0f172a;
+		--col-bg-input: #28385e;
+		--col-bg-input-darker: #1a2641;
+		--col-border: #334155;
+
+		--col-text-main: #e2e8f0;
+		--col-text-muted: #94a3b8;
+		--col-text-accent: #818cf8;
+
+		--col-primary: #4f46e5;
+		--col-primary-glow: rgba(79, 70, 229, 0.4);
+
+		--col-danger: #e11d48;
+		--col-danger-hover: #be123c;
+		--col-danger-glow: rgba(225, 29, 72, 0.3);
+		--col-danger-bg: rgba(225, 29, 72, 0.1);
+
+		--col-success: #059669;
+		--col-success-bg: rgba(5, 150, 105, 0.9);
+		--col-success-glow: rgba(5, 150, 105, 0.2);
+	}
+
 	body {
-		@apply bg-slate-900 text-slate-200;
+		background-color: var(--col-bg-main);
+		color: var(--col-text-main);
 		cursor:
 			url("./assets/cursor-icon.png") 4 4,
 			auto;
 	}
+
 	button,
 	label,
 	input[type="radio"],
@@ -45,10 +41,80 @@
 			url("./assets/cursor-pointer-icon.png") 2 2,
 			pointer;
 	}
+
 	input[type="text"],
 	textarea {
 		cursor:
 			url("./assets/cursor-text-icon.png") 16 16,
 			text;
+	}
+}
+
+@layer utilities {
+	.image-pixel {
+		image-rendering: pixelated;
+	}
+	.button {
+		@apply transition-all duration-300 flex items-center justify-center px-6 py-3 w-max font-semibold tracking-wide rounded-xl shadow-lg;
+		background-color: var(--col-danger);
+		color: white;
+		box-shadow: 0 10px 15px -3px var(--col-danger-glow);
+	}
+	.button:hover {
+		background-color: var(--col-danger-hover);
+	}
+
+	.quiz-card {
+		@apply text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl rounded-3xl max-h-[400px] max-w-[400px] aspect-square w-full flex items-center justify-center text-center hover:scale-105 transition-all shadow-xl border;
+		background-color: var(--col-primary);
+		color: white;
+		box-shadow: 0 20px 25px -5px var(--col-primary-glow);
+		border-color: rgba(129, 140, 248, 0.2);
+	}
+
+	.input {
+		@apply rounded-lg p-3 min-w-0 outline-none transition-all border;
+		background-color: var(--col-bg-input);
+		border-color: var(--col-border);
+		color: var(--col-text-main);
+	}
+	.input:focus {
+		border-color: var(--col-primary);
+		box-shadow: 0 0 0 2px var(--col-primary-glow);
+	}
+
+	.error {
+		@apply rounded-lg border;
+		border-color: var(--col-danger);
+		background-color: var(--col-danger-bg);
+		color: #fecdd3;
+	}
+
+	.quiz-error {
+		@apply rounded-lg backdrop-blur-sm border;
+		border-color: var(--col-danger);
+		background-color: rgba(225, 29, 72, 0.2);
+		color: white;
+	}
+
+	.container {
+		@apply min-w-[95%] max-w-[95%] m-0 mx-auto mb-5 p-6 rounded-2xl shadow-2xl border;
+		background-color: var(--col-bg-card);
+		border-color: var(--col-border);
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+	}
+
+	.option-false {
+		@apply flex shadow-md text-white border rounded-sm;
+		background-color: rgba(225, 29, 72, 0.9);
+		border-color: var(--col-danger);
+		box-shadow: 0 4px 6px -1px var(--col-danger-glow);
+	}
+
+	.option-true {
+		@apply flex shadow-md text-white border rounded-sm;
+		background-color: var(--col-success-bg);
+		border-color: var(--col-success);
+		box-shadow: 0 4px 6px -1px var(--col-success-glow);
 	}
 }

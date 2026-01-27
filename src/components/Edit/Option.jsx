@@ -14,7 +14,7 @@ export default function Option({
 }) {
 	return (
 		<>
-			<div id={id} className="flex flex-row gap-4 items-center">
+			<div id={id} className="flex flex-row gap-3 items-center w-full">
 				<Radio
 					id={`q${name}-o${id}`}
 					name={`q${name}`}
@@ -23,7 +23,7 @@ export default function Option({
 				/>
 				<Input
 					placeholder="Enter option text here..."
-					className={`${errors?.hasError ? "error" : ""}`}
+					className={`flex-1 bg-(--col-bg-card) border-(--col-border) ${errors?.hasError ? "error" : ""}`}
 					value={text}
 					onChange={onChange}
 				/>

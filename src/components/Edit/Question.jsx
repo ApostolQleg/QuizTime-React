@@ -5,6 +5,7 @@ import Button from "../UI/Button.jsx";
 export default function Question({
 	id,
 	text,
+	index,
 	errors,
 	options,
 	onDelete,
@@ -16,9 +17,16 @@ export default function Question({
 }) {
 	return (
 		<div
-			className={`w-full bg-slate-800/50 p-4 rounded-2xl flex flex-col gap-3 border border-slate-700 ${errors?.hasRadioError ? "error" : ""}`}
+			className={`w-full bg-(--col-bg-input-darker) p-4 rounded-2xl flex flex-col gap-3 border border-(--col-border) ${errors?.hasRadioError ? "error" : ""}`}
 			id={id}
 		>
+			<div className="flex flex-row justify-between items-center border-b border-(--col-border) pb-2">
+				<div className="text-(--col-text-muted) font-bold tracking-wide ml-2">
+					Question {index + 1}
+				</div>
+				<Button onClick={onDelete}>Delete</Button>
+			</div>
+
 			<div className="flex flex-row justify-between items-center">
 				<Input
 					placeholder="Enter question text here..."
@@ -26,7 +34,6 @@ export default function Question({
 					value={text}
 					onChange={onChange}
 				/>
-				<Button onClick={onDelete}>Delete</Button>
 			</div>
 
 			{options.map((option) => (

@@ -8,16 +8,19 @@ export default function Radio({
 	...props
 }) {
 	return (
-		<div className={className}>
+		<div className={`${className} flex items-center gap-2 cursor-pointer`}>
 			<input
 				type="radio"
 				id={id}
 				name={name}
 				checked={checked}
 				onChange={onChange}
+				className="accent-(--col-primary) w-4 h-4 cursor-pointer"
 				{...props}
 			/>
-			<label htmlFor={id}>{label}</label>
+			<label htmlFor={id} className="cursor-pointer text-(--col-text-main)">
+				{label}
+			</label>
 		</div>
 	);
 }

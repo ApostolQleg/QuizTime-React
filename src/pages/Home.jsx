@@ -48,7 +48,7 @@ export default function Home() {
 	if (isHelpPage) {
 		return (
 			<Container>
-				<div className="text-center text-slate-200 col-span-full">
+				<div className="text-center col-span-full text-(--col-text-main)">
 					Here is an information section for new users.
 				</div>
 			</Container>
@@ -56,7 +56,7 @@ export default function Home() {
 	}
 
 	if (loading) {
-		return <Container className="text-slate-200 text-center">Loading...</Container>;
+		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
 	}
 
 	return (
@@ -118,7 +118,7 @@ export default function Home() {
 			)}
 
 			{!loading && items.length === 0 && (
-				<div className="text-center text-slate-200 col-span-full">
+				<div className="text-center col-span-full text-(--col-text-main)">
 					{isResultsPage
 						? "You have no quiz results yet."
 						: "No quizzes found. Create one!"}

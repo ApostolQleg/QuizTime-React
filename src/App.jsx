@@ -8,16 +8,14 @@ import Edit from "./pages/Edit.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
-	// Scroll to top on route change
 	const { pathname } = useLocation();
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 	}, [pathname]);
 
-	// Main app layout with routing
 	return (
-		<div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col flex-1">
+		<div className="min-h-screen flex flex-col flex-1 bg-(--col-bg-main) text-(--col-text-main)">
 			<Header />
 			<Routes>
 				<Route exact path="/" element={<Home />} />

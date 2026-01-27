@@ -111,19 +111,19 @@ export default function Quiz() {
 	};
 
 	if (loading) {
-		return <Container className="text-slate-200 text-center">Loading...</Container>;
+		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
 	}
 
 	if (!quizData) return null;
 
 	return (
 		<Container className={"flex flex-col items-center gap-6"}>
-			<div className="text-3xl font-bold text-indigo-400 text-center drop-shadow-md pb-2 border-b border-slate-800 w-full">
+			<div className="text-3xl font-bold text-center drop-shadow-md pb-2 border-b w-full text-(--col-text-accent) border-(--col-border)">
 				{quizData.title}
 			</div>
 
 			{isResultPage && resultData && (
-				<div className="text-xl font-semibold text-emerald-400 bg-emerald-400/10 px-6 py-2 rounded-full border border-emerald-400/20">
+				<div className="text-xl font-semibold px-6 py-2 rounded-full border text-(--col-success) bg-(--col-success-glow) border-(--col-success)">
 					Your Result: {resultData.summary?.score} / {quizData.questions.length}
 				</div>
 			)}
@@ -133,7 +133,7 @@ export default function Quiz() {
 					<Question
 						question={question}
 						key={index}
-						className="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg shadow-black/20 transition-all hover:border-slate-600"
+						className="p-6 rounded-xl border shadow-lg transition-all bg-(--col-bg-input) border-(--col-border) hover:border-(--col-border)"
 						isResultPage={isResultPage}
 						onOptionSelect={(optionId) =>
 							!isResultPage && handleRadioUpdate(index, optionId)
@@ -149,7 +149,7 @@ export default function Quiz() {
 			{!isResultPage ? (
 				<Button
 					onClick={handleSubmit}
-					className="w-full md:w-auto min-w-[200px] text-lg shadow-xl shadow-indigo-500/20"
+					className="w-full md:w-auto min-w-[200px] text-lg shadow-xl"
 				>
 					Submit
 				</Button>
