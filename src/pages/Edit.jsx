@@ -23,7 +23,7 @@ export default function Edit() {
 
 	const isManagePage = location.pathname.startsWith("/manage");
 
-	const [loading, setLoading] = useState(isManagePage); // Якщо створюємо новий - loading false одразу
+	const [loading, setLoading] = useState(isManagePage); // Loading only if managing existing quiz
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -36,7 +36,7 @@ export default function Edit() {
 		questions: {},
 	});
 
-	// Завантаження даних, якщо ми редагуємо існуючий квіз
+	// Loading data if we are editing an existing quiz
 	useEffect(() => {
 		if (isManagePage && quizId) {
 			getQuizById(quizId)
@@ -54,6 +54,7 @@ export default function Edit() {
 		}
 	}, [isManagePage, quizId, navigate]);
 
+	// Handlers for question
 	const handleQuestionAdd = () => {
 		const newId = questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 0;
 		setQuestions([...questions, { ...DEFAULT_QUESTION, id: newId }]);
@@ -67,6 +68,7 @@ export default function Edit() {
 		setQuestions(questions.map((q) => (q.id === id ? { ...q, text: newValue } : q)));
 	};
 
+	// Handlers for options
 	const handleOptionAdd = (questionId) => {
 		setQuestions(
 			questions.map((question) => {
@@ -135,6 +137,7 @@ export default function Edit() {
 		);
 	};
 
+	// Other handlers
 	const handleSaveQuiz = async () => {
 		// Validation logic
 		const newErrors = {
@@ -172,7 +175,7 @@ export default function Edit() {
 		setErrors(newErrors);
 		if (hasError) return;
 
-		// Save logic (API CALLS)
+		// Save logic for creating or updating quiz
 		try {
 			const quizPayload = {
 				title,
@@ -189,8 +192,8 @@ export default function Edit() {
 
 			navigate("/");
 		} catch (error) {
-			console.error("Failed to save quiz", error);
-			alert("Error saving quiz. Please try again.");
+			console.error("Error saving quiz: ", error);
+			alert("Failed to save quiz. Please try again later.");
 		}
 	};
 

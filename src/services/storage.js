@@ -1,6 +1,6 @@
 const API_URL = "https://quiztime-react-backend.vercel.app/api";
 
-// QUIZES SERVICES
+// Quizzes services
 
 export async function getQuizzesList() {
 	const res = await fetch(`${API_URL}/quizzes`);
@@ -42,7 +42,7 @@ export async function deleteQuiz(id) {
 	return await res.json();
 }
 
-// RESULTS SERVICES
+// Results services
 
 export async function getResults() {
 	const res = await fetch(`${API_URL}/results`);

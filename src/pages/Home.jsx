@@ -17,18 +17,20 @@ export default function Home() {
 	const isHelpPage = location.pathname === "/help";
 
 	useEffect(() => {
-		// Створюємо асинхронну функцію всередині ефекту
 		const fetchData = async () => {
-			// Якщо це сторінка допомоги - нічого не вантажимо, просто прибираємо лоадер
+			// If it's the help page, no need to fetch data
 			if (isHelpPage) {
 				setLoading(false);
 				return;
 			}
 
-			// Починаємо завантаження
+			// Start loading
 			setLoading(true);
-			setItems([]); // Очищуємо старі дані
 
+			// Clear previous items
+			setItems([]);
+
+			// Fetch quizzes or results based on the current page
 			try {
 				let data;
 
@@ -45,7 +47,6 @@ export default function Home() {
 			}
 		};
 
-		// Викликаємо цю функцію
 		fetchData();
 	}, [isResultsPage, isHelpPage]);
 
@@ -69,25 +70,25 @@ export default function Home() {
 				"grid gap-6 lg:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-center justify-items-center"
 			}
 		>
-			{/* Картка додавання нового тесту (тільки на головній) */}
+			{/* Add new quiz card */}
 			{!isResultsPage && (
 				<Link to="/create" id={`quiz-add`} className="quiz-card">
 					<img src={addIcon} alt="Add Quiz" className="w-1/2 h-1/2" />
 				</Link>
 			)}
 
-			{/* Список карток */}
+			{/* List of cards */}
 			{items.map((item, index) => (
 				<button
 					type="button"
-					// Використовуємо _id (MongoDB) як ключ
+					// Use _id (MongoDB) as key if available, otherwise fallback to index
 					key={item._id || index}
 					className="quiz-card flex flex-col justify-between"
 					onClick={
 						isResultsPage
-							? // Перехід до деталей результату
+							? // Navigate to result page
 								() => navigate(`/result/${item.quizId}/${item._id}`)
-							: // Відкриття опису вікторини
+							: // Open quiz description modal
 								() => setSelectedQuiz(item)
 					}
 				>
@@ -99,34 +100,32 @@ export default function Home() {
 						{isResultsPage ? (
 							<>
 								<div>
-									{/* ДОДАНО ПЕРЕВІРКУ: item.summary?.score */}
 									Score: {item.summary?.score ?? 0}/{item.summary?.total ?? 0}
 								</div>
 								<div className="text-xs mt-1 opacity-60">
-									{/* Додаємо перевірку і для дати, про всяк випадок */}
 									{item.timestamp
 										? new Date(item.timestamp).toLocaleDateString()
 										: ""}
 								</div>
 							</>
 						) : (
-							// Показуємо кількість питань
+							// Show questions count for quizzes
 							<span>
 								{item.questionsCount
 									? `${item.questionsCount} questions`
-									: "Click for details"}
+									: "Failed to load questions count"}
 							</span>
 						)}
 					</div>
 				</button>
 			))}
 
-			{/* Модальне вікно з описом тесту */}
+			{/* Modal window with quiz description */}
 			{selectedQuiz && (
 				<Description quiz={selectedQuiz} onClose={() => setSelectedQuiz(null)} />
 			)}
 
-			{/* Повідомлення, якщо список порожній */}
+			{/* Message if the list is empty */}
 			{!loading && items.length === 0 && (
 				<div className="text-center text-white col-span-full">
 					{isResultsPage
