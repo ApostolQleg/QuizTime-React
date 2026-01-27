@@ -1,7 +1,7 @@
+// const API_URL = "http://localhost:3000/api";
 const API_URL = "https://quiztime-react-backend.vercel.app/api";
 
 // Quizzes services
-
 export async function getQuizzesList() {
 	const res = await fetch(`${API_URL}/quizzes`);
 	if (!res.ok) throw new Error("Failed to load quizzes");
@@ -43,7 +43,6 @@ export async function deleteQuiz(id) {
 }
 
 // Results services
-
 export async function getResults() {
 	const res = await fetch(`${API_URL}/results`);
 	if (!res.ok) throw new Error("Failed to load results");
