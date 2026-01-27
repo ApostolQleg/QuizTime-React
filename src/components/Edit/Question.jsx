@@ -15,7 +15,10 @@ export default function Question({
 	onOptionChange,
 }) {
 	return (
-		<div className={`w-full p-4 rounded-2xl flex flex-col gap-2 border border-gray-300 ${errors?.hasRadioError ? "error" : ""}`} id={id}>
+		<div
+			className={`w-full bg-slate-800/50 p-4 rounded-2xl flex flex-col gap-3 border border-slate-700 ${errors?.hasRadioError ? "error" : ""}`}
+			id={id}
+		>
 			<div className="flex flex-row justify-between items-center">
 				<Input
 					placeholder="Enter question text here..."
@@ -39,7 +42,9 @@ export default function Question({
 					onCorrect={() => onCorrect(option.id)}
 				/>
 			))}
-			<Button onClick={onOptionAdd}>Add Option</Button>
+			<Button onClick={onOptionAdd} className="self-start mt-1">
+				Add Option
+			</Button>
 		</div>
 	);
 }

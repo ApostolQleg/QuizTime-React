@@ -20,17 +20,15 @@ export default function Quiz() {
 	const isResultPage = Boolean(resultIdParam);
 
 	useEffect(() => {
-		// Reset states when page changes to avoid showing old data during loading
 		setLoading(true);
 		setQuizData(null);
 		setResultData(null);
 		setAnswers([]);
 		setErrors({});
-		
+
 		const loadData = async () => {
 			try {
 				if (isResultPage) {
-					// Result mode
 					const res = await getResultById(resultIdParam);
 					setResultData(res);
 					setQuizData({
@@ -38,7 +36,6 @@ export default function Quiz() {
 						questions: res.questions,
 					});
 				} else {
-					// Quiz mode
 					const quiz = await getQuizById(quizId);
 					setQuizData(quiz);
 				}
@@ -65,7 +62,6 @@ export default function Quiz() {
 	const handleSubmit = async () => {
 		if (!quizData) return;
 
-		// Validation
 		let allAnswered = true;
 		const newErrors = {};
 
@@ -79,7 +75,6 @@ export default function Quiz() {
 		setErrors(newErrors);
 		if (!allAnswered) return;
 
-		// Scoring
 		let score = 0;
 		quizData.questions.forEach((question, qIndex) => {
 			const correctIds = question.options.filter((o) => o.isCorrect).map((o) => o.id);
@@ -116,41 +111,52 @@ export default function Quiz() {
 	};
 
 	if (loading) {
-		return <Container className="text-white text-center">Loading...</Container>;
+		return <Container className="text-slate-200 text-center">Loading...</Container>;
 	}
 
 	if (!quizData) return null;
 
 	return (
-		<Container className={"flex flex-col items-center"}>
-			<div className="text-white pb-5 text-[18px] text-center">{quizData.title}</div>
+		<Container className={"flex flex-col items-center gap-6"}>
+			<div className="text-3xl font-bold text-indigo-400 text-center drop-shadow-md pb-2 border-b border-slate-800 w-full">
+				{quizData.title}
+			</div>
 
 			{isResultPage && resultData && (
-				<div className="text-white mb-5">
-					Your Result is {resultData.summary?.score} / {quizData.questions.length}
+				<div className="text-xl font-semibold text-emerald-400 bg-emerald-400/10 px-6 py-2 rounded-full border border-emerald-400/20">
+					Your Result: {resultData.summary?.score} / {quizData.questions.length}
 				</div>
 			)}
 
-			{quizData.questions.map((question, index) => (
-				<Question
-					question={question}
-					key={index}
-					className="w-[95%] m-0 mx-auto mb-5 bg-[rgb(146,6,146)] p-5 rounded-2xl shadow-[0_0_10px_rgba(114,0,104,0.692)]"
-					isResultPage={isResultPage}
-					onOptionSelect={(optionId) =>
-						!isResultPage && handleRadioUpdate(index, optionId)
-					}
-					error={errors[index]}
-					selected={isResultPage ? resultData?.answers?.[index] : answers[index]}
-				>
-					{question.text}
-				</Question>
-			))}
+			<div className="w-full flex flex-col gap-6">
+				{quizData.questions.map((question, index) => (
+					<Question
+						question={question}
+						key={index}
+						className="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg shadow-black/20 transition-all hover:border-slate-600"
+						isResultPage={isResultPage}
+						onOptionSelect={(optionId) =>
+							!isResultPage && handleRadioUpdate(index, optionId)
+						}
+						error={errors[index]}
+						selected={isResultPage ? resultData?.answers?.[index] : answers[index]}
+					>
+						{question.text}
+					</Question>
+				))}
+			</div>
 
 			{!isResultPage ? (
-				<Button onClick={handleSubmit}>Submit</Button>
+				<Button
+					onClick={handleSubmit}
+					className="w-full md:w-auto min-w-[200px] text-lg shadow-xl shadow-indigo-500/20"
+				>
+					Submit
+				</Button>
 			) : (
-				<Button onClick={() => navigate("/")}>Back to Home</Button>
+				<Button onClick={() => navigate("/")} className="w-full md:w-auto">
+					Back to Home
+				</Button>
 			)}
 		</Container>
 	);

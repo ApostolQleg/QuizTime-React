@@ -5,43 +5,50 @@
 		image-rendering: pixelated;
 	}
 	.button {
-		@apply bg-pink-600 rounded-xl transition hover:bg-pink-500 flex items-center justify-center px-4 py-2 w-max;
+		@apply bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/30 rounded-xl transition-all duration-300 flex items-center justify-center px-6 py-3 w-max font-semibold tracking-wide;
 	}
 	.quiz-card {
-		@apply bg-[rgb(233,14,178)] text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl rounded-3xl max-h-[400px] max-w-[400px] aspect-square w-full flex items-center justify-center text-center hover:scale-105 transition-all shadow-[0_0_10px_rgba(114,0,104,0.692)];
+		@apply bg-indigo-600 text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl rounded-3xl max-h-[400px] max-w-[400px] aspect-square w-full flex items-center justify-center text-center hover:scale-105 transition-all shadow-xl shadow-indigo-500/40 border border-indigo-400/20;
 	}
 	.input {
-		@apply border border-gray-300 rounded text-white p-2 min-w-0;
+		@apply bg-slate-800 border border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 rounded-lg text-white p-3 min-w-0 outline-none transition-all;
 	}
 	.error {
-		@apply border-2 border-red-500 bg-[rgba(255,0,0,0.1)];
+		@apply border border-rose-500 bg-rose-500/10 text-rose-200 rounded-lg;
 	}
 	.quiz-error {
-		@apply border-2 border-red-500 bg-[rgba(209,5,93,0.6)];
+		@apply border border-rose-500 bg-rose-600/20 text-white rounded-lg backdrop-blur-sm;
 	}
 	.container {
-		@apply min-w-[95%] max-w-[95%] m-0 mx-auto mb-5 bg-[rgb(34,14,34)] p-5 rounded-2xl shadow-[0_0_10px_rgba(114,0,104,0.692)];
+		@apply min-w-[95%] max-w-[95%] m-0 mx-auto mb-5 bg-slate-900 p-6 rounded-2xl shadow-2xl shadow-black/50 border border-slate-700/50;
 	}
 	.option-false {
-		@apply border-2 border-red-500 bg-red-600 flex;
+		@apply border border-rose-500 bg-rose-600/90 text-white flex shadow-md shadow-rose-900/20;
 	}
 	.option-true {
-		@apply border-2 border-green-500 bg-green-600 flex;
+		@apply border border-emerald-500 bg-emerald-600/90 text-white flex shadow-md shadow-emerald-900/20;
 	}
 }
 
 @layer base {
 	body {
-		cursor: url("./assets/cursor-icon.png") 4 4, auto;
+		@apply bg-slate-900 text-slate-200;
+		cursor:
+			url("./assets/cursor-icon.png") 4 4,
+			auto;
 	}
 	button,
 	label,
 	input[type="radio"],
 	a {
-		cursor: url("./assets/cursor-pointer-icon.png") 2 2, pointer;
+		cursor:
+			url("./assets/cursor-pointer-icon.png") 2 2,
+			pointer;
 	}
 	input[type="text"],
 	textarea {
-		cursor: url("./assets/cursor-text-icon.png") 16 16, text;
+		cursor:
+			url("./assets/cursor-text-icon.png") 16 16,
+			text;
 	}
 }

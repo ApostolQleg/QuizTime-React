@@ -17,7 +17,7 @@ export default function App() {
 
 	// Main app layout with routing
 	return (
-		<div className="min-h-screen bg-[rgb(80,12,63)] text-[rgb(27,0,25)] flex flex-col flex-1">
+		<div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col flex-1">
 			<Header />
 			<Routes>
 				<Route exact path="/" element={<Home />} />

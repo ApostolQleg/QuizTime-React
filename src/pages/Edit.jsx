@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation } from "react-router";
-import { createQuiz, getQuizById, updateQuiz } from "../services/storage.js"; // Оновлені імпорти
+import { createQuiz, getQuizById, updateQuiz } from "../services/storage.js";
 import { useState, useEffect } from "react";
 import Question from "../components/Edit/Question.jsx";
 import Input from "../components/UI/Input.jsx";
@@ -11,8 +11,8 @@ const DEFAULT_QUESTION = {
 	id: 0,
 	text: "",
 	options: [
-		{ id: 0, text: "Так", isCorrect: false },
-		{ id: 1, text: "Ні", isCorrect: false },
+		{ id: 0, text: "Yes", isCorrect: false },
+		{ id: 1, text: "No", isCorrect: false },
 	],
 };
 
@@ -23,7 +23,7 @@ export default function Edit() {
 
 	const isManagePage = location.pathname.startsWith("/manage");
 
-	const [loading, setLoading] = useState(isManagePage); // Loading only if managing existing quiz
+	const [loading, setLoading] = useState(isManagePage);
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -36,7 +36,6 @@ export default function Edit() {
 		questions: {},
 	});
 
-	// Loading data if we are editing an existing quiz
 	useEffect(() => {
 		if (isManagePage && quizId) {
 			getQuizById(quizId)
@@ -54,7 +53,6 @@ export default function Edit() {
 		}
 	}, [isManagePage, quizId, navigate]);
 
-	// Handlers for question
 	const handleQuestionAdd = () => {
 		const newId = questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 0;
 		setQuestions([...questions, { ...DEFAULT_QUESTION, id: newId }]);
@@ -68,7 +66,6 @@ export default function Edit() {
 		setQuestions(questions.map((q) => (q.id === id ? { ...q, text: newValue } : q)));
 	};
 
-	// Handlers for options
 	const handleOptionAdd = (questionId) => {
 		setQuestions(
 			questions.map((question) => {
@@ -137,9 +134,7 @@ export default function Edit() {
 		);
 	};
 
-	// Other handlers
 	const handleSaveQuiz = async () => {
-		// Validation logic
 		const newErrors = {
 			title: title.trim() === "",
 			description: description.trim() === "",
@@ -175,7 +170,6 @@ export default function Edit() {
 		setErrors(newErrors);
 		if (hasError) return;
 
-		// Save logic for creating or updating quiz
 		try {
 			const quizPayload = {
 				title,
@@ -198,15 +192,15 @@ export default function Edit() {
 	};
 
 	if (loading) {
-		return <Container className="text-white text-center">Loading...</Container>;
+		return <Container className="text-slate-200 text-center">Loading...</Container>;
 	}
 
 	return (
 		<Container className={"flex flex-col gap-4 flex-1"}>
-			<div className="w-full flex flex-row gap-2 justify-between items-center">
+			<div className="w-full flex flex-row justify-between items-center bg-slate-800/50 p-4 rounded-xl border border-slate-700">
 				<Input
 					placeholder="Enter quiz title here..."
-					className={`text-[20px] w-3/4 ${errors.title ? "error" : ""}`}
+					className={`text-lg font-bold w-3/4 bg-transparent ${errors.title ? "error" : ""}`}
 					value={title}
 					onChange={(e) => {
 						const newValue = e.target.value.slice(0, 30);
@@ -216,7 +210,7 @@ export default function Edit() {
 					maxLength="30"
 				/>
 
-				<div className="text-white text-[20px]">{counter}/30</div>
+				<div className="text-slate-400 font-bold text-lg">{counter}/30</div>
 				<Button
 					onClick={() => {
 						setTitle("");
@@ -229,32 +223,39 @@ export default function Edit() {
 
 			<Textarea
 				placeholder="Enter quiz description here..."
-				className={`h-10 resize-handle w-full ${errors.description ? "error" : ""}`}
+				className={`resize-y w-full font-bold ${errors.description ? "error" : ""}`}
 				value={description}
 				onChange={(e) => setDescription(e.target.value)}
 			/>
 
-			{questions.map((question) => (
-				<Question
-					id={question.id}
-					key={question.id}
-					text={question.text}
-					errors={errors.questions?.[question.id] || {}}
-					options={question.options}
-					onDelete={() => handleQuestionDelete(question.id)}
-					onChange={(e) => handleQuestionUpdate(question.id, e.target.value)}
-					onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
-					onOptionAdd={() => handleOptionAdd(question.id)}
-					onOptionDelete={(optionId) => handleOptionDelete(question.id, optionId)}
-					onOptionChange={(optionId, val) =>
-						handleOptionUpdate(question.id, optionId, val)
-					}
-				/>
-			))}
+			<div className="flex flex-col gap-4">
+				{questions.map((question) => (
+					<Question
+						id={question.id}
+						key={question.id}
+						text={question.text}
+						errors={errors.questions?.[question.id] || {}}
+						options={question.options}
+						onDelete={() => handleQuestionDelete(question.id)}
+						onChange={(e) => handleQuestionUpdate(question.id, e.target.value)}
+						onCorrect={(optionId) => handleCorrectOption(question.id, optionId)}
+						onOptionAdd={() => handleOptionAdd(question.id)}
+						onOptionDelete={(optionId) => handleOptionDelete(question.id, optionId)}
+						onOptionChange={(optionId, val) =>
+							handleOptionUpdate(question.id, optionId, val)
+						}
+					/>
+				))}
+			</div>
 
-			<Button onClick={handleQuestionAdd}>Add Question</Button>
+			<Button onClick={handleQuestionAdd} className="bg-slate-700 hover:bg-slate-600">
+				Add Question
+			</Button>
 
-			<Button className="self-center mt-auto min-w-full" onClick={handleSaveQuiz}>
+			<Button
+				className="self-center mt-auto min-w-full shadow-xl shadow-indigo-500/20"
+				onClick={handleSaveQuiz}
+			>
 				Save Quiz
 			</Button>
 		</Container>

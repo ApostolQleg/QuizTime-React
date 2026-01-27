@@ -14,7 +14,7 @@ export default function Option({
 }) {
 	return (
 		<>
-			<div id={id} className="flex flex-row gap-3 items-center">
+			<div id={id} className="flex flex-row gap-4 items-center">
 				<Radio
 					id={`q${name}-o${id}`}
 					name={`q${name}`}

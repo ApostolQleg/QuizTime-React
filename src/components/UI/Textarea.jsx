@@ -2,6 +2,7 @@ export default function Textarea({ placeholder, className = "", onChange, ...pro
 	return (
 		<>
 			<textarea
+				rows="1"
 				placeholder={placeholder}
 				className={`${className} input`}
 				{...props}
