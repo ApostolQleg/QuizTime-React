@@ -9,9 +9,15 @@ export default function Header() {
 				<span className="tracking-wide drop-shadow-lg">QuizTime bitches!</span>
 			</header>
 			<nav className="justify-center flex flex-row space-x-8 text-2xl m-6 font-medium text-(--col-text-muted)">
-				<Link to="/" className="hover:text-(--col-text-accent) transition-colors duration-300">Quizzes</Link>
-				<Link to="/results" className="hover:text-(--col-text-accent) transition-colors duration-300">Results</Link>
-				<Link to="/help" className="hover:text-(--col-text-accent) transition-colors duration-300">Help</Link>
+				<Link to="/" className="nav-link">
+					Quizzes
+				</Link>
+				<Link to="/results" className="nav-link">
+					Results
+				</Link>
+				<Link to="/help" className="nav-link">
+					Help
+				</Link>
 			</nav>
 		</>
 	);

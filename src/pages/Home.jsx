@@ -47,9 +47,43 @@ export default function Home() {
 
 	if (isHelpPage) {
 		return (
-			<Container>
-				<div className="text-center col-span-full text-(--col-text-main)">
-					Here is an information section for new users.
+			<Container className="container-card gap-6 text-left">
+				<div className="quiz-title border-none pb-0">How to use QuizTime</div>
+
+				<div className="space-y-8 text-(--col-text-main)">
+					<section>
+						<h2 className="text-xl font-bold text-(--col-text-accent) mb-3">🎮 Taking a Quiz</h2>
+						<p className="mb-2">
+							Ready to test your knowledge? On the <span className="font-bold">Quizzes</span> page, simply click on any card to start.
+						</p>
+						<ul className="list-disc list-inside pl-2 sm:pl-4 opacity-90 space-y-1 marker:text-(--col-primary)">
+							<li>Select the answer you think is correct for each question.</li>
+							<li>Click <span className="font-bold text-(--col-danger)">Submit</span> at the bottom when you are finished.</li>
+							<li>You will see your score and the correct answers immediately!</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2 className="text-xl font-bold text-(--col-text-accent) mb-3">✨ Creating a Quiz</h2>
+						<p className="mb-2">
+							Want to challenge others? Click the big card with the <span className="font-bold text-(--col-primary)">+</span> icon on the home page.
+						</p>
+						<ul className="list-disc list-inside pl-2 sm:pl-4 opacity-90 space-y-1 marker:text-(--col-primary)">
+							<li>Give your quiz a catchy <strong>Title</strong> (max 30 characters).</li>
+							<li>Add a short <strong>Description</strong>.</li>
+							<li>Use <span className="font-bold">Add Question</span> to expand your quiz.</li>
+							<li>Don't forget to mark the <span className="font-bold text-(--col-success)">Correct Answer</span> for every question!</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2 className="text-xl font-bold text-(--col-text-accent) mb-3">📊 Checking Results</h2>
+						<p className="opacity-90">
+							Navigate to the <span className="font-bold">Results</span> page via the top menu.
+							Here you can track your progress, view your scores, and see the dates of your past attempts.
+							Click on any result card to review your specific answers.
+						</p>
+					</section>
 				</div>
 			</Container>
 		);

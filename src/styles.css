@@ -15,14 +15,15 @@
 		--col-primary: #4f46e5;
 		--col-primary-glow: rgba(79, 70, 229, 0.4);
 
-		--col-danger: #e11d48;
-		--col-danger-hover: #be123c;
-		--col-danger-glow: rgba(225, 29, 72, 0.3);
-		--col-danger-bg: rgba(225, 29, 72, 0.1);
+		--col-fail: #e11d48;
+		--col-fail-hover: #be123c;
+		--col-fail-glow: rgba(225, 29, 72, 0.3);
+		--col-fail-bg: rgba(225, 29, 72, 0.1);
 
 		--col-success: #059669;
-		--col-success-bg: rgba(5, 150, 105, 0.9);
-		--col-success-glow: rgba(5, 150, 105, 0.2);
+		--col-success-hover: #047857;
+		--col-success-glow: rgba(5, 150, 105, 0.3);
+		--col-success-bg: rgba(5, 150, 105, 0.1);
 	}
 
 	body {
@@ -56,12 +57,12 @@
 	}
 	.button {
 		@apply transition-all duration-300 flex items-center justify-center px-6 py-3 w-max font-semibold tracking-wide rounded-xl shadow-lg;
-		background-color: var(--col-danger);
+		background-color: var(--col-fail);
 		color: white;
-		box-shadow: 0 10px 15px -3px var(--col-danger-glow);
+		box-shadow: 0 10px 15px -3px var(--col-fail-glow);
 	}
 	.button:hover {
-		background-color: var(--col-danger-hover);
+		background-color: var(--col-fail-hover);
 	}
 
 	.quiz-card {
@@ -85,15 +86,15 @@
 
 	.error {
 		@apply rounded-lg border;
-		border-color: var(--col-danger);
-		background-color: var(--col-danger-bg);
+		border-color: var(--col-fail);
+		background-color: var(--col-fail-bg);
 		color: #fecdd3;
 	}
 
 	.quiz-error {
 		@apply rounded-lg backdrop-blur-sm border;
-		border-color: var(--col-danger);
-		background-color: rgba(225, 29, 72, 0.2);
+		border-color: var(--col-fail);
+		background-color: var(--col-fail-bg);
 		color: white;
 	}
 
@@ -104,11 +105,19 @@
 		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 	}
 
+	.nav-link {
+		@apply transition-colors duration-300;
+	}
+
+	.nav-link:hover {
+		color: var(--col-text-accent);
+	}
+
 	.option-false {
 		@apply flex shadow-md text-white border rounded-sm;
-		background-color: rgba(225, 29, 72, 0.9);
-		border-color: var(--col-danger);
-		box-shadow: 0 4px 6px -1px var(--col-danger-glow);
+		background-color: var(--col-fail-bg);
+		border-color: var(--col-fail);
+		box-shadow: 0 4px 6px -1px var(--col-fail-glow);
 	}
 
 	.option-true {
