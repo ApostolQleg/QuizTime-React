@@ -7,7 +7,7 @@ export default function Footer() {
 			<br />
 			the best team lead: Bohdanchik
 			<br />
-			ideas and help: Vlad, Bohdan
+			dev ideas and moral support: Vlad, Bohdan
 		</footer>
 	);
 }
