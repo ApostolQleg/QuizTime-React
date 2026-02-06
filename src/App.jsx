@@ -8,9 +8,11 @@ import Quiz from "./pages/Quiz.jsx";
 import Edit from "./pages/Edit.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import useAutoReload from "./hooks/useAutoReload.js";
 
 export default function App() {
 	const { pathname } = useLocation();
+	useAutoReload();
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
