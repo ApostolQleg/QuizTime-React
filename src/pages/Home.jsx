@@ -51,6 +51,34 @@ export default function Home() {
 		fetchData();
 	}, [isResultsPage, isHelpPage, user]);
 
+	const formatDateTime = (timestamp) => {
+		if (!timestamp) return "";
+		const date = new Date(timestamp);
+
+		const hours = String(date.getHours()).padStart(2, "0");
+		const minutes = String(date.getMinutes()).padStart(2, "0");
+		const day = String(date.getDate());
+		const year = date.getFullYear();
+
+		const months = [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		];
+		const monthName = months[date.getMonth()];
+
+		return `${hours}:${minutes}, ${day} ${monthName} ${year}`;
+	};
+
 	if (isHelpPage) {
 		return (
 			<Container className="container-card gap-6 text-left">
@@ -163,9 +191,7 @@ export default function Home() {
 									Score: {item.summary?.score ?? 0}/{item.summary?.total ?? 0}
 								</div>
 								<div className="text-xs mt-1 opacity-70">
-									{item.timestamp
-										? new Date(item.timestamp).toLocaleDateString()
-										: ""}
+									{item.timestamp ? formatDateTime(item.timestamp) : ""}
 								</div>
 							</>
 						) : (
