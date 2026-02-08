@@ -7,6 +7,7 @@ import Home from "./pages/Home.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Edit from "./pages/Edit.jsx";
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound.jsx";
 import useAutoReload from "./hooks/useAutoReload.js";
 
@@ -25,6 +26,7 @@ export default function App() {
 				<Routes>
 					<Route exact path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
 					<Route path="/results" element={<Home />} />
 					<Route path="/help" element={<Home />} />
 					<Route path="/quiz/:quizId" element={<Quiz />} />

@@ -47,7 +47,24 @@ export async function loginWithGoogle(credential) {
 	});
 
 	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Google login failed");
+	if (!res.ok) {
+		if (res.status === 404) {
+			throw new Error("USER_NOT_FOUND");
+		}
+		throw new Error(json.error || "Google login failed");
+	}
+	return json;
+}
+
+export async function extractGoogleData(credential) {
+	const res = await fetch(`${AUTH_URL}/google-extract`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ token: credential }),
+	});
+
+	const json = await res.json();
+	if (!res.ok) throw new Error(json.error || "Failed to extract Google data");
 	return json;
 }
 

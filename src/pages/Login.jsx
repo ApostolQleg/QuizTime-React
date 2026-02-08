@@ -1,199 +1,158 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { GoogleLogin } from "@react-oauth/google";
-import {
-	loginUser,
-	registerUser,
-	loginWithGoogle,
-	sendVerificationCode,
-} from "../services/storage";
+import { loginUser, loginWithGoogle } from "../services/storage";
 import Container from "../components/UI/Container.jsx";
 
 export default function Login() {
-	const [isRegister, setIsRegister] = useState(false);
-
-	const [isVerifying, setIsVerifying] = useState(false);
-
 	const [formData, setFormData] = useState({
-		email: "",
+		login: "",
 		password: "",
-		name: "",
-		code: "",
 	});
 
 	const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+
 	const navigate = useNavigate();
 	const { login } = useAuth();
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
+		setError("");
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("");
+		setIsLoading(true);
 
 		try {
-			let data;
-			if (isRegister) {
-				if (!isVerifying) {
-					await sendVerificationCode(formData.email);
-					setIsVerifying(true);
-					return;
-				} else {
-					data = await registerUser(formData);
-				}
-			} else {
-				data = await loginUser({ email: formData.email, password: formData.password });
-			}
-
+			const data = await loginUser({
+				login: formData.login,
+				password: formData.password,
+			});
 			login(data.user, data.token);
 			navigate("/");
 		} catch (err) {
-			setError(err.message || "Something went wrong");
+			setError(err.message || "Invalid credentials");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
-	const toggleMode = () => {
-		setIsRegister(!isRegister);
-		setIsVerifying(false);
-		setError("");
-		setFormData({ ...formData, code: "" });
-	};
-
 	const handleGoogleSuccess = async (credentialResponse) => {
+		setError("");
+		setIsLoading(true);
 		try {
 			const data = await loginWithGoogle(credentialResponse.credential);
 			login(data.user, data.token);
 			navigate("/");
-		} catch {
-			setError("Google Login Failed");
+		} catch (err) {
+			if (err.message === "USER_NOT_FOUND") {
+				navigate("/register");
+			} else {
+				setError("Google Login Failed. Please try again.");
+			}
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return (
-		<Container className="flex flex-col items-center justify-center gap-6 max-w-lg mx-auto mt-10">
-			<h2 className="text-3xl font-bold text-(--col-text-accent) drop-shadow-md">
-				{isRegister ? (isVerifying ? "Verify Email" : "Create Account") : "Welcome Back"}
+		<Container className="flex flex-col items-center justify-center gap-6">
+			<h2 className="text-3xl font-bold text-(--col-text-accent) drop-shadow-md text-center">
+				Welcome Back
 			</h2>
 
 			{error && (
-				<div className="w-full p-3 text-center border rounded-lg bg-(--col-fail-bg) border-(--col-fail) text-(--col-text-main)">
+				<div className="w-full max-w-md p-3 text-center border rounded-lg bg-(--col-fail-bg) border-(--col-fail) text-(--col-text-main)">
 					{error}
 				</div>
 			)}
 
-			<form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-				{(!isRegister || !isVerifying) && (
-					<>
-						{isRegister && (
-							<div className="flex flex-col gap-1">
-								<label className="text-sm font-semibold text-(--col-text-muted)">
-									Name
-								</label>
-								<input
-									className="input w-full text-lg"
-									type="text"
-									name="name"
-									placeholder="Enter your name"
-									value={formData.name}
-									onChange={handleChange}
-									required
-								/>
-							</div>
-						)}
-
-						<div className="flex flex-col gap-1">
-							<label className="text-sm font-semibold text-(--col-text-muted)">
-								Email
+			<div className="flex flex-col md:flex-row w-full items-stretch justify-between gap-8 md:gap-0 animate-fade-in">
+				<div className="flex-1 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-(--col-border) pb-8 md:pb-0 md:pr-12">
+					<form onSubmit={handleSubmit} className="w-full max-w-xs flex flex-col gap-5">
+						<div className="flex flex-col gap-2">
+							<label className="text-sm font-semibold text-(--col-text-muted) ml-1">
+								Nickname
 							</label>
 							<input
-								className="input w-full text-lg"
-								type="email"
-								name="email"
-								placeholder="name@example.com"
-								value={formData.email}
+								className="input w-full text-lg py-3 px-4"
+								type="text"
+								name="login"
+								placeholder="Your nickname"
+								value={formData.login}
 								onChange={handleChange}
 								required
-								disabled={isVerifying}
+								disabled={isLoading}
 							/>
 						</div>
 
-						<div className="flex flex-col gap-1">
-							<label className="text-sm font-semibold text-(--col-text-muted)">
+						<div className="flex flex-col gap-2">
+							<label className="text-sm font-semibold text-(--col-text-muted) ml-1">
 								Password
 							</label>
 							<input
-								className="input w-full text-lg"
+								className="input w-full text-lg py-3 px-4"
 								type="password"
 								name="password"
 								placeholder="••••••••"
 								value={formData.password}
 								onChange={handleChange}
 								required
-								disabled={isVerifying}
+								disabled={isLoading}
 							/>
 						</div>
-					</>
-				)}
-				
-				{isRegister && isVerifying && (
-					<div className="flex flex-col gap-1 animate-fade-in">
-						<label className="text-sm font-semibold text-(--col-text-muted)">
-							Verification Code
-						</label>
-						<input
-							className="input w-full text-lg text-center tracking-widest"
-							type="text"
-							name="code"
-							placeholder="123456"
-							value={formData.code}
-							onChange={handleChange}
-							required
-						/>
-						<p className="text-xs text-(--col-text-muted) mt-1">
-							We sent a code to {formData.email}.
-							<button
-								type="button"
-								onClick={() => setIsVerifying(false)}
-								className="ml-1 text-(--col-primary) hover:underline bg-transparent border-none cursor-pointer"
-							>
-								Change details?
-							</button>
-						</p>
+
+						<button
+							type="submit"
+							className="button w-full mt-2 justify-center text-lg py-3 shadow-lg"
+							disabled={isLoading}
+						>
+							{isLoading ? "Signing In..." : "Sign In"}
+						</button>
+					</form>
+				</div>
+
+				<div className="relative hidden md:flex items-center justify-center">
+					<div className="absolute bg-(--col-bg-card) p-3 text-(--col-text-muted) font-bold text-sm z-10 rounded-full border border-(--col-border)">
+						OR
 					</div>
-				)}
+				</div>
 
-				<button type="submit" className="button w-full mt-4 justify-center text-lg">
-					{isRegister ? (isVerifying ? "Confirm & Register" : "Send Code") : "Log In"}
-				</button>
-			</form>
+				<div className="md:hidden flex items-center justify-center -my-4 relative z-10">
+					<span className="bg-(--col-bg-card) px-4 text-(--col-text-muted) font-bold text-sm">
+						OR
+					</span>
+				</div>
 
-			<div className="flex items-center w-full mb-4">
-				<div className="h-px bg-(--col-border) flex-1" />
-				<span className="px-4 text-xs text-(--col-text-muted)">Or continue with</span>
-				<div className="h-px bg-(--col-border) flex-1" />
+				<div className="flex-1 flex flex-col items-center justify-center pt-8 md:pt-0 md:pl-12">
+					<div className="w-full max-w-xs flex flex-col items-center gap-6">
+						<p className="text-sm text-(--col-text-muted) text-center">
+							Log in quickly with your Google account
+						</p>
+						<div className="transform transition-transform hover:scale-105">
+							<GoogleLogin
+								onSuccess={handleGoogleSuccess}
+								onError={() => setError("Google Login Failed")}
+								theme="filled_blue"
+								shape="pill"
+								size="large"
+								text="signin_with"
+								width="280"
+							/>
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div className="w-full flex justify-center mb-4">
-				<GoogleLogin
-					onSuccess={handleGoogleSuccess}
-					onError={() => setError("Google Login Failed")}
-					theme="filled_blue"
-					shape="pill"
-					size="large"
-				/>
-			</div>
-
-			<div className="text-(--col-text-muted) text-sm mt-2">
-				{isRegister ? "Already have an account? " : "Don't have an account? "}
-				<button
-					onClick={toggleMode}
-					className="font-bold text-(--col-primary) hover:underline bg-transparent border-none cursor-pointer"
-				>
-					{isRegister ? "Log In" : "Register"}
-				</button>
+			<div className="text-(--col-text-muted) text-sm mt-4">
+				Don't have an account?{" "}
+				<Link to="/register" className="font-bold text-(--col-primary) hover:underline">
+					Sign Up
+				</Link>
 			</div>
 		</Container>
 	);

@@ -44,6 +44,7 @@
 		background-color: var(--col-fail);
 		color: var(--col-text-main);
 		box-shadow: 0 10px 15px -3px var(--col-fail-glow);
+		cursor: pointer;
 	}
 	.button:hover {
 		background-color: var(--col-fail-hover);
@@ -63,6 +64,7 @@
 		background-color: var(--col-bg-input);
 		border-color: var(--col-border);
 		color: var(--col-text-main);
+		cursor: text;
 	}
 	.input:focus {
 		border-color: var(--col-primary);
@@ -103,6 +105,7 @@
 		background-color: var(--col-fail-bg);
 		border-color: var(--col-fail);
 		box-shadow: 0 4px 6px -1px var(--col-fail-glow);
+		cursor: not-allowed;
 	}
 
 	.option-true {
@@ -110,6 +113,7 @@
 		background-color: var(--col-success-bg);
 		border-color: var(--col-success);
 		box-shadow: 0 4px 6px -1px var(--col-success-glow);
+		cursor: not-allowed;
 	}
 }
 

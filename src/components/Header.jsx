@@ -56,21 +56,43 @@ export default function Header() {
 								onClick={handleLogout}
 								className="px-4 py-2 ml-2 rounded-lg border-2 border-(--col-border) hover:bg-(--col-fail-bg) hover:text-(--col-fail) hover:border-(--col-fail) transition-all duration-300 text-sm font-semibold text-(--col-text-muted)"
 							>
-								Log Out
+								Sign Out
 							</button>
 						</div>
 					) : (
-						<Link
-							to="/login"
-							className="button"
-							style={{
-								backgroundColor: "var(--col-primary)",
-								color: "var(--col-text-main)",
-								boxShadow: "0 10px 15px -3px var(--col-primary-glow)",
-							}}
-						>
-							Log In
-						</Link>
+						<div className="flex flex-col sm:flex-row items-center gap-3 text-sm">
+							<span className="text-(--col-text-muted) hidden md:inline">
+								To have more abilities
+							</span>
+							<div className="flex gap-2">
+								<Link
+									to="/register"
+									className="button"
+									style={{
+										backgroundColor: "var(--col-primary)",
+										color: "var(--col-text-main)",
+										boxShadow: "0 10px 15px -3px var(--col-primary-glow)",
+									}}
+								>
+									Sign Up
+								</Link>
+								<span className="text-(--col-text-muted) self-center">or</span>
+								<Link
+									to="/login"
+									className="button"
+									style={{
+										backgroundColor: "var(--col-primary)",
+										color: "var(--col-text-main)",
+										boxShadow: "0 10px 15px -3px var(--col-primary-glow)",
+									}}
+								>
+									Sign In
+								</Link>
+							</div>
+							<span className="text-(--col-text-muted) text-xs sm:text-sm hidden md:inline">
+								if you already have an account
+							</span>
+						</div>
 					)}
 				</div>
 			</header>
