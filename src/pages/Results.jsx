@@ -42,7 +42,7 @@ export default function Results() {
 				setIsLoadingMore(false);
 			}
 		},
-		[user],
+		[user, ITEMS_PER_PAGE],
 	);
 
 	useEffect(() => {

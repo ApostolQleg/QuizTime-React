@@ -15,7 +15,7 @@ export default function Quizzes() {
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
 	const ITEMS_PER_PAGE = 36;
-	const ITEMS_PER_PAGE_AUTH = 35;
+	const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
 
 	const loadData = useCallback(
 		async (pageToLoad, isInitialLoad = false) => {
@@ -52,7 +52,7 @@ export default function Quizzes() {
 				setIsLoadingMore(false);
 			}
 		},
-		[user],
+		[user, ITEMS_PER_PAGE, ITEMS_PER_PAGE_AUTH],
 	);
 
 	useEffect(() => {
