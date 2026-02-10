@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getResults } from "../services/results.js";
 import { useAuth } from "../hooks/useAuth";
@@ -11,33 +11,62 @@ export default function Results() {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		async function fetchResults() {
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+	const ITEMS_PER_PAGE = 36;
+
+	const loadData = useCallback(
+		async (pageToLoad, isInitialLoad = false) => {
 			if (!user) {
 				setLoading(false);
 				return;
 			}
+
 			try {
-				const data = await getResults();
-				setItems(data);
+				if (!isInitialLoad) setIsLoadingMore(true);
+
+				const currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
+				const data = await getResults(currentSkip, ITEMS_PER_PAGE);
+
+				if (data.length < ITEMS_PER_PAGE) {
+					setHasMore(false);
+				}
+
+				setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
 			} catch (err) {
 				console.error("Failed to load results", err);
 			} finally {
 				setLoading(false);
+				setIsLoadingMore(false);
 			}
-		}
-		fetchResults();
-	}, [user]);
+		},
+		[user],
+	);
+
+	useEffect(() => {
+		setItems([]);
+		setPage(1);
+		setHasMore(true);
+		setLoading(true);
+
+		loadData(1, true);
+	}, [user, loadData]);
+
+	const handleLoadMore = () => {
+		const nextPage = page + 1;
+		setPage(nextPage);
+		loadData(nextPage, false);
+	};
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
 	) : (
 		<>
-			<span className="text-xl font-bold">
-				History is available only for registered users
-			</span>
+			<span className="text-xl font-bold">History is available for registered users.</span>
 			<Link to="/login" className="text-(--col-primary) hover:underline text-base">
-				Sign in to save your progress
+				Log in to save your progress
 			</Link>
 		</>
 	);
@@ -46,9 +75,9 @@ export default function Results() {
 		<Grid
 			items={items}
 			loading={loading}
-			hasMore={false}
-			onLoadMore={() => {}}
-			isLoadingMore={false}
+			hasMore={hasMore}
+			onLoadMore={handleLoadMore}
+			isLoadingMore={isLoadingMore}
 			showAddButton={false}
 			isResultsPage={true}
 			onCardClick={(item) => navigate(`/result/${item.quizId}/${item._id}`)}

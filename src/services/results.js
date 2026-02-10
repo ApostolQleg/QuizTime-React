@@ -1,7 +1,7 @@
 import { API_URL, getHeaders } from "./api";
 
-export async function getResults() {
-	const res = await fetch(`${API_URL}/results`, {
+export async function getResults(skip = 0, limit = 36) {
+	const res = await fetch(`${API_URL}/results?skip=${skip}&limit=${limit}`, {
 		headers: getHeaders(),
 	});
 	if (!res.ok) throw new Error("Failed to load results");

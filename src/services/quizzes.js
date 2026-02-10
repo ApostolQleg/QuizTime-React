@@ -1,6 +1,6 @@
 import { API_URL, getHeaders } from "./api";
 
-export async function getQuizzesList(skip = 0, limit = 36) {
+export async function getQuizzes(skip = 0, limit = 36) {
 	const res = await fetch(`${API_URL}/quizzes?skip=${skip}&limit=${limit}`, {
 		headers: getHeaders(),
 	});

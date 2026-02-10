@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getQuizzesList } from "../services/quizzes.js";
+import { getQuizzes } from "../services/quizzes.js";
 import { useAuth } from "../hooks/useAuth";
 import Grid from "../components/Home/Grid.jsx";
 import Description from "../components/Home/Description.jsx";
@@ -38,7 +38,7 @@ export default function Quizzes() {
 					currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
 				}
 
-				const data = await getQuizzesList(currentSkip, currentLimit);
+				const data = await getQuizzes(currentSkip, currentLimit);
 
 				if (data.length < currentLimit) {
 					setHasMore(false);

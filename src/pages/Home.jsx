@@ -1,4 +1,4 @@
-import { getQuizzesList } from "../services/quizzes.js";
+import { getQuizzes } from "../services/quizzes.js";
 import { getResults } from "../services/results.js";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
@@ -56,7 +56,7 @@ export default function Home() {
 						currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
 					}
 
-					data = await getQuizzesList(currentSkip, currentLimit);
+					data = await getQuizzes(currentSkip, currentLimit);
 
 					if (data.length < currentLimit) {
 						setHasMore(false);
