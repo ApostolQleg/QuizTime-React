@@ -54,19 +54,14 @@ export default function Description({ quiz, onClose }) {
 				</div>
 
 				<div className="flex justify-between items-center pt-6 mt-2 gap-4">
-					{/* Manage button - only for the owner */}
 					{canManage && (
 						<Button to={`/manage/${quiz.id}`} className="bg-blue-600 hover:bg-blue-700">
 							Manage
 						</Button>
 					)}
-
-					{/* Start Quiz - available to everyone */}
 					<Button to={`/quiz/${quiz.id}`} className="flex-1 shadow-xl text-lg">
 						Start Quiz
 					</Button>
-
-					{/* Delete button - only for the owner */}
 					{canManage && (
 						<Button onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
 							Delete
