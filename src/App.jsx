@@ -3,7 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthProvider.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import Home from "./pages/Home.jsx";
+import Quizzes from "./pages/Quizzes.jsx";
+import Results from "./pages/Results.jsx";
 import Help from "./pages/Help.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Edit from "./pages/Edit.jsx";
@@ -25,10 +26,10 @@ export default function App() {
 			<AuthProvider>
 				<Header />
 				<Routes>
-					<Route exact path="/" element={<Home />} />
+					<Route exact path="/" element={<Quizzes />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-					<Route path="/results" element={<Home />} />
+					<Route path="/results" element={<Results />} />
 					<Route path="/help" element={<Help />} />
 					<Route path="/quiz/:quizId" element={<Quiz />} />
 					<Route path="/result/:quizId/:resultIdParam" element={<Quiz />} />
