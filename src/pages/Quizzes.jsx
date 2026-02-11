@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getQuizzes } from "../services/quizzes.js";
 import { useAuth } from "../hooks/useAuth";
 import Grid from "../components/Home/Grid.jsx";
-import Description from "../components/Home/Description.jsx";
+import ModalDescription from "../components/Home/ModalDescription.jsx";
 
 export default function Quizzes() {
 	const { user } = useAuth();
@@ -84,7 +84,11 @@ export default function Quizzes() {
 			/>
 
 			{selectedQuiz && (
-				<Description quiz={selectedQuiz} onClose={() => setSelectedQuiz(null)} />
+				<ModalDescription
+					quiz={selectedQuiz}
+					onClose={() => setSelectedQuiz(null)}
+					isOpen={!!selectedQuiz}
+				/>
 			)}
 		</>
 	);
