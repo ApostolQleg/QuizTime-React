@@ -1,4 +1,4 @@
-import { API_URL, getHeaders } from "./api";
+import { API_URL, getHeaders } from "./api.js";
 
 export async function getResults(skip = 0, limit = 36) {
 	const res = await fetch(`${API_URL}/results?skip=${skip}&limit=${limit}`, {
