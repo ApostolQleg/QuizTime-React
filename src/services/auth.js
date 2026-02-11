@@ -1,4 +1,4 @@
-import { AUTH_URL } from "./api";
+import { AUTH_URL, getHeaders } from "./api";
 
 export async function registerUser(data) {
 	const res = await fetch(`${AUTH_URL}/register`, {
@@ -62,5 +62,16 @@ export async function sendVerificationCode(email) {
 
 	const json = await res.json();
 	if (!res.ok) throw new Error(json.error || "Failed to send verification code");
+	return json;
+}
+
+export async function verifySession() {
+	const res = await fetch(`${AUTH_URL}/me`, {
+		method: "GET",
+		headers: getHeaders(),
+	});
+
+	const json = await res.json();
+	if (!res.ok) throw new Error("Session invalid");
 	return json;
 }

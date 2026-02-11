@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import useAutoReload from "../hooks/useAutoReload.js";
 
+import { useAuth } from "../hooks/useAuth.js";
+import { verifySession } from "../services/auth.js";
+import { isTokenExpired } from "../utils/jwtUtil.js";
+
 import Quizzes from "../pages/Quizzes.jsx";
 import Results from "../pages/Results.jsx";
 import Help from "../pages/Help.jsx";
@@ -13,6 +17,8 @@ import NotFound from "../pages/NotFound.jsx";
 
 export default function AppRoutes() {
 	const { pathname } = useLocation();
+	const { token, logout } = useAuth();
+
 	const [refreshKey, setRefreshKey] = useState(0);
 
 	const handleSoftRefresh = () => {
@@ -23,7 +29,19 @@ export default function AppRoutes() {
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-	}, [pathname]);
+
+		if (token) {
+			if (isTokenExpired(token)) {
+				logout();
+				return;
+			}
+
+			verifySession().catch(() => {
+				console.log("User no longer exists. Logging out...");
+				logout();
+			});
+		}
+	}, [pathname, token, logout]);
 
 	return (
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">

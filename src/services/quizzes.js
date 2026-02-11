@@ -4,8 +4,10 @@ export async function getQuizzes(skip = 0, limit = 36) {
 	const res = await fetch(`${API_URL}/quizzes?skip=${skip}&limit=${limit}`, {
 		headers: getHeaders(),
 	});
+
+	const json = await res.json();
 	if (!res.ok) throw new Error("Failed to load quizzes");
-	return await res.json();
+	return json;
 }
 
 export async function createQuiz(data) {
@@ -14,16 +16,20 @@ export async function createQuiz(data) {
 		headers: getHeaders(),
 		body: JSON.stringify(data),
 	});
+
+	const json = await res.json();
 	if (!res.ok) throw new Error("Failed to create quiz");
-	return await res.json();
+	return json;
 }
 
 export async function getQuizById(id) {
 	const res = await fetch(`${API_URL}/quizzes/${id}`, {
 		headers: getHeaders(),
 	});
+
+	const json = await res.json();
 	if (!res.ok) throw new Error("Failed to load quiz details");
-	return await res.json();
+	return json;
 }
 
 export async function updateQuiz(id, data) {
@@ -32,8 +38,10 @@ export async function updateQuiz(id, data) {
 		headers: getHeaders(),
 		body: JSON.stringify(data),
 	});
+
+	const json = await res.json();
 	if (!res.ok) throw new Error("Failed to update quiz");
-	return await res.json();
+	return json;
 }
 
 export async function deleteQuiz(id) {
@@ -41,6 +49,8 @@ export async function deleteQuiz(id) {
 		method: "DELETE",
 		headers: getHeaders(),
 	});
+
+	const json = await res.json();
 	if (!res.ok) throw new Error("Failed to delete quiz");
-	return await res.json();
+	return json;
 }

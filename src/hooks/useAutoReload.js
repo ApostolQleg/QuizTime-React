@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "./useAuth";
+import { useAuth } from "./useAuth.js";
 import { isTokenExpired } from "../utils/jwtUtil.js";
+import { verifySession } from "../services/auth.js";
 
 export default function useAutoReload(onRefresh, timeoutMs = 5 * 60 * 1000) {
 	const lastLeaveTime = useRef(null);
@@ -30,13 +31,20 @@ export default function useAutoReload(onRefresh, timeoutMs = 5 * 60 * 1000) {
 						}
 
 						if (isTokenExpired(token)) {
-							console.log("Session expired. Logging out...");
+							console.log("Token expired. Logging out...");
 							logout();
 							return;
 						}
 
-						console.log("Updating data...");
-						if (onRefresh) onRefresh();
+						verifySession()
+							.then(() => {
+								console.log("Session verified. Updating data...");
+								if (onRefresh) onRefresh();
+							})
+							.catch(() => {
+								console.log("User deleted or session invalid. Logging out...");
+								logout();
+							});
 					}
 				}
 			}
