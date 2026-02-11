@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "./useAuth";
+import { isTokenExpired } from "../utils/jwtUtil.js";
 
-export default function useAutoReload(timeoutMs = 5 * 60 * 1000) {
+export default function useAutoReload(onRefresh, timeoutMs = 5 * 60 * 1000) {
 	const lastLeaveTime = useRef(null);
+	const location = useLocation();
+	const { token, logout } = useAuth();
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -12,9 +17,26 @@ export default function useAutoReload(timeoutMs = 5 * 60 * 1000) {
 					const now = Date.now();
 					const timeAway = now - lastLeaveTime.current;
 
+					const isEditing =
+						location.pathname.startsWith("/create") ||
+						location.pathname.startsWith("/manage");
+
 					if (timeAway > timeoutMs) {
-						console.log("Session expired while away. Reloading...");
-						window.location.reload();
+						if (isEditing) {
+							console.log(
+								"Welcome back. Session refresh ignored to protect unsaved work.",
+							);
+							return;
+						}
+
+						if (isTokenExpired(token)) {
+							console.log("Session expired. Logging out...");
+							logout();
+							return;
+						}
+
+						console.log("Updating data...");
+						if (onRefresh) onRefresh();
 					}
 				}
 			}
@@ -25,5 +47,5 @@ export default function useAutoReload(timeoutMs = 5 * 60 * 1000) {
 		return () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
-	}, [timeoutMs]);
+	}, [timeoutMs, location.pathname, token, logout, onRefresh]);
 }
