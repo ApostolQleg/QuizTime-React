@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import Question from "../components/Quiz/Question.jsx";
 import Button from "../components/UI/Button.jsx";
 import Container from "../components/UI/Container.jsx";
+import ModalConfirm from "../components/UI/ModalConfirm.jsx";
 
 export default function Quiz() {
 	const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function Quiz() {
 	const [loading, setLoading] = useState(true);
 	const [quizData, setQuizData] = useState(null);
 	const [resultData, setResultData] = useState(null);
+
+	const [alertInfo, setAlertInfo] = useState({ isOpen: false, message: "" });
 
 	const [answers, setAnswers] = useState([]);
 	const [errors, setErrors] = useState({});
@@ -121,7 +124,7 @@ export default function Quiz() {
 				navigate(`/result/${quizId}/${response.resultId}`);
 			} catch (error) {
 				console.error("Save error", error);
-				alert("Failed to save result");
+				setAlertInfo({ isOpen: true, message: "Failed to save result" });
 			}
 		} else {
 			const localResult = {
@@ -188,6 +191,15 @@ export default function Quiz() {
 					Back to Home
 				</Button>
 			)}
+
+			<ModalConfirm
+				isOpen={alertInfo.isOpen}
+				onClose={() => setAlertInfo({ ...alertInfo, isOpen: false })}
+				title="Ooops!"
+				message={alertInfo.message}
+				isAlert={true}
+				isDanger={true}
+			/>
 		</Container>
 	);
 }

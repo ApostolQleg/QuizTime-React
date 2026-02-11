@@ -6,6 +6,7 @@ import Input from "../components/UI/Input.jsx";
 import Button from "../components/UI/Button.jsx";
 import Textarea from "../components/UI/Textarea.jsx";
 import Container from "../components/UI/Container.jsx";
+import ModalConfirm from "../components/UI/ModalConfirm.jsx";
 
 const DEFAULT_QUESTION = {
 	id: 0,
@@ -24,6 +25,8 @@ export default function Edit() {
 	const isManagePage = location.pathname.startsWith("/manage");
 
 	const [loading, setLoading] = useState(isManagePage);
+
+	const [alertInfo, setAlertInfo] = useState({ isOpen: false, message: "" });
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -187,7 +190,10 @@ export default function Edit() {
 			navigate("/");
 		} catch (error) {
 			console.error("Error saving quiz: ", error);
-			alert("Failed to save quiz. Please try again later.");
+			setAlertInfo({
+				isOpen: true,
+				message: "Failed to save quiz. Please try again later.",
+			});
 		}
 	};
 
@@ -261,6 +267,14 @@ export default function Edit() {
 			<Button className="self-center mt-auto min-w-full shadow-xl" onClick={handleSaveQuiz}>
 				Save Quiz
 			</Button>
+			<ModalConfirm
+				isOpen={alertInfo.isOpen}
+				onClose={() => setAlertInfo({ ...alertInfo, isOpen: false })}
+				title="Error"
+				message={alertInfo.message}
+				isAlert={true}
+				isDanger={true}
+			/>
 		</Container>
 	);
 }
