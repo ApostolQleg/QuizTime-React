@@ -10,7 +10,6 @@ export default function Results() {
 
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
-
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -64,9 +63,11 @@ export default function Results() {
 		"You have no quiz results yet."
 	) : (
 		<>
-			<span className="text-xl font-bold">History is available for registered users.</span>
+			<span className="text-xl font-bold">
+				History is available only for registered users
+			</span>
 			<Link to="/login" className="text-(--col-primary) hover:underline text-base">
-				Log in to save your progress
+				Sign in to save your progress
 			</Link>
 		</>
 	);
