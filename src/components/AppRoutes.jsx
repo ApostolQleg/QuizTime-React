@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import useAutoReload from "../hooks/useAutoReload.js";
 
 import { useAuth } from "../hooks/useAuth.js";
-import { verifySession } from "../services/auth.js";
+import { verifySession } from "../services/user.js";
 import { isTokenExpired } from "../utils/jwtUtil.js";
 
 import Quizzes from "../pages/Quizzes.jsx";
