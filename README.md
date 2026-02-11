@@ -11,47 +11,51 @@ A dynamic and interactive quiz platform built with React. This application allow
 
 ## ✨ Features
 
-* **Authentication:** Secure login/register via Email (with verification codes) or Google OAuth.
-* **Quiz Engine:**
-    * Create, edit, and delete quizzes.
-    * Support for multiple questions and options.
-    * Pagination and search/filtering.
-* **User Profile:**
-    * **Avatar Generator:** Custom implementation of **Generators & Iterators** (`function*`) to create animated, mathematical color explosions for unique avatars.
-    * Nickname coloring and customization.
-    * "Danger Zone" for password changes and account deletion.
-* **Results & Analytics:** Track history of taken quizzes and view detailed scores.
-* **UI/UX:** Fully responsive design using **Tailwind CSS** with a custom dark mode theme.
+- **Authentication:** Secure login/register via Email (with verification codes) or Google OAuth.
+- **Quiz Engine:**
+    - Create, edit, and delete quizzes.
+    - Support for multiple questions and options.
+    - Pagination and search/filtering.
+- **User Profile:**
+    - **Avatar Generator:** Custom implementation of **Generators & Iterators** (`function*`) to create animated, mathematical color explosions for unique avatars.
+    - Nickname coloring and customization.
+    - "Danger Zone" for password changes and account deletion.
+- **Results & Analytics:** Track history of taken quizzes and view detailed scores.
+- **UI/UX:** Fully responsive design using **Tailwind CSS** with a custom dark mode theme.
 
 ## 🛠️ Tech Stack
 
-* **Core:** React, React Router DOM
-* **Build Tool:** Vite
-* **Styling:** Tailwind CSS
-* **State Management:** React Hooks (Context API for Auth)
-* **HTTP Client:** Fetch API
-* **Utils:** Google OAuth, Generators/Iterators for animations
+- **Core:** React, React Router DOM
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **State Management:** React Hooks (Context API for Auth)
+- **HTTP Client:** Fetch API
+- **Utils:** Google OAuth, Generators/Iterators for animations
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-* Node.js (v16+)
-* npm or yarn
+
+- Node.js (v16+)
+- npm or yarn
 
 ### Installation
 
 1.  Clone the repository:
+
     ```bash
     git clone [https://github.com/ApostolQleg/QuizTime-React.git](https://github.com/ApostolQleg/QuizTime-React.git)
     cd QuizTime-React
     ```
 
 2.  Install dependencies:
+
     ```bash
     npm install
     ```
 
 3.  Create a `.env` file in the root directory:
+
     ```env
     VITE_API_URL=http://localhost:3000/api
     VITE_AUTH_URL=http://localhost:3000/auth
@@ -65,11 +69,14 @@ A dynamic and interactive quiz platform built with React. This application allow
 
 ## 👨‍💻 Authors
 
-* **Oleg Bondarenko** - *Lead Developer*
-    * National Technical University of Ukraine "Igor Sikorsky Kyiv Polytechnic Institute"
-    * Faculty of Informatics and Computer Engineering (FIOT)
-    * Group: **IM-54**
-* **dimpennn** - *Partner Developer*
+- **Oleg Bondarenko** - _Lead Developer_
+    - National Technical University of Ukraine "Igor Sikorsky Kyiv Polytechnic Institute"
+    - Faculty of Informatics and Computer Engineering (FIOT)
+    - Group: **IM-54**
+- **dimpennn** - _Partner Developer_
+    - National Technical University of Ukraine "Igor Sikorsky Kyiv Polytechnic Institute"
+    - Faculty of Informatics and Computer Engineering (FIOT)
+    - Group: **IM-54**
 
 ## 📄 License
 
