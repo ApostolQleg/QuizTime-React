@@ -3,8 +3,8 @@ import { consumeIteratorWithTimeout } from "./iterator.js";
 
 /**
  * Explosion Animation
- *
- * Creates a colorful explosion effect for a limited time
+ * @param {function} onUpdateReactState - Callback function to update React state with the current color and scale
+ * @param {function} onFinishReactState - Callback function to update React state when the animation finishes with the final color
  */
 export function startExplosionAnimation(onUpdateReactState, onFinishReactState) {
 	const colorIterator = colorGenerator();
@@ -13,7 +13,10 @@ export function startExplosionAnimation(onUpdateReactState, onFinishReactState) 
 		colorIterator,
 		2000,
 		(color, progress) => {
-			const oscillation = Math.sin(progress * Math.PI * 10) * (1 - progress);
+			// Create an oscillation effect that peaks at the middle of the animation
+			const oscillation = Math.sin(progress * Math.PI * 6) * (1 - progress);
+
+			// Scale the explosion from 1 to 2 and back to 1, with an oscillation effect
 			const scale = 1 + Math.abs(oscillation);
 
 			onUpdateReactState(color, scale);

@@ -1,7 +1,6 @@
 /**
  * Color Generator
- *
- * Generates random HSL colors indefinitely
+ * @returns {Generator} A generator that yields random HSL color strings
  */
 
 export function* colorGenerator() {
