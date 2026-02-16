@@ -6,6 +6,7 @@ import { registerUser, sendVerificationCode, extractGoogleData } from "../servic
 import Container from "../components/UI/Container.jsx";
 import Input from "../components/UI/Input.jsx";
 import Button from "../components/UI/Button.jsx";
+import Avatar from "../components/UI/Avatar.jsx";
 
 export default function Register() {
 	const navigate = useNavigate();
@@ -230,17 +231,7 @@ export default function Register() {
 					className="w-full flex flex-col gap-4 animate-fade-in"
 				>
 					<div className="p-3 mb-2 bg-(--col-bg-input-darker) rounded-lg border border-(--col-border) flex items-center gap-3">
-						{formData.avatarUrl ? (
-							<img
-								src={formData.avatarUrl}
-								alt="Avatar"
-								className="w-10 h-10 rounded-full"
-							/>
-						) : (
-							<div className="w-10 h-10 rounded-full bg-(--col-primary) flex items-center justify-center font-bold">
-								{formData.name.charAt(0).toUpperCase() || "U"}
-							</div>
-						)}
+						<Avatar src={formData.avatarUrl} name={formData.name} size="md" />
 						<div className="flex flex-col overflow-hidden">
 							<span className="text-xs text-(--col-text-muted)">Registering as</span>
 							<span className="text-sm font-bold truncate">{formData.email}</span>
