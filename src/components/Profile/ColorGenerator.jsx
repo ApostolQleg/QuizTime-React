@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { startExplosionAnimation } from "../../utils/animationUtil.js";
+import { startColorAnimation } from "../../utils/animationUtil.js";
 import Button from "../UI/Button.jsx";
 
-export default function AvatarGenerator({ onColorSelect, initialColor }) {
+export default function ColorGenerator({ onColorSelect, initialColor }) {
 	const [displayColor, setDisplayColor] = useState(initialColor || "#4f46e5");
 	const [scale, setScale] = useState(1);
 	const [isAnimating, setIsAnimating] = useState(false);
@@ -19,7 +19,7 @@ export default function AvatarGenerator({ onColorSelect, initialColor }) {
 		if (isAnimating) return;
 		setIsAnimating(true);
 
-		stopAnimationRef.current = startExplosionAnimation(
+		stopAnimationRef.current = startColorAnimation(
 			(color, currentScale) => {
 				setDisplayColor(color);
 				setScale(currentScale);
