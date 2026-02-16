@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
-import AvatarGenerator from "./AvatarGenerator.jsx";
+import ColorGenerator from "./ColorGenerator.jsx";
 
 export default function ProfileForm({ user, onSave, isLoading }) {
 	const [name, setName] = useState(user.name || "");
@@ -86,7 +86,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 						</p>
 					</div>
 				) : (
-					<AvatarGenerator
+					<ColorGenerator
 						initialColor={generatedColor}
 						onColorSelect={setGeneratedColor}
 					/>

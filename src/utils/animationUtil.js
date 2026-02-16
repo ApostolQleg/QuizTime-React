@@ -1,28 +1,42 @@
-import { colorGenerator } from "./colorGenerator.js";
-import { AnimationSequence } from "./iterator.js";
+import { generator } from "./generator.js";
 
-export function startExplosionAnimation(onUpdateReactState, onFinishReactState) {
-	const colorSource = colorGenerator();
+// linear interpolation function
+const lerp = (start, end, t) => start + (end - start) * t;
 
-	const animationSequence = new AnimationSequence(colorSource, 2000);
+export function startColorAnimation(onUpdateReactState, onFinishReactState) {
+	const hueSource = generator();
+	const duration = 2000;
 
-	const iterator = animationSequence[Symbol.iterator]();
+	const startHue = hueSource.next().value;
+	const targetHue = hueSource.next().value;
 
-	const intervalId = setInterval(() => {
-		const { value, done } = iterator.next();
-		const { color, progress } = value;
+	let startTime = null;
+	let animationFrameId;
 
-		if (done) {
-			clearInterval(intervalId);
-			onFinishReactState(color);
-			return;
-		}
+	const step = (timestamp) => {
+		if (!startTime) startTime = timestamp;
 
-		const oscillation = Math.sin(progress * Math.PI * 6) * (1 - progress);
-		const scale = 1 + Math.abs(oscillation) * 0.5;
+		const elapsed = timestamp - startTime;
+		const progress = Math.min(elapsed / duration, 1);
+
+		const power = 0.5;
+		const frequency = 2;
+
+		const currentHue = lerp(startHue, targetHue, progress);
+		const color = `hsl(${currentHue}, 90%, 55%)`;
+
+		const scale = 1 + Math.abs(Math.sin(progress * frequency * Math.PI)) * power;
 
 		onUpdateReactState(color, scale);
-	}, 50); 
 
-	return () => clearInterval(intervalId);
+		if (progress < 1) {
+			animationFrameId = requestAnimationFrame(step);
+		} else {
+			onFinishReactState(color);
+		}
+	};
+
+	animationFrameId = requestAnimationFrame(step);
+
+	return () => cancelAnimationFrame(animationFrameId);
 }
