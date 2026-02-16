@@ -2,6 +2,7 @@ import { useState } from "react";
 import Input from "../UI/Input.jsx";
 import Button from "../UI/Button.jsx";
 import ColorGenerator from "./ColorGenerator.jsx";
+import Avatar from "../UI/Avatar.jsx";
 
 export default function ProfileForm({ user, onSave, isLoading }) {
 	const [name, setName] = useState(user.name || "");
@@ -71,11 +72,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 				{avatarType === "google" ? (
 					<div className="flex flex-col items-center p-6 border border-(--col-border) rounded-xl bg-(--col-bg-input-darker)">
 						{user.avatarUrl ? (
-							<img
-								src={user.avatarUrl}
-								alt="Google Avatar"
-								className="w-24 h-24 rounded-full shadow-lg"
-							/>
+							<Avatar src={user.avatarUrl} name={user.name} size="lg" />
 						) : (
 							<div className="w-24 h-24 rounded-full bg-gray-600 flex items-center justify-center text-2xl">
 								?

@@ -6,7 +6,7 @@ import { verifySession, updateUser, deleteUser } from "../services/user.js";
 import Container from "../components/UI/Container.jsx";
 import ProfileForm from "../components/Profile/ProfileForm.jsx";
 import ModalConfirm from "../components/UI/ModalConfirm.jsx";
-import ModalChangePassword from "../components/Profile/ModalChangePassword.jsx"; 
+import ModalChangePassword from "../components/Profile/ModalChangePassword.jsx";
 import Button from "../components/UI/Button.jsx";
 
 export default function Profile() {

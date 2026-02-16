@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { useState } from "react";
 import ModalConfirm from "./UI/ModalConfirm.jsx";
+import Avatar from "./UI/Avatar.jsx";
 
 export default function Header() {
 	const { user, logout } = useAuth();
@@ -53,7 +54,7 @@ export default function Header() {
 										Welcome,
 									</span>
 									<span
-										className="font-bold max-w-[150px] truncate transition-colors duration-300"
+										className="font-bold max-w-37.5 truncate transition-colors duration-300"
 										style={{ color: user.themeColor || "var(--col-primary)" }}
 									>
 										{user.name}
@@ -62,11 +63,7 @@ export default function Header() {
 
 								<div className="relative">
 									{user.avatarUrl ? (
-										<img
-											src={user.avatarUrl}
-											alt={user.name}
-											className="w-10 h-10 rounded-full border border-(--col-border) shadow-md object-cover group-hover:border-(--col-text-accent) transition-colors"
-										/>
+										<Avatar src={user.avatarUrl} name={user.name} size="sm" />
 									) : user.avatarType === "generated" && user.themeColor ? (
 										<div
 											className="w-10 h-10 rounded-full border border-(--col-border) shadow-md group-hover:scale-105 transition-transform"
