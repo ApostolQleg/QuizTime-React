@@ -189,15 +189,19 @@ export default function Register() {
 						<label className="text-sm font-semibold text-(--col-text-muted)">
 							Verification Code
 						</label>
-						<Input
+						<input
+							className="input w-full text-lg text-center tracking-widest"
+							style={{
+								border: "none",
+								letterSpacing: "0.3em",
+								backgroundColor: "transparent",
+							}}
 							type="text"
 							name="code"
 							placeholder="123456"
 							value={formData.code}
 							onChange={handleChange}
 							required
-							className="text-center text-2xl tracking-[0.5em] font-mono border-none bg-transparent focus:ring-0"
-							maxLength={6}
 						/>
 						<p className="text-xs text-center text-(--col-text-muted)">
 							Code sent to{" "}
