@@ -1,18 +1,24 @@
 import { generator } from "./generator.js";
 
-export function startColorAnimation(onUpdateReactState, onFinishReactState) {
+export function startColorAnimation(onUpdateReactState, onFinishReactState, initialColor) {
 	const color = generator();
 	const duration = 2000;
 
-	const startColor = color.next().value;
+	const startColor = initialColor
+		? parseInt(initialColor.split("(")[1].split(",")[0])
+		: color.next().value;
 	let targetColor = color.next().value;
 
-	if (targetColor - startColor > 180) {
-		targetColor -= 360;
-	} else if (startColor - targetColor > 180) {
-		targetColor += 360;
+	let colorDifference = Math.abs(targetColor - startColor);
+
+	if (colorDifference < 180) {
+		if (targetColor > startColor) {
+			targetColor -= 360;
+		} else {
+			targetColor += 360;
+		}
+		colorDifference = Math.abs(targetColor - startColor);
 	}
-	const colorDifference = targetColor - startColor;
 
 	let startTime = null;
 	let animationFrameId;
