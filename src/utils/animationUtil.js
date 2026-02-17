@@ -1,24 +1,26 @@
 import { generator } from "./generator.js";
+import getHue from "./colorFormatter.js";
 
 export function startColorAnimation(onUpdateReactState, onFinishReactState, initialColor) {
-	const color = generator();
-	const duration = 2000;
+	const gen = generator();
 
-	const startColor = initialColor
-		? parseInt(initialColor.split("(")[1].split(",")[0])
-		: color.next().value;
-	let targetColor = color.next().value;
+	const startHue = getHue(initialColor);
 
-	let colorDifference = Math.abs(targetColor - startColor);
+	let targetHue = gen.next().value;
 
-	if (colorDifference < 180) {
-		if (targetColor > startColor) {
-			targetColor -= 360;
+	const duration = 1000;
+
+	let delta = targetHue - startHue;
+
+	if (Math.abs(delta) < 180) {
+		if (delta > 0) {
+			targetHue -= 360;
 		} else {
-			targetColor += 360;
+			targetHue += 360;
 		}
-		colorDifference = Math.abs(targetColor - startColor);
 	}
+
+	const finalDelta = targetHue - startHue;
 
 	let startTime = null;
 	let animationFrameId;
@@ -29,15 +31,20 @@ export function startColorAnimation(onUpdateReactState, onFinishReactState, init
 		const elapsed = timestamp - startTime;
 		const progress = Math.min(elapsed / duration, 1);
 
-		const currentColor = startColor + colorDifference * progress;
-		const color = `hsl(${currentColor}, 90%, 55%)`;
+		const currentHue = startHue + finalDelta * progress;
 
-		onUpdateReactState(color);
+		const colorString = `hsl(${currentHue}, 90%, 55%)`;
+
+		const scale = 1 + Math.sin(progress * Math.PI) * 0.3;
+
+		onUpdateReactState(colorString, scale);
 
 		if (progress < 1) {
 			animationFrameId = requestAnimationFrame(step);
 		} else {
-			onFinishReactState(color);
+			const finalHue = targetHue % 360;
+			const finalColorString = `hsl(${finalHue}, 90%, 55%)`;
+			onFinishReactState(finalColorString);
 		}
 	};
 
