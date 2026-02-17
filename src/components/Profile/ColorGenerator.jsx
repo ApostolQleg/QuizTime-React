@@ -3,7 +3,7 @@ import { startColorAnimation } from "../../utils/animationUtil.js";
 import Button from "../UI/Button.jsx";
 
 export default function ColorGenerator({ onColorSelect, initialColor }) {
-	const [displayColor, setDisplayColor] = useState(initialColor || "#4f46e5");
+	const [displayColor, setDisplayColor] = useState(initialColor);
 	const [scale, setScale] = useState(1);
 	const [isAnimating, setIsAnimating] = useState(false);
 
@@ -30,6 +30,7 @@ export default function ColorGenerator({ onColorSelect, initialColor }) {
 				setIsAnimating(false);
 				onColorSelect(finalColor);
 			},
+			displayColor,
 		);
 	};
 

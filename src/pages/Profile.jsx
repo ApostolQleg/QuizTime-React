@@ -89,7 +89,12 @@ export default function Profile() {
 				My Profile
 			</h1>
 
-			<ProfileForm user={user} onSave={handleSaveProfile} isLoading={isSaving} />
+			<ProfileForm
+				key={user._id + (user.themeColor || "")}
+				user={user}
+				onSave={handleSaveProfile}
+				isLoading={isSaving}
+			/>
 
 			<hr className="w-full border-(--col-border) opacity-50" />
 
