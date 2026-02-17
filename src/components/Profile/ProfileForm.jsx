@@ -5,8 +5,14 @@ import ColorGenerator from "./ColorGenerator.jsx";
 import Avatar from "../UI/Avatar.jsx";
 
 export default function ProfileForm({ user, onSave, isLoading }) {
+	const hasGoogleAccount = !!user.googleId;
+
 	const [name, setName] = useState(user.name || "");
-	const [avatarType, setAvatarType] = useState(user.avatarType || "google");
+
+	const [avatarType, setAvatarType] = useState(
+		hasGoogleAccount ? user.avatarType || "google" : "generated",
+	);
+
 	const [generatedColor, setGeneratedColor] = useState(user.themeColor || "#4f46e5");
 
 	const hasChanges =
@@ -36,40 +42,43 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 					required
 				/>
 			</div>
+			{hasGoogleAccount && (
+				<div className="flex flex-col gap-3">
+					<label className="text-sm font-bold text-(--col-text-muted)">
+						Avatar Source
+					</label>
 
-			<div className="flex flex-col gap-3">
-				<label className="text-sm font-bold text-(--col-text-muted)">Avatar Source</label>
-
-				<div className="flex gap-4 p-1 bg-(--col-bg-input) rounded-lg border border-(--col-border)">
-					<button
-						type="button"
-						onClick={() => setAvatarType("google")}
-						className={`flex-1 py-2 rounded-md transition-all text-sm font-semibold cursor-pointer
+					<div className="flex gap-4 p-1 bg-(--col-bg-input) rounded-lg border border-(--col-border)">
+						<button
+							type="button"
+							onClick={() => setAvatarType("google")}
+							className={`flex-1 py-2 rounded-md transition-all text-sm font-semibold cursor-pointer
                             ${
 								avatarType === "google"
 									? "bg-(--col-bg-card) shadow-md text-(--col-text-main)"
 									: "text-(--col-text-muted) hover:text-(--col-text-main)"
 							}`}
-					>
-						Google Photo
-					</button>
-					<button
-						type="button"
-						onClick={() => setAvatarType("generated")}
-						className={`flex-1 py-2 rounded-md transition-all text-sm font-semibold cursor-pointer
+						>
+							Google Photo
+						</button>
+						<button
+							type="button"
+							onClick={() => setAvatarType("generated")}
+							className={`flex-1 py-2 rounded-md transition-all text-sm font-semibold cursor-pointer
                             ${
 								avatarType === "generated"
 									? "bg-(--col-bg-card) shadow-md text-(--col-text-main)"
 									: "text-(--col-text-muted) hover:text-(--col-text-main)"
 							}`}
-					>
-						Color Generator
-					</button>
+						>
+							Color Generator
+						</button>
+					</div>
 				</div>
-			</div>
+			)}
 
 			<div className="animate-fade-in">
-				{avatarType === "google" ? (
+				{avatarType === "google" && hasGoogleAccount ? (
 					<div className="flex flex-col items-center p-6 border border-(--col-border) rounded-xl bg-(--col-bg-input-darker)">
 						{user.avatarUrl ? (
 							<Avatar src={user.avatarUrl} name={user.name} size="lg" />
@@ -83,10 +92,17 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 						</p>
 					</div>
 				) : (
-					<ColorGenerator
-						initialColor={generatedColor}
-						onColorSelect={setGeneratedColor}
-					/>
+					<div className="flex flex-col gap-2">
+						{!hasGoogleAccount && (
+							<label className="text-sm font-bold text-(--col-text-muted)">
+								Avatar Theme
+							</label>
+						)}
+						<ColorGenerator
+							initialColor={generatedColor}
+							onColorSelect={setGeneratedColor}
+						/>
+					</div>
 				)}
 			</div>
 
