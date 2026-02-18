@@ -1,23 +1,19 @@
-import { generator } from "./generator.js";
-import getHue from "./colorFormatter.js";
+import getHue from "./colorUtil.js";
 
-export function startColorAnimation(onUpdateReactState, onFinishReactState, initialColor) {
-	const gen = generator();
-
+export function startColorAnimation(
+	onUpdateReactState,
+	onFinishReactState,
+	initialColor,
+	iterator,
+	duration = 1000,
+) {
 	const startHue = getHue(initialColor);
-
-	let targetHue = gen.next().value;
-
-	const duration = 1000;
+	let targetHue = iterator.next().value;
 
 	let delta = targetHue - startHue;
 
 	if (Math.abs(delta) < 180) {
-		if (delta > 0) {
-			targetHue -= 360;
-		} else {
-			targetHue += 360;
-		}
+		delta = delta > 0 ? delta - 360 : delta + 360;
 	}
 
 	const finalDelta = targetHue - startHue;
