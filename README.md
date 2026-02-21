@@ -58,7 +58,6 @@ A dynamic and interactive quiz platform built with React. This application allow
 
     ```env
     VITE_API_URL=http://localhost:3000/api
-    VITE_AUTH_URL=http://localhost:3000/auth
     VITE_GOOGLE_CLIENT_ID=your_google_client_id
     ```
 
