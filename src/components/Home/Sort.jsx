@@ -31,8 +31,9 @@ export default function Sort({ currentSort, onSortChange }) {
 		<div className="relative h-full flex items-center" ref={dropdownRef}>
 			<button
 				onClick={() => setIsOpen(!isOpen)}
-				className="h-full p-3 border-none rounded-xl hover:border-(--col-primary) transition-all flex items-center justify-center cursor-pointer shadow-md"
+				className="h-full p-3 border-none rounded-xl transition-all flex items-center justify-center cursor-pointer shadow-md"
 				title="Sort quizzes"
+				type="button"
 			>
 				<img
 					src={currentOption.icon}
@@ -45,6 +46,7 @@ export default function Sort({ currentSort, onSortChange }) {
 				<div className="absolute top-[110%] right-0 w-56 bg-(--col-bg-card) border border-(--col-border) rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden flex flex-col">
 					{SORT_OPTIONS.map((option) => (
 						<button
+							type="button"
 							key={option.id}
 							className={`w-full flex flex-row items-center gap-4 px-4 py-3 hover:bg-(--col-bg-input) transition-colors cursor-pointer text-left ${
 								currentSort === option.id
