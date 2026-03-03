@@ -5,6 +5,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";
 import ModalDescription from "../components/Home/ModalDescription.jsx";
 import SearchBar from "../components/Home/SearchBar.jsx";
+import Sort from "../components/Home/Sort.jsx";
 
 const ITEMS_PER_PAGE = 36;
 const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
@@ -22,8 +23,10 @@ export default function Quizzes() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
+	const [sortOption, setSortOption] = useState("newest");
+
 	const loadData = useCallback(
-		async (pageToLoad, isInitialLoad = false, searchParam = "") => {
+		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
 			try {
 				if (!isInitialLoad) setIsLoadingMore(true);
 
@@ -43,7 +46,7 @@ export default function Quizzes() {
 					currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
 				}
 
-				const data = await getQuizzes(currentSkip, currentLimit, searchParam);
+				const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam);
 
 				if (data.length < currentLimit) {
 					setHasMore(false);
@@ -65,13 +68,13 @@ export default function Quizzes() {
 		setPage(1);
 		setHasMore(true);
 		setLoading(true);
-		loadData(1, true, debouncedQuery);
-	}, [user, loadData, debouncedQuery]);
+		loadData(1, true, debouncedQuery, sortOption);
+	}, [user, loadData, debouncedQuery, sortOption]);
 
 	const handleLoadMore = () => {
 		const nextPage = page + 1;
 		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery);
+		loadData(nextPage, false, debouncedQuery, sortOption);
 	};
 
 	const handleDeleteSuccess = (deletedQuizId) => {
@@ -84,11 +87,16 @@ export default function Quizzes() {
 	return (
 		<>
 			<div className="flex flex-col items-center justify-between gap-3">
-				<SearchBar
-					searchTerm={searchQuery}
-					onSearchChange={setSearchQuery}
-					placeholder="Search for quizzes..."
-				/>
+				<div className="flex flex-row items-stretch justify-center gap-3 w-full max-w-xs sm:max-w-xl lg:max-w-2xl">
+					<div className="flex-1">
+						<SearchBar
+							searchTerm={searchQuery}
+							onSearchChange={setSearchQuery}
+							placeholder="Search for quizzes..."
+						/>
+					</div>
+					<Sort currentSort={sortOption} onSortChange={setSortOption} />
+				</div>
 				<Grid
 					items={items}
 					loading={loading}
