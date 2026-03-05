@@ -91,6 +91,7 @@ export default function Quizzes() {
 					onSearchChange={setSearchQuery}
 					sortOption={sortOption}
 					onSortChange={setSortOption}
+					placeholder={"Search for quizzes..."}
 				/>
 				<Grid
 					items={items}

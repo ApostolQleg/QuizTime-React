@@ -86,6 +86,7 @@ export default function Results() {
 					onSearchChange={setSearchQuery}
 					sortOption={sortOption}
 					onSortChange={setSortOption}
+					placeholder={"Search for results..."}
 				/>
 				<Grid
 					items={items}
