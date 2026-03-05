@@ -1,9 +1,10 @@
 import { API_URL, getHeaders } from "./api.js";
 
-export async function getResults(skip = 0, limit = 36, search = "") {
+export async function getResults(skip = 0, limit = 36, search = "", sort = "newest") {
 	const params = new URLSearchParams({
 		skip: String(skip),
 		limit: String(limit),
+		sort: sort,
 	});
 	if (search !== "") {
 		params.append("search", search);
