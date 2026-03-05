@@ -4,8 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";
 import ModalDescription from "../components/Home/ModalDescription.jsx";
-import SearchBar from "../components/Home/SearchBar.jsx";
-import Sort from "../components/Home/Sort.jsx";
+import ToolBar from "../components/Home/ToolBar.jsx";
 
 const ITEMS_PER_PAGE = 36;
 const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
@@ -87,16 +86,13 @@ export default function Quizzes() {
 	return (
 		<>
 			<div className="flex flex-col items-center justify-between gap-3">
-				<div className="flex flex-row items-stretch justify-center gap-3 w-full max-w-xs sm:max-w-xl lg:max-w-2xl">
-					<div className="flex-1">
-						<SearchBar
-							searchTerm={searchQuery}
-							onSearchChange={setSearchQuery}
-							placeholder="Search for quizzes..."
-						/>
-					</div>
-					<Sort currentSort={sortOption} onSortChange={setSortOption} />
-				</div>
+				<ToolBar
+					searchQuery={searchQuery}
+					onSearchChange={setSearchQuery}
+					sortOption={sortOption}
+					onSortChange={setSortOption}
+					placeholder={"Search for quizzes..."}
+				/>
 				<Grid
 					items={items}
 					loading={loading}

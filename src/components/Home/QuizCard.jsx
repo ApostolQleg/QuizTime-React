@@ -14,7 +14,7 @@ export default function QuizCard({ item, isResultsPage, onClick }) {
 							Score: {item.summary?.score ?? 0}/{item.summary?.total ?? 0}
 						</div>
 						<div className="text-xs mt-1 opacity-70">
-							{item.timestamp ? formatDateTime(item.timestamp) : ""}
+							{item.createdAt ? formatDateTime(item.createdAt) : ""}
 						</div>
 					</>
 				) : (

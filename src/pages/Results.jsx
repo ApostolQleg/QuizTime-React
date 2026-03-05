@@ -4,7 +4,7 @@ import { getResults } from "../services/results.js";
 import { useAuth } from "../hooks/useAuth";
 import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";
-import SearchBar from "../components/Home/SearchBar.jsx";
+import ToolBar from "../components/Home/ToolBar.jsx";
 
 const ITEMS_PER_PAGE = 36;
 
@@ -21,8 +21,10 @@ export default function Results() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
+	const [sortOption, setSortOption] = useState("newest");
+
 	const loadData = useCallback(
-		async (pageToLoad, isInitialLoad = false, searchParam = "") => {
+		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
 			if (!user) {
 				setLoading(false);
 				return;
@@ -32,7 +34,7 @@ export default function Results() {
 				if (!isInitialLoad) setIsLoadingMore(true);
 
 				const currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
-				const data = await getResults(currentSkip, ITEMS_PER_PAGE, searchParam);
+				const data = await getResults(currentSkip, ITEMS_PER_PAGE, searchParam, sortParam);
 
 				if (data.length < ITEMS_PER_PAGE) {
 					setHasMore(false);
@@ -54,13 +56,13 @@ export default function Results() {
 		setPage(1);
 		setHasMore(true);
 		setLoading(true);
-		loadData(1, true, debouncedQuery);
-	}, [user, loadData, debouncedQuery]);
+		loadData(1, true, debouncedQuery, sortOption);
+	}, [user, loadData, debouncedQuery, sortOption]);
 
 	const handleLoadMore = () => {
 		const nextPage = page + 1;
 		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery);
+		loadData(nextPage, false, debouncedQuery, sortOption);
 	};
 
 	const emptyMessage = user ? (
@@ -79,10 +81,12 @@ export default function Results() {
 	return (
 		<>
 			<div className="flex flex-col items-center justify-between gap-3">
-				<SearchBar
-					searchTerm={searchQuery}
+				<ToolBar
+					searchQuery={searchQuery}
 					onSearchChange={setSearchQuery}
-					placeholder="Search for results..."
+					sortOption={sortOption}
+					onSortChange={setSortOption}
+					placeholder={"Search for results..."}
 				/>
 				<Grid
 					items={items}

@@ -50,7 +50,7 @@ export default function Grid({
 						disabled={isLoadingMore}
 						className="button px-8 py-3 text-lg"
 					>
-						{isLoadingMore ? "Loading..." : "Load More Quizzes"}
+						{isLoadingMore ? "Loading..." : "Load More"}
 					</button>
 				</div>
 			)}
