@@ -32,6 +32,12 @@ export default function Grid({
 						</Link>
 					)}
 
+					{!loading && items.length === 0 && (
+						<div className="text-center text-(--col-text-main) flex flex-col gap-2">
+							{emptyMessage}
+						</div>
+					)}
+
 					{items.map((item, index) => (
 						<QuizCard
 							key={`${item._id}-${index}`}
@@ -52,12 +58,6 @@ export default function Grid({
 					>
 						{isLoadingMore ? "Loading..." : "Load More"}
 					</button>
-				</div>
-			)}
-
-			{!loading && items.length === 0 && (
-				<div className="text-center col-span-full text-(--col-text-main) flex flex-col gap-2">
-					{emptyMessage}
 				</div>
 			)}
 		</Container>
