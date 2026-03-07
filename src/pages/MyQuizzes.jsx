@@ -5,9 +5,10 @@ import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";
 import ModalDescription from "../components/Home/ModalDescription.jsx";
 import ToolBar from "../components/Home/ToolBar.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 36;
-const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
+const ITEMS_PER_PAGE_FIRST = ITEMS_PER_PAGE - 1;
 
 export default function MyQuizzes() {
     const { user } = useAuth();
@@ -23,6 +24,14 @@ export default function MyQuizzes() {
     const debouncedQuery = useDebounce(searchQuery, 500);
 
     const [sortOption, setSortOption] = useState("newest");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/");
+            window.location.reload();
+        }
+    }, [user, navigate]);
 
     const loadData = useCallback(
         async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest", authorId = `${user._id}`) => {
@@ -32,13 +41,13 @@ export default function MyQuizzes() {
                 let currentLimit = ITEMS_PER_PAGE;
                 let currentSkip = 0;
 
-                if (user && searchParam === "") {
+                if (searchParam === "") {
                     if (pageToLoad === 1) {
-                        currentLimit = ITEMS_PER_PAGE_AUTH;
+                        currentLimit = ITEMS_PER_PAGE_FIRST;
                         currentSkip = 0;
                     } else {
                         currentLimit = ITEMS_PER_PAGE;
-                        currentSkip = ITEMS_PER_PAGE_AUTH + (pageToLoad - 2) * ITEMS_PER_PAGE;
+                        currentSkip = ITEMS_PER_PAGE_FIRST + (pageToLoad - 2) * ITEMS_PER_PAGE;
                     }
                 } else {
                     currentLimit = ITEMS_PER_PAGE;
