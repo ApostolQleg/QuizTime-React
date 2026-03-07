@@ -8,6 +8,7 @@ import { isTokenExpired } from "../utils/jwtUtil.js";
 
 import Quizzes from "../pages/Quizzes.jsx";
 import Results from "../pages/Results.jsx";
+import MyQuizzes from "../pages/MyQuizzes.jsx";
 import Help from "../pages/Help.jsx";
 import Quiz from "../pages/Quiz.jsx";
 import Edit from "../pages/Edit.jsx";
@@ -48,6 +49,7 @@ export default function AppRoutes() {
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">
 			<Routes>
 				<Route exact path="/" element={<Quizzes />} />
+				<Route path="/:authorId" element={<MyQuizzes />}/>
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/results" element={<Results />} />
