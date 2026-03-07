@@ -43,6 +43,12 @@ export default function Grid({
 				</div>
 			)}
 
+			{!loading && items.length === 0 && (
+				<div className="text-center text-(--col-text-main) flex flex-col gap-2">
+					{emptyMessage}
+				</div>
+			)}
+
 			{hasMore && items.length > 0 && (
 				<div className="flex justify-center pb-4">
 					<button
@@ -52,12 +58,6 @@ export default function Grid({
 					>
 						{isLoadingMore ? "Loading..." : "Load More"}
 					</button>
-				</div>
-			)}
-
-			{!loading && items.length === 0 && (
-				<div className="text-center col-span-full text-(--col-text-main) flex flex-col gap-2">
-					{emptyMessage}
 				</div>
 			)}
 		</Container>

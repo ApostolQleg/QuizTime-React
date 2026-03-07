@@ -1,14 +1,17 @@
 import { API_URL, getHeaders } from "./api.js";
 
-export async function getQuizzes(skip = 0, limit = 36, search = "", sort = "newest") {
+export async function getQuizzes(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
 	const params = new URLSearchParams({
 		skip: String(skip),
 		limit: String(limit),
-		sort: sort, 
+		sort: sort,
 	});
 	if (search !== "") {
 		params.append("search", search);
 	}
+	if (authorId !== "") {
+		params.append("authorId", authorId);
+	} 
 	const res = await fetch(`${API_URL}/quizzes?${params.toString()}`, {
 		headers: getHeaders(),
 	});

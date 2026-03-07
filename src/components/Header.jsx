@@ -127,6 +127,14 @@ export default function Header() {
 				>
 					Results
 				</Link>
+				{user && (
+					<Link
+						to={"/" + `${user._id}`}
+						className="nav-link hover:text-(--col-text-accent) transition-colors"
+					>
+						My Quizzes
+					</Link>
+				)}
 				<Link
 					to="/help"
 					className="nav-link hover:text-(--col-text-accent) transition-colors"
