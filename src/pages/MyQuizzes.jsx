@@ -1,0 +1,119 @@
+import { useState, useEffect, useCallback } from "react";
+import { getQuizzes } from "../services/quizzes.js";
+import { useAuth } from "../hooks/useAuth";
+import { useDebounce } from "../hooks/useDebounce";
+import Grid from "../components/Home/Grid.jsx";
+import ModalDescription from "../components/Home/ModalDescription.jsx";
+import ToolBar from "../components/Home/ToolBar.jsx";
+
+const ITEMS_PER_PAGE = 36;
+const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
+
+export default function MyQuizzes() {
+    const { user } = useAuth();
+
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const debouncedQuery = useDebounce(searchQuery, 500);
+
+    const [sortOption, setSortOption] = useState("newest");
+
+    const loadData = useCallback(
+        async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest", authorId = `${user._id}`) => {
+            try {
+                if (!isInitialLoad) setIsLoadingMore(true);
+
+                let currentLimit = ITEMS_PER_PAGE;
+                let currentSkip = 0;
+
+                if (user && searchParam === "") {
+                    if (pageToLoad === 1) {
+                        currentLimit = ITEMS_PER_PAGE_AUTH;
+                        currentSkip = 0;
+                    } else {
+                        currentLimit = ITEMS_PER_PAGE;
+                        currentSkip = ITEMS_PER_PAGE_AUTH + (pageToLoad - 2) * ITEMS_PER_PAGE;
+                    }
+                } else {
+                    currentLimit = ITEMS_PER_PAGE;
+                    currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
+                }
+
+                const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam, authorId);
+
+                if (data.length < currentLimit) {
+                    setHasMore(false);
+                }
+
+                setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
+            } catch (err) {
+                console.error("Failed to load quizzes", err);
+            } finally {
+                setLoading(false);
+                setIsLoadingMore(false);
+            }
+        },
+        [user],
+    );
+
+    useEffect(() => {
+        loadData(1, true, debouncedQuery, sortOption, `${user._id}`);
+    }, [user, loadData, debouncedQuery, sortOption]);
+
+    const handleLoadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
+    };
+
+    const handleDeleteSuccess = (deletedQuizId) => {
+        setItems((prevItems) =>
+            prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
+        );
+        setSelectedQuiz(null);
+    };
+
+    return (
+        <>
+            <div className="flex flex-col items-center justify-between gap-3">
+                <ToolBar
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    sortOption={sortOption}
+                    onSortChange={setSortOption}
+                    placeholder={"Search for quizzes..."}
+                />
+                <Grid
+                    items={items}
+                    loading={loading}
+                    hasMore={hasMore}
+                    onLoadMore={handleLoadMore}
+                    isLoadingMore={isLoadingMore}
+                    showAddButton={!!user && searchQuery === ""}
+                    isResultsPage={false}
+                    onCardClick={setSelectedQuiz}
+                    emptyMessage={
+                        debouncedQuery
+                            ? `No quizzes found matching "${debouncedQuery}"`
+                            : "You are quizless, create one!"
+                    }
+                />
+            </div>
+
+            {selectedQuiz && (
+                <ModalDescription
+                    quiz={selectedQuiz}
+                    onClose={() => setSelectedQuiz(null)}
+                    isOpen={!!selectedQuiz}
+                    onDeleteSuccess={handleDeleteSuccess}
+                />
+            )}
+        </>
+    );
+}
