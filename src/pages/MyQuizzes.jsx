@@ -28,13 +28,13 @@ export default function MyQuizzes() {
 
     useEffect(() => {
         if (!user) {
-            navigate("/");
-            window.location.reload();
+            navigate("/", { replace: true });
         }
     }, [user, navigate]);
 
     const loadData = useCallback(
-        async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest", authorId = `${user._id}`) => {
+        async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest", authorId) => {
+            if (!authorId) return;
             try {
                 if (!isInitialLoad) setIsLoadingMore(true);
 
@@ -68,10 +68,12 @@ export default function MyQuizzes() {
                 setIsLoadingMore(false);
             }
         },
-        [user],
+        [],
     );
 
     useEffect(() => {
+        if (!user) return;
+        
         setItems([]);
         setPage(1);
         setHasMore(true);
@@ -80,6 +82,7 @@ export default function MyQuizzes() {
     }, [user, loadData, debouncedQuery, sortOption]);
 
     const handleLoadMore = () => {
+        if (!user) return;
         const nextPage = page + 1;
         setPage(nextPage);
         loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
@@ -91,6 +94,8 @@ export default function MyQuizzes() {
         );
         setSelectedQuiz(null);
     };
+
+    if (!user) return null;
 
     return (
         <>
