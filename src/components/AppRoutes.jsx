@@ -50,7 +50,7 @@ export default function AppRoutes() {
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">
 			<Routes>
 				<Route exact path="/" element={<Quizzes />} />
-				<Route path="/:authorId" element={<MyQuizzes />} />
+				<Route path="/my-quizzes" element={<MyQuizzes />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/results" element={<Results />} />
