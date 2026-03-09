@@ -129,7 +129,7 @@ export default function Header() {
 				</Link>
 				{user && (
 					<Link
-						to={"/" + `${user._id}`}
+						to={"/my-quizzes"}
 						className="nav-link hover:text-(--col-text-accent) transition-colors"
 					>
 						My Quizzes
