@@ -11,6 +11,17 @@ export async function verifySession() {
 	return json;
 }
 
+export async function getUserProfile(id) {
+	const res = await fetch(`${API_URL}/user/users/${id}`, {
+		method: "GET",
+		headers: getHeaders(),
+	});
+
+	const json = await res.json();
+	if (!res.ok) throw new Error("Failed to load user profile");
+	return json;
+}
+
 export async function deleteUser() {
 	const headers = getHeaders();
 	delete headers["Content-Type"];

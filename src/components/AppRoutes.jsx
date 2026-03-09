@@ -16,6 +16,7 @@ import Login from "../pages/Login.jsx";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import PublicProfile from "../pages/PublicProfile.jsx";
 
 export default function AppRoutes() {
 	const { pathname } = useLocation();
@@ -49,7 +50,7 @@ export default function AppRoutes() {
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">
 			<Routes>
 				<Route exact path="/" element={<Quizzes />} />
-				<Route path="/:authorId" element={<MyQuizzes />}/>
+				<Route path="/my-quizzes" element={<MyQuizzes />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/results" element={<Results />} />
@@ -59,6 +60,7 @@ export default function AppRoutes() {
 				<Route path="/result/:quizId/:resultIdParam" element={<Quiz />} />
 				<Route path="/create" element={<Edit />} />
 				<Route path="/manage/:quizId" element={<Edit />} />
+				<Route path="/user/:userId" element={<PublicProfile />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</div>
