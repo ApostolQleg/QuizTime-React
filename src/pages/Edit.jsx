@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { createQuiz, getQuizById, updateQuiz } from "../services/quizzes.js";
 import { useState, useEffect } from "react";
 import Question from "../components/Edit/Question.jsx";

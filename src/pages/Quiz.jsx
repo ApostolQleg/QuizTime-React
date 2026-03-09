@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { saveResult, getResultById } from "../services/results.js";
 import { getQuizById } from "../services/quizzes.js";
 import { useState, useEffect } from "react";
