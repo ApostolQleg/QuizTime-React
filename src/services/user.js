@@ -12,7 +12,7 @@ export async function verifySession() {
 }
 
 export async function getUserProfile(id) {
-	const res = await fetch(`${API_URL}/user/users/${id}`, {
+	const res = await fetch(`${API_URL}/user/${id}`, {
 		method: "GET",
 		headers: getHeaders(),
 	});
