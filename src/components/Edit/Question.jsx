@@ -1,6 +1,6 @@
 import Option from "./Option.jsx";
-import Input from "../UI/Input.jsx";
-import Button from "../UI/Button.jsx";
+import Input from "../../ui/Input.jsx";
+import Button from "../../ui/Button.jsx";
 
 export default function Question({
 	id,

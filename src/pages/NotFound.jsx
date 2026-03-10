@@ -1,4 +1,4 @@
-import Container from "../components/UI/Container.jsx";
+import Container from "../ui/Container.jsx";
 
 export default function NotFound() {
 	return (

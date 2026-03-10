@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "./useAuth.js";
-import { isTokenExpired } from "../utils/jwtUtil.js";
-import { verifySession } from "../services/user.js";
+import { isTokenExpired } from "../libs/jwt.js";
+import { verifySession } from "../api/user.js";
 
 export default function useAutoReload(onRefresh, timeoutMs = 5 * 60 * 1000) {
 	const lastLeaveTime = useRef(null);

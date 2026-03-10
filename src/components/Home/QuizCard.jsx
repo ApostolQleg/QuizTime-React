@@ -1,4 +1,4 @@
-import { formatDateTime } from "../../utils/dateUtil";
+import { formatDateTime } from "../../libs/formatDateTime.js";
 
 export default function QuizCard({ item, isResultsPage, onClick }) {
 	return (
