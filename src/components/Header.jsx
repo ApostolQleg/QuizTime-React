@@ -2,8 +2,8 @@ import logoImage from "../assets/logo-icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { useState } from "react";
-import ModalConfirm from "./UI/ModalConfirm.jsx";
-import Avatar from "./UI/Avatar.jsx";
+import ModalConfirm from "../ui/ModalConfirm.jsx";
+import Avatar from "../ui/Avatar.jsx";
 
 export default function Header() {
 	const { user, logout } = useAuth();

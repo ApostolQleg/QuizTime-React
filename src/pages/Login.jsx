@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { GoogleLogin } from "@react-oauth/google";
-import { loginUser, loginWithGoogle } from "../services/auth.js";
-import Container from "../components/UI/Container.jsx";
+import { loginUser, loginWithGoogle } from "../api/auth.js";
+import Container from "../ui/Container.jsx";
 
 export default function Login() {
 	const [formData, setFormData] = useState({

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getQuizzes } from "../services/quizzes.js";
+import { getQuizzes } from "../api/quizzes.js";
 import { useAuth } from "../hooks/useAuth";
 import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";
