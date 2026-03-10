@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUserProfile } from "../services/user.js";
-import { getQuizzes } from "../services/quizzes.js";
+import { getUserProfile } from "../api/user.js";
+import { getQuizzes } from "../api/quizzes.js";
 
-import Container from "../components/UI/Container.jsx";
-import Avatar from "../components/UI/Avatar.jsx";
+import Container from "../ui/Container.jsx";
+import Avatar from "../ui/Avatar.jsx";
 import Grid from "../components/Home/Grid.jsx";
 import ModalDescription from "../components/Home/ModalDescription.jsx";
 

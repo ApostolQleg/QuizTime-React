@@ -1,12 +1,12 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { createQuiz, getQuizById, updateQuiz } from "../services/quizzes.js";
+import { createQuiz, getQuizById, updateQuiz } from "../api/quizzes.js";
 import { useState, useEffect } from "react";
 import Question from "../components/Edit/Question.jsx";
-import Input from "../components/UI/Input.jsx";
-import Button from "../components/UI/Button.jsx";
-import Textarea from "../components/UI/Textarea.jsx";
-import Container from "../components/UI/Container.jsx";
-import ModalConfirm from "../components/UI/ModalConfirm.jsx";
+import Input from "../ui/Input.jsx";
+import Button from "../ui/Button.jsx";
+import Textarea from "../ui/Textarea.jsx";
+import Container from "../ui/Container.jsx";
+import ModalConfirm from "../ui/ModalConfirm.jsx";
 
 const DEFAULT_QUESTION = {
 	id: 0,

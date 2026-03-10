@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { getResults } from "../services/results.js";
+import { getResults } from "../api/results.js";
 import { useAuth } from "../hooks/useAuth";
 import { useDebounce } from "../hooks/useDebounce";
 import Grid from "../components/Home/Grid.jsx";

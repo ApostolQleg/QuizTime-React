@@ -1,6 +1,6 @@
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import AppRoutes from "./components/AppRoutes.jsx";
+import AppRoutes from "./AppRoutes.jsx";
 
 export default function App() {
 	return (

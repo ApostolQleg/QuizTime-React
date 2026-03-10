@@ -1,6 +1,6 @@
-import Radio from "../UI/Radio.jsx";
-import Button from "../UI/Button.jsx";
-import Input from "../UI/Input.jsx";
+import Radio from "../../ui/Radio.jsx";
+import Button from "../../ui/Button.jsx";
+import Input from "../../ui/Input.jsx";
 
 export default function Option({
 	id,

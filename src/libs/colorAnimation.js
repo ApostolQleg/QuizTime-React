@@ -1,4 +1,4 @@
-import getHue from "./colorUtil.js";
+import getHue from "./getHue.js";
 
 export function startColorAnimation(
 	onUpdateReactState,
