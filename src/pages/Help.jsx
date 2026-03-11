@@ -11,9 +11,18 @@ export default function Help() {
 					</h2>
 					<p className="mb-2">
 						Anyone can take a quiz! On the <span className="font-bold">Quizzes</span>{" "}
-						page, browse the collection and click on any card to view details.
+						page, browse or search the collection and click on any card to view details.
 					</p>
 					<ul className="list-disc list-inside pl-2 sm:pl-4 opacity-90 space-y-1 marker:text-(--col-primary)">
+						<li>
+							Use the <span className="font-bold">search bar</span> or{" "}
+							<span className="font-bold">sort</span> options to find what you are
+							looking for.
+						</li>
+						<li>
+							Click a card to open its details. You can also click the author&apos;s
+							name to visit their public profile.
+						</li>
 						<li>
 							Click <span className="font-bold text-(--col-primary)">Start Quiz</span>{" "}
 							to begin.
@@ -41,8 +50,8 @@ export default function Help() {
 						<li>
 							<span className="font-bold text-white">Registered Users:</span> All your
 							attempts are saved to the <span className="font-bold">Results</span>{" "}
-							page. You can track your progress and see exactly when you took each
-							quiz.
+							page. You can search, sort, and click any past result to review your
+							answers in detail.
 						</li>
 					</ul>
 				</section>
@@ -56,17 +65,41 @@ export default function Help() {
 						<li>
 							Click the card with the{" "}
 							<span className="font-bold text-(--col-primary)">+</span> icon on the
-							home page.
+							Quizzes page to create a new quiz.
 						</li>
 						<li>
 							Fill in the <strong>Title</strong>, <strong>Description</strong>, and
-							add as many questions as you like.
+							add as many questions and answer options as you like.
 						</li>
 						<li>
-							<strong>Manage:</strong> If you are the author of a quiz, you can open
-							its details card to{" "}
-							<span className="font-bold text-(--col-primary)">Edit</span> or{" "}
-							<span className="font-bold text-(--col-fail)">Delete</span> it.
+							If you are the author of a quiz, open its details card to find the{" "}
+							<span className="font-bold text-(--col-primary)">Manage</span> button
+							(edit title, description, and questions) or the{" "}
+							<span className="font-bold text-(--col-fail)">Delete</span> button to
+							remove it permanently.
+						</li>
+						<li>
+							The <span className="font-bold">My Quizzes</span> page shows all quizzes
+							you have created in one place, also with search and sort support.
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2 className="text-xl font-bold text-(--col-text-accent) mb-3">
+						👤 Your Profile
+					</h2>
+					<p className="mb-2">
+						Registered users can personalise their account from the{" "}
+						<span className="font-bold">Profile</span> page:
+					</p>
+					<ul className="list-disc list-inside pl-2 sm:pl-4 opacity-90 space-y-1 marker:text-(--col-primary)">
+						<li>Update your nickname, avatar, and theme colour.</li>
+						<li>Change your password at any time.</li>
+						<li>
+							Permanently delete your account and all associated results from the{" "}
+							<span className="font-bold text-(--col-fail)">Danger Zone</span>{" "}
+							section.
 						</li>
 					</ul>
 				</section>
