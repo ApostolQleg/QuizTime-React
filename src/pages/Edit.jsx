@@ -1,7 +1,7 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { createQuiz, getQuizById, updateQuiz } from "../api/quizzes.js";
 import { useState, useEffect } from "react";
-import Question from "../components/Edit/Question.jsx";
+import Question from "../components/edit/Question.jsx";
 import Input from "../ui/Input.jsx";
 import Button from "../ui/Button.jsx";
 import Textarea from "../ui/Textarea.jsx";

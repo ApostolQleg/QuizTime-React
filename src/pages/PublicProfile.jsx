@@ -5,8 +5,8 @@ import { getQuizzes } from "../api/quizzes.js";
 
 import Container from "../ui/Container.jsx";
 import Avatar from "../ui/Avatar.jsx";
-import Grid from "../components/Home/Grid.jsx";
-import ModalDescription from "../components/Home/ModalDescription.jsx";
+import Grid from "../components/home/Grid.jsx";
+import ModalDescription from "../components/home/ModalDescription.jsx";
 
 const ITEMS_PER_PAGE = 36;
 
