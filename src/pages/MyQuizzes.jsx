@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { getQuizzes } from "../api/quizzes.js";
-import { useAuth } from "../hooks/useAuth";
-import { useDebounce } from "../hooks/useDebounce";
-import Grid from "../components/Home/Grid.jsx";
-import ModalDescription from "../components/Home/ModalDescription.jsx";
-import ToolBar from "../components/Home/ToolBar.jsx";
+import { useAuth } from "../hooks/useAuth.js";
+import { useDebounce } from "../hooks/useDebounce.js";
+import Grid from "../components/home/Grid.jsx";
+import ModalDescription from "../components/home/ModalDescription.jsx";
+import ToolBar from "../components/home/ToolBar.jsx";
 import { useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 36;
