@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { getQuizzes } from "../features/quizzes/api/quizzes.api.js";
-import { useAuth } from "../features/auth/hooks/useAuth.js";
-import { useDebounce } from "../shared/hooks/useDebounce.js";
-import Grid from "../components/home/Grid.jsx";
-import ModalDescription from "../components/home/ModalDescription.jsx";
-import ToolBar from "../components/home/ToolBar.jsx";
-import { useNavigate } from "react-router-dom";
+import { getQuizzes } from "../api/quizzes.api.js";
+import { useAuth } from "../../auth/hooks/useAuth.js";
+import { useDebounce } from "../../../shared/hooks/useDebounce.js";
+import Grid from "../../../components/home/Grid.jsx";
+import ModalDescription from "../../../components/home/ModalDescription.jsx";
+import ToolBar from "../../../components/home/ToolBar.jsx";
 
 const ITEMS_PER_PAGE = 36;
-const ITEMS_PER_PAGE_FIRST = ITEMS_PER_PAGE - 1;
+const ITEMS_PER_PAGE_AUTH = ITEMS_PER_PAGE - 1;
 
-export default function MyQuizzes() {
+export default function Quizzes() {
 	const { user } = useAuth();
 
 	const [items, setItems] = useState([]);
@@ -24,49 +23,29 @@ export default function MyQuizzes() {
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
 	const [sortOption, setSortOption] = useState("newest");
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (!user) {
-			navigate("/", { replace: true });
-		}
-	}, [user, navigate]);
 
 	const loadData = useCallback(
-		async (
-			pageToLoad,
-			isInitialLoad = false,
-			searchParam = "",
-			sortParam = "newest",
-			authorId,
-		) => {
-			if (!authorId) return;
+		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
 			try {
 				if (!isInitialLoad) setIsLoadingMore(true);
 
 				let currentLimit = ITEMS_PER_PAGE;
 				let currentSkip = 0;
 
-				if (searchParam === "") {
+				if (user && searchParam === "") {
 					if (pageToLoad === 1) {
-						currentLimit = ITEMS_PER_PAGE_FIRST;
+						currentLimit = ITEMS_PER_PAGE_AUTH;
 						currentSkip = 0;
 					} else {
 						currentLimit = ITEMS_PER_PAGE;
-						currentSkip = ITEMS_PER_PAGE_FIRST + (pageToLoad - 2) * ITEMS_PER_PAGE;
+						currentSkip = ITEMS_PER_PAGE_AUTH + (pageToLoad - 2) * ITEMS_PER_PAGE;
 					}
 				} else {
 					currentLimit = ITEMS_PER_PAGE;
 					currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
 				}
 
-				const data = await getQuizzes(
-					currentSkip,
-					currentLimit,
-					searchParam,
-					sortParam,
-					authorId,
-				);
+				const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam);
 
 				if (data.length < currentLimit) {
 					setHasMore(false);
@@ -80,24 +59,21 @@ export default function MyQuizzes() {
 				setIsLoadingMore(false);
 			}
 		},
-		[],
+		[user],
 	);
 
 	useEffect(() => {
-		if (!user) return;
-
 		setItems([]);
 		setPage(1);
 		setHasMore(true);
 		setLoading(true);
-		loadData(1, true, debouncedQuery, sortOption, `${user._id}`);
+		loadData(1, true, debouncedQuery, sortOption);
 	}, [user, loadData, debouncedQuery, sortOption]);
 
 	const handleLoadMore = () => {
-		if (!user) return;
 		const nextPage = page + 1;
 		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
+		loadData(nextPage, false, debouncedQuery, sortOption);
 	};
 
 	const handleDeleteSuccess = (deletedQuizId) => {
@@ -106,8 +82,6 @@ export default function MyQuizzes() {
 		);
 		setSelectedQuiz(null);
 	};
-
-	if (!user) return null;
 
 	return (
 		<>
@@ -131,7 +105,7 @@ export default function MyQuizzes() {
 					emptyMessage={
 						debouncedQuery
 							? `No quizzes found matching "${debouncedQuery}"`
-							: "You are quizless, create one!"
+							: "No quizzes found."
 					}
 				/>
 			</div>
