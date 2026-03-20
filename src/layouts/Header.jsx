@@ -1,4 +1,4 @@
-import logoImage from "../assets/logo-icon.png";
+import logoImage from "../shared/assets/logo-icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/useAuth.js";
 import { useState } from "react";
