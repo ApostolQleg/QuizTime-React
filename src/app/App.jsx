@@ -1,5 +1,5 @@
-import Header from "./layouts/Header.jsx";
-import Footer from "./layouts/Footer.jsx";
+import Header from "../layouts/Header.jsx";
+import Footer from "../layouts/Footer.jsx";
 import AppRoutes from "./AppRoutes.jsx";
 
 export default function App() {

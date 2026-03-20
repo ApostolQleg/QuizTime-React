@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import useAutoReload from "./hooks/useAutoReload.js";
+import useAutoReload from "../hooks/useAutoReload.js";
 
-import { useAuth } from "./hooks/useAuth.js";
-import { verifySession } from "./api/user.js";
-import { isTokenExpired } from "./libs/jwt.js";
+import { useAuth } from "../hooks/useAuth.js";
+import { verifySession } from "../api/user.js";
+import { isTokenExpired } from "../libs/jwt.js";
 
-import Quizzes from "./pages/Quizzes.jsx";
-import Results from "./pages/Results.jsx";
-import MyQuizzes from "./pages/MyQuizzes.jsx";
-import Help from "./pages/Help.jsx";
-import Quiz from "./pages/Quiz.jsx";
-import Edit from "./pages/Edit.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Profile from "./pages/Profile.jsx";
-import NotFound from "./pages/NotFound.jsx";
-import PublicProfile from "./pages/PublicProfile.jsx";
+import Quizzes from "../pages/Quizzes.jsx";
+import Results from "../pages/Results.jsx";
+import MyQuizzes from "../pages/MyQuizzes.jsx";
+import Help from "../pages/Help.jsx";
+import Quiz from "../pages/Quiz.jsx";
+import Edit from "../pages/Edit.jsx";
+import Login from "../pages/Login.jsx";
+import Register from "../pages/Register.jsx";
+import Profile from "../pages/Profile.jsx";
+import NotFound from "../pages/NotFound.jsx";
+import PublicProfile from "../pages/PublicProfile.jsx";
 
 export default function AppRoutes() {
 	const { pathname } = useLocation();
