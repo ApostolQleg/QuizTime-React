@@ -1,6 +1,6 @@
 import logoImage from "../assets/logo-icon.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../shared/hooks/useAuth.js";
+import { useAuth } from "../features/auth/hooks/useAuth.js";
 import { useState } from "react";
 import ModalConfirm from "../shared/ui/ModalConfirm.jsx";
 import Avatar from "../shared/ui/Avatar.jsx";

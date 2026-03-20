@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { linkGoogleAccount } from "../../features/auth/api/auth.api.js";
-import { useAuth } from "../../shared/hooks/useAuth.js";
+import { useAuth } from "../../features/auth/hooks/useAuth.js";
 import Input from "../../shared/ui/Input.jsx";
 import Button from "../../shared/ui/Button.jsx";
 import ColorGenerator from "./ColorGenerator.jsx";

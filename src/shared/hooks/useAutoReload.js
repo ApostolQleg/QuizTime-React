@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "./useAuth.js";
+import { useAuth } from "../../features/auth/hooks/useAuth.js";
 import { isTokenExpired } from "../libs/jwt.js";
 import { verifySession } from "../../features/profile/api/user.api.js";
 

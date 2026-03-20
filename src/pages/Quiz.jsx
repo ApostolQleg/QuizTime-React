@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { saveResult, getResultById } from "../features/results/api/results.api.js";
 import { getQuizById } from "../features/quizzes/api/quizzes.api.js";
 import { useState, useEffect } from "react";
-import { useAuth } from "../shared/hooks/useAuth.js";
+import { useAuth } from "../features/auth/hooks/useAuth.js";
 import Question from "../components/quiz/Question.jsx";
 import Button from "../shared/ui/Button.jsx";
 import Container from "../shared/ui/Container.jsx";

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import useAutoReload from "../shared/hooks/useAutoReload.js";
-import { useAuth } from "../shared/hooks/useAuth.js";
+import { useAuth } from "../features/auth/hooks/useAuth.js";
 
 import { verifySession } from "../features/profile/api/user.api.js";
 import { isTokenExpired } from "../shared/libs/jwt.js";
@@ -13,7 +13,7 @@ import MyQuizzes from "../pages/MyQuizzes.jsx";
 import Help from "../pages/Help.jsx";
 import Quiz from "../pages/Quiz.jsx";
 import Edit from "../pages/Edit.jsx";
-import Login from "../pages/Login.jsx";
+import Login from "../features/auth/pages/Login.jsx";
 import Register from "../pages/Register.jsx";
 import Profile from "../pages/Profile.jsx";
 import NotFound from "../pages/NotFound.jsx";

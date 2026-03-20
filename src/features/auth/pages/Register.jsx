@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../shared/hooks/useAuth.js";
+import { useAuth } from "../features/auth/hooks/useAuth.js";
 import { GoogleLogin } from "@react-oauth/google";
 import {
 	registerUser,
