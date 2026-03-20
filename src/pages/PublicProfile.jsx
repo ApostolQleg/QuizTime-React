@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "../api/user.js";
 import { getQuizzes } from "../api/quizzes.js";
 
-import Container from "../ui/Container.jsx";
-import Avatar from "../ui/Avatar.jsx";
+import Container from "../shared/ui/Container.jsx";
+import Avatar from "../shared/ui/Avatar.jsx";
 import Grid from "../components/home/Grid.jsx";
 import ModalDescription from "../components/home/ModalDescription.jsx";
 
@@ -105,7 +105,7 @@ export default function PublicProfile() {
 					</span>
 				</div>
 			</div>
-            
+
 			<div className="w-full max-w-7xl flex flex-col gap-6 mt-4">
 				<h2 className="text-2xl font-bold text-(--col-text-main) px-2 sm:px-4">
 					Quizzes by {user.nickname}

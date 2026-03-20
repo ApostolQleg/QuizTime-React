@@ -1,9 +1,9 @@
 import logoImage from "../assets/logo-icon.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
 import { useState } from "react";
-import ModalConfirm from "../ui/ModalConfirm.jsx";
-import Avatar from "../ui/Avatar.jsx";
+import ModalConfirm from "../shared/ui/ModalConfirm.jsx";
+import Avatar from "../shared/ui/Avatar.jsx";
 
 export default function Header() {
 	const { user, logout } = useAuth();
@@ -66,7 +66,7 @@ export default function Header() {
 										src={user.avatarUrl}
 										name={user.nickname}
 										type={user.avatarType}
-										color={user.themeColor} 
+										color={user.themeColor}
 										size="sm"
 									/>
 								</div>

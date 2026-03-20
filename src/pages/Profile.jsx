@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
 import { verifySession, updateUser, deleteUser } from "../api/user.js";
 
-import Container from "../ui/Container.jsx";
+import Container from "../shared/ui/Container.jsx";
 import ProfileForm from "../components/profile/ProfileForm.jsx";
-import ModalConfirm from "../ui/ModalConfirm.jsx";
+import ModalConfirm from "../shared/ui/ModalConfirm.jsx";
 import ModalChangePassword from "../components/profile/ModalChangePassword.jsx";
-import Button from "../ui/Button.jsx";
+import Button from "../shared/ui/Button.jsx";
 
 export default function Profile() {
 	const navigate = useNavigate();

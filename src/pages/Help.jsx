@@ -1,4 +1,4 @@
-import Container from "../ui/Container.jsx";
+import Container from "../shared/ui/Container.jsx";
 
 export default function Help() {
 	return (

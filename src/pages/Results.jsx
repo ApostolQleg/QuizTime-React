@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getResults } from "../api/results.js";
-import { useAuth } from "../hooks/useAuth.js";
-import { useDebounce } from "../hooks/useDebounce.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
+import { useDebounce } from "../shared/hooks/useDebounce.js";
 import Grid from "../components/home/Grid.jsx";
 import ToolBar from "../components/home/ToolBar.jsx";
 

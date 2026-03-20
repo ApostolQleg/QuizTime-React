@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
 import { GoogleLogin } from "@react-oauth/google";
 import { registerUser, sendVerificationCode, extractGoogleData } from "../api/auth.js";
-import Container from "../ui/Container.jsx";
-import Input from "../ui/Input.jsx";
-import Button from "../ui/Button.jsx";
-import Avatar from "../ui/Avatar.jsx";
+import Container from "../shared/ui/Container.jsx";
+import Input from "../shared/ui/Input.jsx";
+import Button from "../shared/ui/Button.jsx";
+import Avatar from "../shared/ui/Avatar.jsx";
 
 export default function Register() {
 	const navigate = useNavigate();

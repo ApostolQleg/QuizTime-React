@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getQuizzes } from "../api/quizzes.js";
-import { useAuth } from "../hooks/useAuth.js";
-import { useDebounce } from "../hooks/useDebounce.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
+import { useDebounce } from "../shared/hooks/useDebounce.js";
 import Grid from "../components/home/Grid.jsx";
 import ModalDescription from "../components/home/ModalDescription.jsx";
 import ToolBar from "../components/home/ToolBar.jsx";
@@ -11,91 +11,103 @@ const ITEMS_PER_PAGE = 36;
 const ITEMS_PER_PAGE_FIRST = ITEMS_PER_PAGE - 1;
 
 export default function MyQuizzes() {
-    const { user } = useAuth();
+	const { user } = useAuth();
 
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [selectedQuiz, setSelectedQuiz] = useState(null);
+	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-    const [searchQuery, setSearchQuery] = useState("");
-    const debouncedQuery = useDebounce(searchQuery, 500);
+	const [searchQuery, setSearchQuery] = useState("");
+	const debouncedQuery = useDebounce(searchQuery, 500);
 
-    const [sortOption, setSortOption] = useState("newest");
-    const navigate = useNavigate();
+	const [sortOption, setSortOption] = useState("newest");
+	const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/", { replace: true });
-        }
-    }, [user, navigate]);
+	useEffect(() => {
+		if (!user) {
+			navigate("/", { replace: true });
+		}
+	}, [user, navigate]);
 
-    const loadData = useCallback(
-        async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest", authorId) => {
-            if (!authorId) return;
-            try {
-                if (!isInitialLoad) setIsLoadingMore(true);
+	const loadData = useCallback(
+		async (
+			pageToLoad,
+			isInitialLoad = false,
+			searchParam = "",
+			sortParam = "newest",
+			authorId,
+		) => {
+			if (!authorId) return;
+			try {
+				if (!isInitialLoad) setIsLoadingMore(true);
 
-                let currentLimit = ITEMS_PER_PAGE;
-                let currentSkip = 0;
+				let currentLimit = ITEMS_PER_PAGE;
+				let currentSkip = 0;
 
-                if (searchParam === "") {
-                    if (pageToLoad === 1) {
-                        currentLimit = ITEMS_PER_PAGE_FIRST;
-                        currentSkip = 0;
-                    } else {
-                        currentLimit = ITEMS_PER_PAGE;
-                        currentSkip = ITEMS_PER_PAGE_FIRST + (pageToLoad - 2) * ITEMS_PER_PAGE;
-                    }
-                } else {
-                    currentLimit = ITEMS_PER_PAGE;
-                    currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
-                }
+				if (searchParam === "") {
+					if (pageToLoad === 1) {
+						currentLimit = ITEMS_PER_PAGE_FIRST;
+						currentSkip = 0;
+					} else {
+						currentLimit = ITEMS_PER_PAGE;
+						currentSkip = ITEMS_PER_PAGE_FIRST + (pageToLoad - 2) * ITEMS_PER_PAGE;
+					}
+				} else {
+					currentLimit = ITEMS_PER_PAGE;
+					currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
+				}
 
-                const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam, authorId);
+				const data = await getQuizzes(
+					currentSkip,
+					currentLimit,
+					searchParam,
+					sortParam,
+					authorId,
+				);
 
-                if (data.length < currentLimit) {
-                    setHasMore(false);
-                }
+				if (data.length < currentLimit) {
+					setHasMore(false);
+				}
 
-                setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
-            } catch (err) {
-                console.error("Failed to load quizzes", err);
-            } finally {
-                setLoading(false);
-                setIsLoadingMore(false);
-            }
-        },
-        [],
-    );
+				setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
+			} catch (err) {
+				console.error("Failed to load quizzes", err);
+			} finally {
+				setLoading(false);
+				setIsLoadingMore(false);
+			}
+		},
+		[],
+	);
 
-    useEffect(() => {
-        if (!user) return;
-        
-        setItems([]);
-        setPage(1);
-        setHasMore(true);
-        setLoading(true);
-        loadData(1, true, debouncedQuery, sortOption, `${user._id}`);
-    }, [user, loadData, debouncedQuery, sortOption]);
+	useEffect(() => {
+		if (!user) return;
 
-    const handleLoadMore = () => {
-        if (!user) return;
-        const nextPage = page + 1;
-        setPage(nextPage);
-        loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
-    };
+		setItems([]);
+		setPage(1);
+		setHasMore(true);
+		setLoading(true);
+		loadData(1, true, debouncedQuery, sortOption, `${user._id}`);
+	}, [user, loadData, debouncedQuery, sortOption]);
 
-    const handleDeleteSuccess = (deletedQuizId) => {
-        setItems((prevItems) =>
-            prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
-        );
-        setSelectedQuiz(null);
-    };
+	const handleLoadMore = () => {
+		if (!user) return;
+		const nextPage = page + 1;
+		setPage(nextPage);
+		loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
+	};
 
-    if (!user) return null;
+	const handleDeleteSuccess = (deletedQuizId) => {
+		setItems((prevItems) =>
+			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
+		);
+		setSelectedQuiz(null);
+	};
+
+	if (!user) return null;
 
 	return (
 		<>

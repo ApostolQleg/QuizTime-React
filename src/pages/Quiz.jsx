@@ -2,11 +2,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { saveResult, getResultById } from "../api/results.js";
 import { getQuizById } from "../api/quizzes.js";
 import { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
 import Question from "../components/quiz/Question.jsx";
-import Button from "../ui/Button.jsx";
-import Container from "../ui/Container.jsx";
-import ModalConfirm from "../ui/ModalConfirm.jsx";
+import Button from "../shared/ui/Button.jsx";
+import Container from "../shared/ui/Container.jsx";
+import ModalConfirm from "../shared/ui/ModalConfirm.jsx";
 
 export default function Quiz() {
 	const navigate = useNavigate();

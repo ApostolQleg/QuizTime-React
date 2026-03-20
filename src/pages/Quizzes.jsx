@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getQuizzes } from "../api/quizzes.js";
-import { useAuth } from "../hooks/useAuth.js";
-import { useDebounce } from "../hooks/useDebounce.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
+import { useDebounce } from "../shared/hooks/useDebounce.js";
 import Grid from "../components/home/Grid.jsx";
 import ModalDescription from "../components/home/ModalDescription.jsx";
 import ToolBar from "../components/home/ToolBar.jsx";

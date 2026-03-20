@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { linkGoogleAccount } from "../../api/auth.js";
-import { useAuth } from "../../hooks/useAuth.js";
-import Input from "../../ui/Input.jsx";
-import Button from "../../ui/Button.jsx";
+import { useAuth } from "../../shared/hooks/useAuth.js";
+import Input from "../../shared/ui/Input.jsx";
+import Button from "../../shared/ui/Button.jsx";
 import ColorGenerator from "./ColorGenerator.jsx";
-import Avatar from "../../ui/Avatar.jsx";
+import Avatar from "../../shared/ui/Avatar.jsx";
 import { getNicknameArray } from "../../api/user.js";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

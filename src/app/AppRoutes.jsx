@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import useAutoReload from "../hooks/useAutoReload.js";
 
-import { useAuth } from "../hooks/useAuth.js";
+import useAutoReload from "../shared/hooks/useAutoReload.js";
+import { useAuth } from "../shared/hooks/useAuth.js";
+
 import { verifySession } from "../api/user.js";
-import { isTokenExpired } from "../libs/jwt.js";
+import { isTokenExpired } from "../shared/libs/jwt.js";
 
 import Quizzes from "../pages/Quizzes.jsx";
 import Results from "../pages/Results.jsx";
