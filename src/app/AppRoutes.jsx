@@ -8,7 +8,7 @@ import { verifySession } from "../features/profile/api/user.api.js";
 import { isTokenExpired } from "../shared/libs/jwt.js";
 
 import Quizzes from "../features/quizzes/pages/Quizzes.jsx";
-import Results from "../pages/Results.jsx";
+import Results from "../features/results/pages/Results.jsx";
 import MyQuizzes from "../features/quizzes/pages/MyQuizzes.jsx";
 import Help from "../pages/Help.jsx";
 import Quiz from "../features/quizzes/pages/Quiz.jsx";
