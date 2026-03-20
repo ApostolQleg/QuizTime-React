@@ -10,13 +10,13 @@ import { isTokenExpired } from "../shared/libs/jwt.js";
 import Quizzes from "../features/quizzes/pages/Quizzes.jsx";
 import Results from "../features/results/pages/Results.jsx";
 import MyQuizzes from "../features/quizzes/pages/MyQuizzes.jsx";
-import Help from "../pages/Help.jsx";
+import Help from "./pages/Help.jsx";
 import Quiz from "../features/quizzes/pages/Quiz.jsx";
 import Edit from "../features/quizzes/pages/Edit.jsx";
 import Login from "../features/auth/pages/Login.jsx";
 import Register from "../features/auth/pages/Register.jsx";
 import Profile from "../features/profile/pages/Profile.jsx";
-import NotFound from "../pages/NotFound.jsx";
+import NotFound from "./pages/NotFound.jsx";
 import PublicProfile from "../features/profile/pages/PublicProfile.jsx";
 
 export default function AppRoutes() {

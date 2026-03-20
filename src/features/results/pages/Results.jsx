@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { getResults } from "../api/results.api.js";
 import { useAuth } from "../../auth/hooks/useAuth.js";
 import { useDebounce } from "../../../shared/hooks/useDebounce.js";
-import Grid from "../../../shared/components/Grid.jsx";
+import Grid from "../../../app/components/Grid.jsx";
 import ToolBar from "../../quizzes/components/discovery/ToolBar.jsx";
 
 const ITEMS_PER_PAGE = 36;
