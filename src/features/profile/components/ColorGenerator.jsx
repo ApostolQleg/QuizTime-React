@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { startColorAnimation } from "@/features/profile/libs/colorAnimation.js";
 import { generator } from "@/features/profile/libs/generator.js";
 import Button from "@/shared/ui/Button.jsx";
+import { COLOR_ANIMATION_CONFIG } from "@/constants/config.js";
 
 export default function ColorGenerator({ onColorSelect, initialColor }) {
 	const [displayColor, setDisplayColor] = useState(initialColor);
@@ -32,7 +33,7 @@ export default function ColorGenerator({ onColorSelect, initialColor }) {
 				onColorSelect(finalColor);
 			},
 			generator(),
-			1000,
+			COLOR_ANIMATION_CONFIG.DURATION_MS,
 			displayColor,
 		);
 	};

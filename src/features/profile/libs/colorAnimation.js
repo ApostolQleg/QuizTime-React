@@ -1,10 +1,11 @@
 import getHue from "./getHue.js";
+import { COLOR_ANIMATION_CONFIG } from "@/constants/config.js";
 
 export function startColorAnimation(
 	onUpdateReactState,
 	onFinishReactState,
 	iterator,
-	duration = 1000,
+	duration = COLOR_ANIMATION_CONFIG.DURATION_MS,
 	initialColor,
 ) {
 	const startHue = getHue(initialColor);
@@ -29,7 +30,7 @@ export function startColorAnimation(
 
 		const currentHue = startHue + finalDelta * progress;
 
-		const colorString = `hsl(${currentHue}, 90%, 55%)`;
+		const colorString = `hsl(${currentHue}, ${COLOR_ANIMATION_CONFIG.SATURATION}%, ${COLOR_ANIMATION_CONFIG.LIGHTNESS}%)`;
 
 		const scale = 1 + Math.sin(progress * Math.PI) * 0.3;
 
@@ -39,7 +40,7 @@ export function startColorAnimation(
 			animationFrameId = requestAnimationFrame(step);
 		} else {
 			const finalHue = targetHue % 360;
-			const finalColorString = `hsl(${finalHue}, 90%, 55%)`;
+			const finalColorString = `hsl(${finalHue}, ${COLOR_ANIMATION_CONFIG.SATURATION}%, ${COLOR_ANIMATION_CONFIG.LIGHTNESS}%)`;
 			onFinishReactState(finalColorString);
 		}
 	};
