@@ -29,8 +29,8 @@ export const COLOR_ANIMATION_CONFIG = {
 
 // Sorting Options
 export const SORT_OPTIONS = [
-	{ id: "newest", label: "Newest first", icon: "sort-newold-icon.png" },
-	{ id: "oldest", label: "Oldest first", icon: "sort-oldnew-icon.png" },
-	{ id: "az", label: "Alphabetical (A-Z)", icon: "sort-AZ-icon.png" },
-	{ id: "za", label: "Alphabetical (Z-A)", icon: "sort-ZA-icon.png" },
+	{ id: "newest", label: "Newest first" },
+	{ id: "oldest", label: "Oldest first" },
+	{ id: "az", label: "Alphabetical (A-Z)" },
+	{ id: "za", label: "Alphabetical (Z-A)" },
 ];

@@ -3,13 +3,19 @@ import newoldIcon from "@/shared/assets/sort-newold-icon.png";
 import oldnewIcon from "@/shared/assets/sort-oldnew-icon.png";
 import azIcon from "@/shared/assets/sort-AZ-icon.png";
 import zaIcon from "@/shared/assets/sort-ZA-icon.png";
+import { SORT_OPTIONS as BASE_SORT_OPTIONS } from "@/constants/config.js";
 
-const SORT_OPTIONS = [
-	{ id: "newest", label: "Newest first", icon: newoldIcon },
-	{ id: "oldest", label: "Oldest first", icon: oldnewIcon },
-	{ id: "az", label: "Alphabetical (A-Z)", icon: azIcon },
-	{ id: "za", label: "Alphabetical (Z-A)", icon: zaIcon },
-];
+const SORT_ICONS = {
+	newest: newoldIcon,
+	oldest: oldnewIcon,
+	az: azIcon,
+	za: zaIcon,
+};
+
+const SORT_OPTIONS = BASE_SORT_OPTIONS.map((option) => ({
+	...option,
+	icon: SORT_ICONS[option.id] ?? newoldIcon,
+}));
 
 export default function Sort({ currentSort, onSortChange }) {
 	const [isOpen, setIsOpen] = useState(false);
