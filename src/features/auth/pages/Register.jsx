@@ -84,7 +84,9 @@ export default function Register() {
 			return setError("Passwords do not match");
 		}
 		if (formData.login.length < QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH) {
-			return setError(`Login must be at least ${QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH} characters`);
+			return setError(
+				`Login must be at least ${QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH} characters`,
+			);
 		}
 
 		setIsLoading(true);
