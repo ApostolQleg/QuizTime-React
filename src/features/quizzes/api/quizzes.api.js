@@ -1,4 +1,4 @@
-import { API_URL, getHeaders } from "@/shared/api/client.js";
+import client from "@/shared/api/client.js";
 
 export async function getQuizzes(
 	skip = 0,
@@ -7,70 +7,17 @@ export async function getQuizzes(
 	sort = "newest",
 	authorId = "",
 ) {
-	const params = new URLSearchParams({
-		skip: String(skip),
-		limit: String(limit),
-		sort: sort,
-	});
-	if (search !== "") {
-		params.append("search", search);
-	}
-	if (authorId !== "") {
-		params.append("authorId", authorId);
-	}
-	const res = await fetch(`${API_URL}/quizzes?${params.toString()}`, {
-		headers: getHeaders(),
-	});
+	const params = new URLSearchParams({ skip: String(skip), limit: String(limit), sort });
+	if (search) params.append("search", search);
+	if (authorId) params.append("authorId", authorId);
 
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to load quizzes");
-	return json;
+	return client.get(`/quizzes?${params.toString()}`);
 }
 
-export async function createQuiz(data) {
-	const res = await fetch(`${API_URL}/quizzes`, {
-		method: "POST",
-		headers: getHeaders(),
-		body: JSON.stringify(data),
-	});
+export const createQuiz = (data) => client.post("/quizzes", data);
 
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to create quiz");
-	return json;
-}
+export const getQuizById = (id) => client.get(`/quizzes/${id}`);
 
-export async function getQuizById(id) {
-	const res = await fetch(`${API_URL}/quizzes/${id}`, {
-		headers: getHeaders(),
-	});
+export const updateQuiz = (id, data) => client.put(`/quizzes/${id}`, data);
 
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to load quiz details");
-	return json;
-}
-
-export async function updateQuiz(id, data) {
-	const res = await fetch(`${API_URL}/quizzes/${id}`, {
-		method: "PUT",
-		headers: getHeaders(),
-		body: JSON.stringify(data),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to update quiz");
-	return json;
-}
-
-export async function deleteQuiz(id) {
-	const headers = getHeaders();
-	delete headers["Content-Type"];
-
-	const res = await fetch(`${API_URL}/quizzes/${id}`, {
-		method: "DELETE",
-		headers: headers,
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to delete quiz");
-	return json;
-}
+export const deleteQuiz = (id) => client.delete(`/quizzes/${id}`);
