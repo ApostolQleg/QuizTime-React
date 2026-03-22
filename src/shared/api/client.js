@@ -1,4 +1,4 @@
-import { URL_CONFIG } from "../config/config";
+import { URL_CONFIG } from "../config/config.js";
 
 export const API_URL = URL_CONFIG.API_URL;
 export const AUTH_URL = URL_CONFIG.AUTH_URL;
@@ -55,7 +55,8 @@ export const client = {
 	get: (endpoint, options) => request(endpoint, { method: "GET", ...options }),
 	post: (endpoint, body, options) => request(endpoint, { method: "POST", body, ...options }),
 	put: (endpoint, body, options) => request(endpoint, { method: "PUT", body, ...options }),
-	delete: (endpoint, options) => request(endpoint, { method: "DELETE", headers: { "Content-Type": undefined }, ...options }),
+	delete: (endpoint, options) =>
+		request(endpoint, { method: "DELETE", headers: { "Content-Type": undefined }, ...options }),
 };
 
 export default client;
