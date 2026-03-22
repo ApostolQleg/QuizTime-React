@@ -15,7 +15,6 @@ export async function saveResult(resultData) {
 	} catch (error) {
 		if (error.status === 403) {
 			console.warn("User not logged in, result not saved");
-			return null;
 		}
 		throw error;
 	}
