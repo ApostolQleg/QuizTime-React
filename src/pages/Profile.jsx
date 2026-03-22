@@ -5,7 +5,6 @@ import {
 	verifySession,
 	updateUser,
 	deleteUser,
-	clearUserFromCache,
 } from "@/features/profile/api/user.api.js";
 
 import Container from "@/shared/ui/Container.jsx";
@@ -45,7 +44,6 @@ export default function Profile() {
 	const handleSaveProfile = async (formData) => {
 		setIsSaving(true);
 		try {
-			clearUserFromCache();
 			const updated = await updateUser(formData);
 
 			setUser(updated.user);

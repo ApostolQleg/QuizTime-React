@@ -1,17 +1,8 @@
 import client from "@/shared/api/client.js";
-import Memoizer from "@/shared/libs/memoizer.js";
 
-const cache = new Memoizer();
+export const verifySession = () => client.get("/user");
 
-const getUser = () => client.get("/user");
-
-export const verifySession = cache.memoize(getUser);
-
-const getProfile = (id) => client.get(`/user/${id}`);
-
-export const getUserProfile = cache.memoize(getProfile);
-
-export const clearUserFromCache = () => cache.clear();
+export const getUserProfile = (id) => client.get(`/user/${id}`);
 
 export const updateUser = (data) => client.put("/user/update", data);
 
