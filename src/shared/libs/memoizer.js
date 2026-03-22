@@ -6,12 +6,21 @@ export default class Memoizer {
 	memoize(fn) {
 		return (...args) => {
 			const key = JSON.stringify(args);
+
+			const now = Date.now();
+			const ttl = 10000;
+
 			if (this.cache.has(key)) {
-				return this.cache.get(key);
+				const { data, timestamp } = this.cache.get(key);
+
+				if (now - timestamp <= ttl) {
+					return data;
+				}
+				this.cache.delete(key);
 			}
 
 			const result = fn(...args);
-			this.cache.set(key, result);
+			this.cache.set(key, { data: result, timestamp: now });
 			return result;
 		};
 	}
