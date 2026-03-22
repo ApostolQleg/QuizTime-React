@@ -1,6 +1,7 @@
-// export const API_URL = "http://localhost:3000/api";
-export const API_URL = import.meta.env.VITE_API_URL;
-export const AUTH_URL = API_URL.replace("/api", "/auth");
+import { URL_CONFIG } from "../config/config";
+
+export const API_URL = URL_CONFIG.API_URL;
+export const AUTH_URL = URL_CONFIG.AUTH_URL;
 
 export function getHeaders() {
 	const headers = { "Content-Type": "application/json" };
