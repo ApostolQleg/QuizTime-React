@@ -1,5 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { saveResult, getResultById } from "@/features/results/api/results.api.js";
+import {
+	saveResult,
+	getResultById,
+	clearAllResultsCache,
+} from "@/features/results/api/results.api.js";
 import { getQuizById } from "@/features/quizzes/api/quizzes.api.js";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
@@ -122,6 +126,7 @@ export default function Quiz() {
 		if (user) {
 			try {
 				const response = await saveResult(payload);
+				clearAllResultsCache();
 				navigate(`/result/${quizId}/${response.resultId}`);
 			} catch (error) {
 				console.error("Save error", error);
