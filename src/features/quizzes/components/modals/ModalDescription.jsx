@@ -9,6 +9,7 @@ import Avatar from "@/shared/ui/Avatar.jsx";
 
 export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSuccess }) {
 	const { user } = useAuth();
+	const quizId = quiz?.id || quiz?._id;
 
 	const navigate = useNavigate();
 
@@ -16,13 +17,18 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 	const [errorMessage, setErrorMessage] = useState(null);
 
 	const handleDelete = async () => {
+		if (!quizId) {
+			setErrorMessage("Failed to delete quiz: invalid quiz id.");
+			return;
+		}
+
 		try {
-			await deleteQuiz(quiz.id);
+			await deleteQuiz(quizId);
 			setIsDeleteConfirmOpen(false);
 			onClose();
 
 			if (onDeleteSuccess) {
-				onDeleteSuccess(quiz.id);
+				onDeleteSuccess(quizId);
 			} else {
 				onClose();
 			}
@@ -81,8 +87,8 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 				</div>
 
 				<div className="flex justify-between items-center pt-6 mt-2 gap-4">
-					{canManage && <Button to={`/manage/${quiz.id}`}>Manage</Button>}
-					<Button to={`/quiz/${quiz.id}`} className="flex-1">
+					{canManage && <Button to={`/manage/${quizId}`}>Manage</Button>}
+					<Button to={`/quiz/${quizId}`} className="flex-1">
 						Start Quiz
 					</Button>
 					{canManage && (

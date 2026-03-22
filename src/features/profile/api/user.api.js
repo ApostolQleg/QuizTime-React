@@ -1,72 +1,13 @@
-import { API_URL, getHeaders } from "@/shared/api/client.js";
+import client from "@/shared/api/client.js";
 
-export async function verifySession() {
-	const res = await fetch(`${API_URL}/user`, {
-		method: "GET",
-		headers: getHeaders(),
-	});
+export const verifySession = () => client.get("/user");
 
-	const json = await res.json();
-	if (!res.ok) throw new Error("Session invalid");
-	return json;
-}
+export const getUserProfile = (id) => client.get(`/user/${id}`);
 
-export async function getUserProfile(id) {
-	const res = await fetch(`${API_URL}/user/${id}`, {
-		method: "GET",
-		headers: getHeaders(),
-	});
+export const updateUser = (data) => client.put("/user/update", data);
 
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to load user profile");
-	return json;
-}
+export const changePassword = (data) => client.post("/user/password", data);
 
-export async function deleteUser() {
-	const headers = getHeaders();
-	delete headers["Content-Type"];
+export const getNicknameArray = () => client.get("/user/nickname");
 
-	const res = await fetch(`${API_URL}/user/delete`, {
-		method: "DELETE",
-		headers: headers,
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to delete user");
-	return json;
-}
-
-export async function updateUser(data) {
-	const res = await fetch(`${API_URL}/user/update`, {
-		method: "PUT",
-		headers: getHeaders(),
-		body: JSON.stringify(data),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to update user");
-	return json;
-}
-
-export async function changePassword(data) {
-	const res = await fetch(`${API_URL}/user/password`, {
-		method: "POST",
-		headers: getHeaders(),
-		body: JSON.stringify(data),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to change password");
-	return json;
-}
-
-export async function getNicknameArray() {
-	const res = await fetch(`${API_URL}/user/nickname`, {
-		method: "GET",
-		headers: getHeaders(),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error("Failed to get nickname array");
-	return json;
-}
+export const deleteUser = () => client.delete("/user/delete");

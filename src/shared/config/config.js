@@ -1,4 +1,3 @@
-// API Configuration
 export const API_CONFIG = {
 	ITEMS_PER_PAGE_QUIZZES: 36,
 	ITEMS_PER_PAGE_QUIZZES_AUTH: 35, // 36 - 1 for create button
@@ -6,7 +5,6 @@ export const API_CONFIG = {
 	ITEMS_PER_PAGE_PUBLIC_PROFILE: 36,
 };
 
-// Quiz Constraints
 export const QUIZ_CONSTRAINTS = {
 	TITLE_MAX_LENGTH: 30,
 	NICKNAME_MIN_LENGTH: 3,
@@ -15,22 +13,25 @@ export const QUIZ_CONSTRAINTS = {
 	LOGIN_MIN_LENGTH: 3,
 };
 
-// Auto-reload Configuration
 export const AUTO_RELOAD_CONFIG = {
 	TIME_OUT_MS: 5 * 60 * 1000, // 5 minutes
 };
 
-// Color Animation Configuration
 export const COLOR_ANIMATION_CONFIG = {
 	DURATION_MS: 1000,
 	SATURATION: 90,
 	LIGHTNESS: 55,
 };
 
-// Sorting Options
 export const SORT_OPTIONS = [
 	{ id: "newest", label: "Newest first" },
 	{ id: "oldest", label: "Oldest first" },
 	{ id: "az", label: "Alphabetical (A-Z)" },
 	{ id: "za", label: "Alphabetical (Z-A)" },
 ];
+
+export const URL_CONFIG = {
+	// API_URL: "http://localhost:3000/api",
+	API_URL: import.meta.env.VITE_API_URL,
+	AUTH_URL: import.meta.env.VITE_API_URL.replace("/api", "/auth"),
+};

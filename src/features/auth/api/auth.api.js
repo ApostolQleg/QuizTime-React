@@ -1,78 +1,31 @@
-import { AUTH_URL, getHeaders } from "@/shared/api/client.js";
+import { client, AUTH_URL } from "@/shared/api/client.js";
 
-export async function registerUser(data) {
-	const res = await fetch(`${AUTH_URL}/register`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(data),
-	});
+export const registerUser = (data) => client.post(`${AUTH_URL}/register`, data);
 
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Registration failed");
-	return json;
-}
+export const loginUser = (data) => {
+	return client.post(`${AUTH_URL}/login`, data);
+};
 
-export async function loginUser(data) {
-	const res = await fetch(`${AUTH_URL}/login`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(data),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Login failed");
-	return json;
-}
-
-export async function loginWithGoogle(credential) {
-	const res = await fetch(`${AUTH_URL}/google`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ token: credential }),
-	});
-
-	const json = await res.json();
-	if (!res.ok) {
-		if (res.status === 404) {
+export const loginWithGoogle = async (credential) => {
+	try {
+		return await client.post(`${AUTH_URL}/google`, { token: credential });
+	} catch (error) {
+		if (error && error.status === 404) {
 			throw new Error("USER_NOT_FOUND");
 		}
-		throw new Error(json.error || "Google login failed");
+
+		throw error;
 	}
-	return json;
-}
+};
 
-export async function extractGoogleData(credential) {
-	const res = await fetch(`${AUTH_URL}/google-extract`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ token: credential }),
-	});
+export const extractGoogleData = (credential) => {
+	return client.post(`${AUTH_URL}/google-extract`, { token: credential });
+};
 
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to extract Google data");
-	return json;
-}
+export const sendVerificationCode = (email) => {
+	return client.post(`${AUTH_URL}/send-code`, { email });
+};
 
-export async function sendVerificationCode(email) {
-	const res = await fetch(`${AUTH_URL}/send-code`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ email }),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to send verification code");
-	return json;
-}
-
-export async function linkGoogleAccount(credential) {
-	const res = await fetch(`${AUTH_URL}/link-google`, {
-		method: "POST",
-		headers: getHeaders(),
-		body: JSON.stringify({ token: credential }),
-	});
-
-	const json = await res.json();
-	if (!res.ok) throw new Error(json.error || "Failed to link Google account");
-	return json;
-}
+export const linkGoogleAccount = (credential) => {
+	return client.post(`${AUTH_URL}/link-google`, { token: credential });
+};
