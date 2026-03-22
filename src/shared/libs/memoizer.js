@@ -4,7 +4,7 @@ export default class Memoizer {
 		this.cacheSize = this.cache.size;
 	}
 
-	memoize(fn, ttl = 10000, capacity = 100) {
+	memoize(fn, ttl = 30000, capacity = 50) {
 		return (...args) => {
 			const key = JSON.stringify(args);
 			const cache = this.cache;

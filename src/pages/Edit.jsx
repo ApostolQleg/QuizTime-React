@@ -1,5 +1,10 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { createQuiz, getQuizById, updateQuiz } from "@/features/quizzes/api/quizzes.api.js";
+import {
+	createQuiz,
+	getQuizById,
+	updateQuiz,
+	clearQuizCacheById,
+} from "@/features/quizzes/api/quizzes.api.js";
 import { useState, useEffect } from "react";
 import Question from "@/features/quizzes/components/edit/QuestionEditor.jsx";
 import Input from "@/shared/ui/Input.jsx";
@@ -183,6 +188,7 @@ export default function Edit() {
 			};
 
 			if (isManagePage) {
+				clearQuizCacheById(quizId);
 				await updateQuiz(quizId, quizPayload);
 			} else {
 				await createQuiz(quizPayload);

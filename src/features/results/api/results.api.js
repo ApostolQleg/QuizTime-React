@@ -1,13 +1,20 @@
 import client from "@/shared/api/client";
+import Memoizer from "@/shared/libs/memoizer";
 
-export async function getResults(skip = 0, limit = 36, search = "", sort = "newest") {
+const cache = new Memoizer();
+
+function getAllResults(skip = 0, limit = 36, search = "", sort = "newest") {
 	const params = new URLSearchParams({ skip: String(skip), limit: String(limit), sort });
 	if (search) params.append("search", search);
 
 	return client.get(`/results?${params.toString()}`);
 }
 
-export const getResultById = (id) => client.get(`/results/${id}`);
+export const getResults = cache.memoize(getAllResults, 180000);
+
+const getResult = (id) => client.get(`/results/${id}`);
+
+export const getResultById = cache.memoize(getResult);
 
 export async function saveResult(resultData) {
 	try {

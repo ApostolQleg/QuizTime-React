@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
-import { verifySession, updateUser, deleteUser } from "@/features/profile/api/user.api.js";
+import {
+	verifySession,
+	updateUser,
+	deleteUser,
+	clearUserFromCache,
+} from "@/features/profile/api/user.api.js";
 
 import Container from "@/shared/ui/Container.jsx";
 import ProfileForm from "@/features/profile/components/ProfileForm.jsx";
@@ -40,6 +45,7 @@ export default function Profile() {
 	const handleSaveProfile = async (formData) => {
 		setIsSaving(true);
 		try {
+			clearUserFromCache();
 			const updated = await updateUser(formData);
 
 			setUser(updated.user);
