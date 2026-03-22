@@ -1,5 +1,5 @@
-import client from "@/shared/api/client";
-import Memoizer from "@/shared/libs/memoizer";
+import client from "@/shared/api/client.js";
+import Memoizer from "@/shared/libs/memoizer.js";
 
 const cache = new Memoizer();
 
