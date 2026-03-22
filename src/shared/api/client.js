@@ -12,7 +12,7 @@ export function getHeaders(extraHeaders = {}) {
 		...extraHeaders,
 	};
 
-	return Object.fromEntries(Object.entries(headers).filter((_, value) => value !== undefined));
+	return Object.fromEntries(Object.entries(headers).filter(([, value]) => value !== undefined));
 }
 
 async function parseResponse(response) {
@@ -32,8 +32,6 @@ async function request(endpoint, options = {}) {
 	const config = {
 		...options,
 		headers: getHeaders(options.headers),
-		...(options.body &&
-			typeof options.body === "object" && { body: JSON.stringify(options.body) }),
 	};
 
 	if (options.body && typeof options.body === "object") {
