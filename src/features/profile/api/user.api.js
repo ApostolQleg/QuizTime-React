@@ -10,8 +10,4 @@ export const changePassword = (data) => client.post("/user/password", data);
 
 export const getNicknameArray = () => client.get("/user/nickname");
 
-export const deleteUser = () => {
-	return client.delete("/user/delete", {
-		headers: { "Content-Type": undefined },
-	});
-};
+export const deleteUser = () => client.delete("/user/delete");

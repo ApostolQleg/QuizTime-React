@@ -20,7 +20,4 @@ export const getQuizById = (id) => client.get(`/quizzes/${id}`);
 
 export const updateQuiz = (id, data) => client.put(`/quizzes/${id}`, data);
 
-export const deleteQuiz = (id) =>
-	client.delete(`/quizzes/${id}`, {
-		headers: { "Content-Type": undefined },
-	});
+export const deleteQuiz = (id) => client.delete(`/quizzes/${id}`);
