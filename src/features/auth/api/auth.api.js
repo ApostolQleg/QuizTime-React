@@ -1,6 +1,17 @@
 import { client, AUTH_URL } from "@/shared/api/client.js";
 
-export const registerUser = (data) => client.post(`${AUTH_URL}/register`, data);
+const omitEmpty = (obj) => {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([, value]) => value !== undefined && value !== null && value !== "",
+		),
+	);
+};
+
+export const registerUser = (data) => {
+	const payload = omitEmpty(data);
+	return client.post(`${AUTH_URL}/register`, payload);
+};
 
 export const loginUser = (data) => {
 	return client.post(`${AUTH_URL}/login`, data);
