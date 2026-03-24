@@ -16,7 +16,10 @@ const getResult = (id) => client.get(`/results/${id}`);
 
 export const getResultById = cache.memoize(getResult);
 
-export const clearAllResultsCache = () => cache.clearAll();
+export const clearAllResultsCache = () => {
+	cache.clear(getAllResults);
+	cache.clear(getResult);
+};
 
 export async function saveResult(resultData) {
 	try {
