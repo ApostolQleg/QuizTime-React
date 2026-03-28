@@ -1,8 +1,8 @@
-export default function Input({ placeholder, className = "", ...props }) {
+export default function Input({ type = "text", placeholder, className = "", ...props }) {
 	return (
 		<>
 			<input
-				type="text"
+				type={type}
 				placeholder={placeholder}
 				className={`${className} input`}
 				{...props}
