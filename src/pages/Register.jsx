@@ -234,7 +234,7 @@ export default function Register() {
 					className="w-full flex flex-col gap-4 animate-fade-in"
 				>
 					<div className="p-3 mb-2 bg-(--col-bg-input-darker) rounded-lg border border-(--col-border) flex items-center gap-3">
-						<Avatar src={formData.avatarUrl} name={formData.login} size="md" />
+						<Avatar src={formData.avatarUrl} size="md" />
 						<div className="flex flex-col overflow-hidden">
 							<span className="text-xs text-(--col-text-muted)">Registering as</span>
 							<span className="text-sm font-bold truncate">{formData.email}</span>
