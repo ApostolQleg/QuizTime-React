@@ -12,12 +12,12 @@ export default function getGoogleAuthErrorMessage(err) {
 	}
 
 	if (err?.status >= 500) {
-		return "Server error during Google sign-up. Please try again in a moment.";
+		return "Server error during Google authentication. Please try again in a moment.";
 	}
 
 	if (/token|invalid|expired/i.test(err?.message || "")) {
 		return "Your Google session is invalid or expired. Please try again.";
 	}
 
-	return err?.message || "Google Sign-Up Failed. Please try manually.";
+	return err?.message || "Google authentication failed. Please try manually.";
 }
