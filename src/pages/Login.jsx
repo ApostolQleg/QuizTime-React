@@ -5,6 +5,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, loginWithGoogle } from "@/features/auth/api/auth.api.js";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
+import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
 
 export default function Login() {
 	const [formData, setFormData] = useState({
@@ -43,6 +44,11 @@ export default function Login() {
 	};
 
 	const handleGoogleSuccess = async (credentialResponse) => {
+		if (!credentialResponse?.credential) {
+			setError("Google did not return a credential. Please try again.");
+			return;
+		}
+
 		setError("");
 		setIsLoading(true);
 		try {
@@ -53,7 +59,7 @@ export default function Login() {
 			if (err.message === "USER_NOT_FOUND") {
 				navigate("/register");
 			} else {
-				setError("Google Login Failed. Please try again.");
+				setError(getGoogleAuthErrorMessage(err));
 			}
 		} finally {
 			setIsLoading(false);
