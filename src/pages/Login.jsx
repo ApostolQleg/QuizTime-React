@@ -4,10 +4,11 @@ import { useAuth } from "@/features/auth/hooks/useAuth.js";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, loginWithGoogle } from "@/features/auth/api/auth.api.js";
 import Container from "@/shared/ui/Container.jsx";
+import Input from "@/shared/ui/Input.jsx";
 
 export default function Login() {
 	const [formData, setFormData] = useState({
-		login: "",
+		email: "",
 		password: "",
 	});
 
@@ -29,7 +30,7 @@ export default function Login() {
 
 		try {
 			const data = await loginUser({
-				login: formData.login,
+				email: formData.email,
 				password: formData.password,
 			});
 			login(data.user, data.token);
@@ -76,14 +77,13 @@ export default function Login() {
 					<form onSubmit={handleSubmit} className="w-full max-w-xs flex flex-col gap-5">
 						<div className="flex flex-col gap-2">
 							<label className="text-sm font-semibold text-(--col-text-muted) ml-1">
-								Login
+								Email
 							</label>
-							<input
-								className="input w-full text-lg py-3 px-4"
-								type="text"
-								name="login"
-								placeholder="Your login"
-								value={formData.login}
+							<Input
+								type="email"
+								name="email"
+								placeholder="Your email"
+								value={formData.email}
 								onChange={handleChange}
 								required
 								disabled={isLoading}
@@ -94,11 +94,10 @@ export default function Login() {
 							<label className="text-sm font-semibold text-(--col-text-muted) ml-1">
 								Password
 							</label>
-							<input
-								className="input w-full text-lg py-3 px-4"
+							<Input
 								type="password"
 								name="password"
-								placeholder="••••••••"
+								placeholder="Your password"
 								value={formData.password}
 								onChange={handleChange}
 								required
