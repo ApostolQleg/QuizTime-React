@@ -73,7 +73,6 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-lg">
 			<div className="flex flex-col gap-2">
-				<label className="text-lg font-bold text-(--col-text-main)">{user.login}</label>
 				<label className="text-sm font-bold text-(--col-text-muted)">Nickname</label>
 				<div className="w-full flex flex-row items-center gap-4">
 					<Input
