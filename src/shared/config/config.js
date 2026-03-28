@@ -27,7 +27,7 @@ export const SORT_OPTIONS = [
 	{ id: "newest", label: "Newest first" },
 	{ id: "oldest", label: "Oldest first" },
 	{ id: "az", label: "Alphabetical (A-Z)" },
-	{ id: "za", label: "Alphabetical (sZ-A)" },
+	{ id: "za", label: "Alphabetical (Z-A)" },
 ];
 
 // const API_URL = "http://localhost:3000/api";
