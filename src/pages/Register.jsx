@@ -24,7 +24,6 @@ export default function Register() {
 	const [formData, setFormData] = useState({
 		email: "",
 		code: "",
-		login: "",
 		password: "",
 		confirmPassword: "",
 		avatarUrl: "",
@@ -60,7 +59,6 @@ export default function Register() {
 			setFormData((prev) => ({
 				...prev,
 				email: googleData.email,
-				login: "",
 				avatarUrl: googleData.picture,
 				googleToken: credentialResponse.credential,
 			}));
@@ -87,17 +85,11 @@ export default function Register() {
 		if (formData.password !== formData.confirmPassword) {
 			return setError("Passwords do not match");
 		}
-		if (formData.login.length < QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH) {
-			return setError(
-				`Login must be at least ${QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH} characters`,
-			);
-		}
 
 		setIsLoading(true);
 		try {
 			const data = await registerUser({
 				email: formData.email,
-				login: formData.login,
 				password: formData.password,
 				code: formData.googleToken ? null : formData.code,
 				googleToken: formData.googleToken,
@@ -251,28 +243,11 @@ export default function Register() {
 
 					<div className="flex flex-col gap-1">
 						<label className="text-sm font-semibold text-(--col-text-muted)">
-							Login
-						</label>
-						<Input
-							type="text"
-							name="login"
-							placeholder="CoolUser123"
-							value={formData.login}
-							onChange={handleChange}
-							required
-							minLength={QUIZ_CONSTRAINTS.LOGIN_MIN_LENGTH}
-							className="text-lg"
-						/>
-					</div>
-
-					<div className="flex flex-col gap-1">
-						<label className="text-sm font-semibold text-(--col-text-muted)">
-							Password
+							Set your password
 						</label>
 						<Input
 							type="password"
 							name="password"
-							placeholder="••••••••"
 							value={formData.password}
 							onChange={handleChange}
 							required
@@ -283,12 +258,11 @@ export default function Register() {
 
 					<div className="flex flex-col gap-1">
 						<label className="text-sm font-semibold text-(--col-text-muted)">
-							Confirm Password
+							Confirm your password
 						</label>
 						<Input
 							type="password"
 							name="confirmPassword"
-							placeholder="••••••••"
 							value={formData.confirmPassword}
 							onChange={handleChange}
 							required
