@@ -48,11 +48,11 @@ export default function Quizzes() {
 
 				const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam);
 
-				if (data.length < currentLimit) {
+				if (data.quizzes.length < currentLimit) {
 					setHasMore(false);
 				}
 
-				setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
+				setItems((prev) => (isInitialLoad ? data.quizzes : [...prev, ...data.quizzes]));
 			} catch (err) {
 				console.error("Failed to load quizzes", err);
 			} finally {

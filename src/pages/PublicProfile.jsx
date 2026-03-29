@@ -53,11 +53,11 @@ export default function PublicProfile() {
 
 			const data = await getQuizzes(currentSkip, currentLimit, "", "newest", authorId);
 
-			if (data.length < currentLimit) {
+			if (data.quizzes.length < currentLimit) {
 				setHasMore(false);
 			}
 
-			setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
+			setItems((prev) => (isInitialLoad ? data.quizzes : [...prev, ...data.quizzes]));
 		} catch (err) {
 			console.error("Failed to load quizzes", err);
 		} finally {
