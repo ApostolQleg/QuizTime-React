@@ -49,10 +49,10 @@ export default function Edit() {
 		if (isManagePage && quizId) {
 			getQuizById(quizId)
 				.then((foundQuiz) => {
-					setTitle(foundQuiz.title);
-					setDescription(foundQuiz.description);
-					setQuestions(foundQuiz.questions);
-					setCounter(foundQuiz.title.length);
+					setTitle(foundQuiz.quiz.title);
+					setDescription(foundQuiz.quiz.description);
+					setQuestions(foundQuiz.quiz.questions);
+					setCounter(foundQuiz.quiz.title.length);
 					setLoading(false);
 				})
 				.catch((err) => {

@@ -50,15 +50,15 @@ export default function Quiz() {
 		const loadData = async () => {
 			try {
 				if (resultIdParam) {
-					const res = await getResultById(resultIdParam);
-					setResultData(res);
+					const data = await getResultById(resultIdParam);
+					setResultData(data.result);
 					setQuizData({
-						title: res.quizTitle,
-						questions: res.questions,
+						title: data.result.quizTitle,
+						questions: data.result.questions,
 					});
 				} else {
-					const quiz = await getQuizById(quizId);
-					setQuizData(quiz);
+					const data = await getQuizById(quizId);
+					setQuizData(data.quiz);
 				}
 			} catch (error) {
 				console.error("Failed to load data", error);

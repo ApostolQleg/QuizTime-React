@@ -36,12 +36,11 @@ export default function Results() {
 
 				const currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
 				const data = await getResults(currentSkip, ITEMS_PER_PAGE, searchParam, sortParam);
-
-				if (data.length < ITEMS_PER_PAGE) {
+				if (data.results.length < ITEMS_PER_PAGE) {
 					setHasMore(false);
 				}
 
-				setItems((prev) => (isInitialLoad ? data : [...prev, ...data]));
+				setItems((prev) => (isInitialLoad ? data.results : [...prev, ...data.results]));
 			} catch (err) {
 				console.error("Failed to load results", err);
 			} finally {
