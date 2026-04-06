@@ -33,6 +33,14 @@ export class PriorityDeque {
 			return this.items.pop().item;
 		}
 
+		if (type === "oldest") {
+			return null;
+		}
+
+		if (type === "lowest") {
+			return null;
+		}
+
 		return null;
 	}
 
@@ -45,6 +53,14 @@ export class PriorityDeque {
 
 		if (type === "lowest") {
 			return this.items[this.size - 1].item;
+		}
+
+		if (type === "oldest") {
+			return null;
+		}
+
+		if (type === "lowest") {
+			return null;
 		}
 
 		return null;
