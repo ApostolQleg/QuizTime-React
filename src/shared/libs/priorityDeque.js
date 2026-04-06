@@ -18,7 +18,7 @@ export class PriorityDeque {
 			if (a.priority !== b.priority) {
 				return b.priority - a.priority;
 			}
-			b.order - a.order;
+			return b.order - a.order;
 		});
 	}
 
