@@ -34,17 +34,25 @@ export class PriorityDeque {
 		}
 
 		if (type === "oldest") {
-			return null;
+			const orders = this.items.map((el) => el.order);
+			const minOrder = Math.min(...orders);
+			const index = this.items.findIndex((el) => el.order === minOrder);
+
+			return this.items.splice(index, 1)[0].item;
 		}
 
-		if (type === "lowest") {
-			return null;
+		if (type === "newest") {
+			const orders = this.items.map((el) => el.order);
+			const maxOrder = Math.max(...orders);
+			const index = this.items.findIndex((el) => el.order === maxOrder);
+
+			return this.items.splice(index, 1)[0].item;
 		}
 
 		return null;
 	}
 
-	peek(type = "lowest") {
+	peek(type = "highest") {
 		if (this.isEmpty()) return null;
 
 		if (type === "highest") {
@@ -56,11 +64,19 @@ export class PriorityDeque {
 		}
 
 		if (type === "oldest") {
-			return null;
+			const orders = this.items.map((el) => el.order);
+			const minOrder = Math.min(...orders);
+			const index = this.items.findIndex((el) => el.order === minOrder);
+
+			return this.items[index].item;
 		}
 
-		if (type === "lowest") {
-			return null;
+		if (type === "newest") {
+			const orders = this.items.map((el) => el.order);
+			const maxOrder = Math.max(...orders);
+			const index = this.items.findIndex((el) => el.order === maxOrder);
+
+			return this.items[index].item;
 		}
 
 		return null;
