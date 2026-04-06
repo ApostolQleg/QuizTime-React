@@ -33,19 +33,23 @@ export class PriorityDeque {
 			return this.items.pop().item;
 		}
 
-		if (type === "oldest") {
-			const orders = this.items.map((el) => el.order);
-			const minOrder = Math.min(...orders);
-			const index = this.items.findIndex((el) => el.order === minOrder);
+		let index = 0;
 
+		if (type === "oldest") {
+			for (let i = 1; i < this.size; i++) {
+				if (this.items[i].order < this.items[index].order) {
+					index = i;
+				}
+			}
 			return this.items.splice(index, 1)[0].item;
 		}
 
 		if (type === "newest") {
-			const orders = this.items.map((el) => el.order);
-			const maxOrder = Math.max(...orders);
-			const index = this.items.findIndex((el) => el.order === maxOrder);
-
+			for (let i = 1; i < this.size; i++) {
+				if (this.items[i].order > this.items[index].order) {
+					index = i;
+				}
+			}
 			return this.items.splice(index, 1)[0].item;
 		}
 
@@ -63,19 +67,23 @@ export class PriorityDeque {
 			return this.items[this.size - 1].item;
 		}
 
-		if (type === "oldest") {
-			const orders = this.items.map((el) => el.order);
-			const minOrder = Math.min(...orders);
-			const index = this.items.findIndex((el) => el.order === minOrder);
+		let index = 0;
 
+		if (type === "oldest") {
+			for (let i = 1; i < this.size; i++) {
+				if (this.items[i].order < this.items[index].order) {
+					index = i;
+				}
+			}
 			return this.items[index].item;
 		}
 
 		if (type === "newest") {
-			const orders = this.items.map((el) => el.order);
-			const maxOrder = Math.max(...orders);
-			const index = this.items.findIndex((el) => el.order === maxOrder);
-
+			for (let i = 1; i < this.size; i++) {
+				if (this.items[i].order > this.items[index].order) {
+					index = i;
+				}
+			}
 			return this.items[index].item;
 		}
 
