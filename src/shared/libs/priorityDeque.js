@@ -22,16 +22,9 @@ export class PriorityDeque {
 		});
 	}
 
-	dequeue(type = "highest") {
-		if (this.isEmpty()) return null;
-
-		if (type === "highest") {
-			return this.items.shift().item;
-		}
-
-		if (type === "lowest") {
-			return this.items.pop().item;
-		}
+	_findIndex(type) {
+		if (type === "highest") return 0;
+		if (type === "lowest") return this.size - 1;
 
 		let index = 0;
 
@@ -41,7 +34,7 @@ export class PriorityDeque {
 					index = i;
 				}
 			}
-			return this.items.splice(index, 1)[0].item;
+			return index;
 		}
 
 		if (type === "newest") {
@@ -50,43 +43,20 @@ export class PriorityDeque {
 					index = i;
 				}
 			}
-			return this.items.splice(index, 1)[0].item;
+			return index;
 		}
+		throw new Error(`Invalid type: "${type}". Expected type: highest, lowest, newest, oldest`);
+	}
 
-		return null;
+	dequeue(type = "highest") {
+		if (this.isEmpty()) return null;
+		const index = this._findIndex(type);
+		return this.items.splice(index, 1)[0].item;
 	}
 
 	peek(type = "highest") {
 		if (this.isEmpty()) return null;
-
-		if (type === "highest") {
-			return this.items[0].item;
-		}
-
-		if (type === "lowest") {
-			return this.items[this.size - 1].item;
-		}
-
-		let index = 0;
-
-		if (type === "oldest") {
-			for (let i = 1; i < this.size; i++) {
-				if (this.items[i].order < this.items[index].order) {
-					index = i;
-				}
-			}
-			return this.items[index].item;
-		}
-
-		if (type === "newest") {
-			for (let i = 1; i < this.size; i++) {
-				if (this.items[i].order > this.items[index].order) {
-					index = i;
-				}
-			}
-			return this.items[index].item;
-		}
-
-		return null;
+		const index = this._findIndex(type);
+		return this.items[index].item;
 	}
 }
