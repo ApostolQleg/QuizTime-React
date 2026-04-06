@@ -2,7 +2,7 @@ export class PriorityDeque {
 	constructor() {
 		this.items = [];
 	}
-    
+
 	get size() {
 		return this.items.length;
 	}
@@ -12,8 +12,8 @@ export class PriorityDeque {
 	}
 
 	enqueue(item, priority = 0) {
-		items.push({ item, priority });
-		items.sort((a, b) => b.priority - a.priority);
+		this.items.push({ item, priority });
+		this.items.sort((a, b) => b.priority - a.priority);
 	}
 
 	dequeue(type = "highest") {
