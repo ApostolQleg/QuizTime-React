@@ -20,6 +20,7 @@ export const AUTO_RELOAD_CONFIG = {
 export const TOAST_CONFIG = {
 	MAX_TOASTS: 3,
 	TOAST_LIFETIME: 5 * 1000, // 5 seconds
+	TOAST_ANIM_TIME: 200, // 200 ms
 };
 
 export const COLOR_ANIMATION_CONFIG = {
