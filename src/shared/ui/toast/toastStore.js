@@ -36,15 +36,18 @@ export const useToastStore = create((set, get) => ({
 
 	dismissToast: (id) => {
 		const item = queue.items.find((toast) => toast.id === id);
-		if (item) {
-			item.isExiting = true;
-		}
+		if (!item || item.isExiting) return;
 
+		item.isExiting = true;
 		set({ toasts: queue.toArray() });
 
-		setTimeout(() => {
+		if (timers.has(id)) clearTimeout(timers.get(id));
+
+		const animTimerId = setTimeout(() => {
 			get().removeToast(id);
 		}, TOAST_ANIM_TIME);
+
+		timers.set(id, animTimerId);
 	},
 
 	removeToast: (id) => {
