@@ -138,7 +138,7 @@
 	50% {
 		transform: translateX(100%);
 		opacity: 0;
-		max-height: 150px;
+		max-height: 800px;
 		padding-top: 1rem;
 		padding-bottom: 1rem;
 		border-width: 1px;
@@ -147,7 +147,7 @@
 	100% {
 		transform: translateX(0);
 		opacity: 1;
-		max-height: 150px;
+		max-height: 800px;
 		padding-top: 1rem;
 		padding-bottom: 1rem;
 		border-width: 1px;
@@ -159,7 +159,7 @@
 	0% {
 		transform: translateX(0);
 		opacity: 1;
-		max-height: 150px;
+		max-height: 800px;
 		padding-top: 1rem;
 		padding-bottom: 1rem;
 		border-width: 1px;
@@ -168,7 +168,7 @@
 	50% {
 		transform: translateX(100%);
 		opacity: 0;
-		max-height: 150px;
+		max-height: 800px;
 		padding-top: 1rem;
 		padding-bottom: 1rem;
 		border-width: 1px;
