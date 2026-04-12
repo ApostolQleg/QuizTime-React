@@ -1,6 +1,6 @@
 export const API_CONFIG = {
 	ITEMS_PER_PAGE_QUIZZES: 36,
-	ITEMS_PER_PAGE_QUIZZES_AUTH: 35, // 36 - 1 for create button
+	ITEMS_PER_PAGE_QUIZZES_AUTH: 35, // -1 for create button
 	ITEMS_PER_PAGE_RESULTS: 36,
 	ITEMS_PER_PAGE_PUBLIC_PROFILE: 36,
 };
@@ -15,6 +15,11 @@ export const QUIZ_CONSTRAINTS = {
 
 export const AUTO_RELOAD_CONFIG = {
 	TIME_OUT_MS: 5 * 60 * 1000, // 5 minutes
+};
+
+export const TOAST_CONFIG = {
+	MAX_TOASTS: 3,
+	TOAST_LIFETIME: 5 * 1000, // 5 seconds
 };
 
 export const COLOR_ANIMATION_CONFIG = {

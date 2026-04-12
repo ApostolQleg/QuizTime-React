@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import { Queue } from "@/shared/libs/queue.js";
 
-const MAX_TOASTS = 3;
-const TOAST_LIFETIME = 5000;
+import { MAX_TOASTS, TOAST_LIFETIME } from "@/shared/config/config.js";
 
 const queue = new Queue();
 const timers = new Map();
