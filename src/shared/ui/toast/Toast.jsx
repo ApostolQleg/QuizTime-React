@@ -4,21 +4,18 @@ export default function Toast({ id, message }) {
 	const removeToast = useToastStore((state) => state.removeToast);
 
 	return (
-		<div className="relative flex w-full items-start justify-between gap-3 rounded-xl border border-(--col-border) bg-(--col-bg-card) p-3 text-(--col-text-main) shadow-lg pointer-events-auto transition-all duration-300 sm:p-4">
-			<p className="text-sm font-medium leading-snug">{message}</p>
+		<div className="pointer-events-auto relative flex items-start gap-3 overflow-hidden rounded-xl border border-(--col-border) bg-(--col-bg-card) p-4 text-(--col-text-main) shadow-lg">
+			<p className="flex-1 text-sm font-medium">{message}</p>
 
 			<button
 				onClick={() => removeToast(id)}
-				className="ml-1 shrink-0 rounded-md p-1 text-(--col-text-muted) transition-colors hover:text-(--col-text-main)"
-				aria-label="Закрити сповіщення"
+				className="shrink-0 p-1 text-(--col-text-muted) transition-colors hover:text-(--col-text-main)"
+				aria-label="Close"
 			>
 				✕
 			</button>
 
-			<div
-				className="absolute bottom-0 left-0 h-1 rounded-b-xl bg-(--col-primary) opacity-60 animate-[shrink_5s_linear_forwards]"
-				style={{ width: "100%" }}
-			/>
+			<div className="absolute bottom-0 left-0 h-1 w-full bg-(--col-primary) opacity-60 animate-[shrink_5s_linear_forwards]" />
 		</div>
 	);
 }
