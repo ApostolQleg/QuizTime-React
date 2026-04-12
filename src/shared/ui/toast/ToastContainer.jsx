@@ -9,7 +9,12 @@ export default function ToastContainer() {
 	return (
 		<div className="fixed inset-x-6 bottom-4 z-50 flex flex-col pointer-events-none sm:inset-x-auto sm:right-4 sm:w-80">
 			{toasts.map((toast) => (
-				<Toast key={toast.id} id={toast.id} message={toast.message} />
+				<Toast
+					key={toast.id}
+					id={toast.id}
+					message={toast.message}
+					isExiting={toast.isExiting}
+				/>
 			))}
 		</div>
 	);

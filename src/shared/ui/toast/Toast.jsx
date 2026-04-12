@@ -1,19 +1,10 @@
-import { useState } from "react";
 import { useToastStore } from "./toastStore.js";
 
 import { TOAST_CONFIG } from "@/shared/config/config.js";
 const { TOAST_LIFETIME, TOAST_ANIM_TIME } = TOAST_CONFIG;
 
-export default function Toast({ id, message }) {
-	const removeToast = useToastStore((state) => state.removeToast);
-	const [isExiting, setIsExiting] = useState(false);
-
-	const handleClose = () => {
-		setIsExiting(true);
-		setTimeout(() => {
-			removeToast(id);
-		}, TOAST_ANIM_TIME);
-	};
+export default function Toast({ id, message, isExiting }) {
+	const dismissToast = useToastStore((state) => state.dismissToast);
 
 	const styles = {
 		"--toast-lifetime": `${TOAST_LIFETIME}ms`,
@@ -31,7 +22,7 @@ export default function Toast({ id, message }) {
 				<p className="flex-1 p-1 text-sm">{message}</p>
 
 				<button
-					onClick={handleClose}
+					onClick={() => dismissToast(id)}
 					className="shrink-0 p-1 text-(--col-text-muted) transition-colors hover:text-(--col-text-main)"
 					aria-label="Close"
 				>

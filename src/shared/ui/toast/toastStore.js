@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Queue } from "@/shared/libs/queue.js";
 
 import { TOAST_CONFIG } from "@/shared/config/config.js";
-const { MAX_TOASTS, TOAST_LIFETIME } = TOAST_CONFIG;
+const { MAX_TOASTS, TOAST_LIFETIME, TOAST_ANIM_TIME } = TOAST_CONFIG;
 
 const queue = new Queue();
 const timers = new Map();
@@ -16,22 +16,35 @@ export const useToastStore = create((set, get) => ({
 
 		queue.enqueue(newToast);
 
-		if (queue.size > MAX_TOASTS) {
-			const removedToast = queue.dequeue();
+		const activeToasts = queue.items.filter((toast) => !toast.isExiting);
 
-			if (removedToast && timers.has(removedToast.id)) {
-				clearTimeout(timers.get(removedToast.id));
-				timers.delete(removedToast.id);
+		if (activeToasts.length > MAX_TOASTS) {
+			const oldestActive = activeToasts[0];
+			if (oldestActive) {
+				get().dismissToast(oldestActive.id);
 			}
 		}
 
 		set({ toasts: queue.toArray() });
 
 		const timerId = setTimeout(() => {
-			get().removeToast(id);
+			get().dismissToast(id);
 		}, TOAST_LIFETIME);
 
 		timers.set(id, timerId);
+	},
+
+	dismissToast: (id) => {
+		const item = queue.items.find((toast) => toast.id === id);
+		if (item) {
+			item.isExiting = true;
+		}
+
+		set({ toasts: queue.toArray() });
+
+		setTimeout(() => {
+			get().removeToast(id);
+		}, TOAST_ANIM_TIME);
 	},
 
 	removeToast: (id) => {
