@@ -195,13 +195,13 @@
 }
 
 .animate-toast-in {
-	animation: toast-in 0.2s ease-in-out forwards;
+	animation: toast-in var(--toast-anim-duration, 200ms) ease-in-out forwards;
 }
 
 .animate-toast-out {
-	animation: toast-out 0.2s ease-in-out forwards;
+	animation: toast-out var(--toast-anim-duration, 200ms) ease-in-out forwards;
 }
 
 .animate-shrink {
-	animation: shrink 5s linear forwards;
+	animation: shrink var(--toast-lifetime, 5000ms) linear forwards;
 }
