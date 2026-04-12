@@ -93,7 +93,7 @@ Configured in `src/app/AppRoutes.jsx`.
 - /create - Quiz creation page
 - /manage/:quizId - Quiz edit/manage page
 - /user/:userId - Public profile page
--   -   - Not found page
+- /\* - Not found page
 
 ## Configuration
 
@@ -147,6 +147,8 @@ Notes:
 - `npm run build` - Create production build.
 - `npm run preview` - Preview production build locally.
 - `npm run lint` - Run ESLint.
+- `npm run test` - Run Vitest once, allowing projects without test files.
+- `npm run test:watch` - Run Vitest in watch mode, allowing projects without test files.
 
 ## Backend Integration
 
