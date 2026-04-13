@@ -18,13 +18,6 @@ export default function Profile() {
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
-
-	const [modalInfo, setModalInfo] = useState({
-		isOpen: false,
-		title: "",
-		message: "",
-		isError: false,
-	});
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
@@ -48,20 +41,9 @@ export default function Profile() {
 
 			setUser(updated.user);
 			login(updated.user, token);
-
-			setModalInfo({
-				isOpen: true,
-				title: "Success",
-				message: "Profile updated successfully!",
-				isError: false,
-			});
+			addToast("Your profile has been updated successfully.");
 		} catch (error) {
-			setModalInfo({
-				isOpen: true,
-				title: "Error",
-				message: error.message || "Failed to update profile",
-				isError: true,
-			});
+			addToast(error.message || "Failed to update profile.");
 		} finally {
 			setIsSaving(false);
 		}

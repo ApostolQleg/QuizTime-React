@@ -109,7 +109,7 @@ export default function MyQuizzes() {
 			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
-		addToast("You've deleted that bullshit quiz.");
+		addToast("Quiz deleted successfully.");
 	};
 
 	if (!user) return null;

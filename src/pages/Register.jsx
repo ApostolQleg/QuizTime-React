@@ -44,7 +44,7 @@ export default function Register() {
 		setError("");
 		try {
 			await sendVerificationCode(formData.email);
-			addToast("We've sent code, you little bi###.");
+			addToast("Verification code sent. Check your inbox.");
 			setStep(2);
 		} catch (err) {
 			setError(err.message || "Failed to send code");
@@ -64,7 +64,7 @@ export default function Register() {
 		try {
 			const data = await loginWithGoogle(credentialResponse.credential);
 			login(data.user, data.token);
-			addToast("You're registered now, feel free to explore and go f#ck yourself ♥");
+			addToast("Registration successful. Welcome to QuizTime!");
 			navigate("/");
 		} catch (err) {
 			setError(getGoogleAuthErrorMessage(err));

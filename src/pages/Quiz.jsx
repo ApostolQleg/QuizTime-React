@@ -197,8 +197,11 @@ export default function Quiz() {
 					Submit
 				</Button>
 			) : (
-				<Button onClick={() => navigate("/results")} className="w-full md:w-auto">
-					Back to Results
+				<Button
+					onClick={() => navigate(resultIdParam ? "/results" : "/")}
+					className="w-full md:w-auto"
+				>
+					{resultIdParam ? "Back to Results" : "Back to Home"}
 				</Button>
 			)}
 

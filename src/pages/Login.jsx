@@ -38,7 +38,7 @@ export default function Login() {
 				password: formData.password,
 			});
 			login(data.user, data.token);
-			addToast("You have successfule logined ♥");
+			addToast("Logged in successfully.");
 			navigate("/");
 		} catch (err) {
 			setError(err.message || "Invalid credentials");
@@ -58,7 +58,7 @@ export default function Login() {
 		try {
 			const data = await loginWithGoogle(credentialResponse.credential);
 			login(data.user, data.token);
-			addToast("You have successfule logined ♥");
+			addToast("Logged in successfully.");
 			navigate("/");
 		} catch (err) {
 			if (err.message === "USER_NOT_FOUND") {
