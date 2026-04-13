@@ -28,7 +28,7 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 			onClose();
 
 			if (onDeleteSuccess) {
-				onDeleteSuccess(quizId);
+				onDeleteSuccess(quizId, quiz.title);
 			} else {
 				onClose();
 			}

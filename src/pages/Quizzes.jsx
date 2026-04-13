@@ -80,12 +80,16 @@ export default function Quizzes() {
 		loadData(nextPage, false, debouncedQuery, sortOption);
 	};
 
-	const handleDeleteSuccess = (deletedQuizId) => {
+	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
 			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
-		addToast("Quiz deleted successfully.");
+		addToast(
+			deletedQuizTitle
+				? `Quiz "${deletedQuizTitle}" deleted successfully.`
+				: "Quiz deleted successfully.",
+		);
 	};
 
 	return (
