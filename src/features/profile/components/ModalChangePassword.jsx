@@ -15,6 +15,14 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 
 	const addToast = useToastStore((state) => state.addToast);
 
+	const handleClose = () => {
+		setCurrentPassword("");
+		setNewPassword("");
+		setConfirmPassword("");
+		setError("");
+		onClose();
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("");
@@ -30,11 +38,7 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 		try {
 			await changePassword({ currentPassword, newPassword });
 			addToast("Your password has been changed successfully.");
-			onClose();
-			setCurrentPassword("");
-			setNewPassword("");
-			setConfirmPassword("");
-			setError("");
+			handleClose();
 		} catch (err) {
 			setError(err.message || "Failed to change password");
 		} finally {
@@ -43,7 +47,7 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} title="Change Password">
+		<Modal isOpen={isOpen} onClose={handleClose} title="Change Password">
 			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 				{error && (
 					<div className="text-(--col-fail) text-sm bg-(--col-bg-input) p-2 rounded border border-(--col-fail)">
@@ -91,7 +95,7 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 				<div className="flex justify-end gap-3 mt-4">
 					<Button
 						type="button"
-						onClick={onClose}
+						onClick={handleClose}
 						className="bg-transparent border border-(--col-border)"
 					>
 						Cancel
