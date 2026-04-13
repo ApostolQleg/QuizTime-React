@@ -6,6 +6,7 @@ import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_AUTH = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
@@ -24,6 +25,8 @@ export default function Quizzes() {
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
 	const [sortOption, setSortOption] = useState("newest");
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const loadData = useCallback(
 		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
@@ -82,6 +85,7 @@ export default function Quizzes() {
 			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
+		addToast("You've deleted that bullshit quiz.");
 	};
 
 	return (

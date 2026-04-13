@@ -3,6 +3,7 @@ import Modal from "@/shared/ui/Modal.jsx";
 import Input from "@/shared/ui/Input.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import { changePassword } from "@/features/profile/api/user.api.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function ModalChangePassword({ isOpen, onClose }) {
 	const [currentPassword, setCurrentPassword] = useState("");
@@ -12,6 +13,8 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -35,6 +38,8 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 				setNewPassword("");
 				setConfirmPassword("");
 			}, 1500);
+
+			addToast("Your password has been changed successfully.");
 		} catch (err) {
 			setError(err.message || "Failed to change password");
 		} finally {
@@ -42,71 +47,65 @@ export default function ModalChangePassword({ isOpen, onClose }) {
 		}
 	};
 
-	return (
+	return !success ? (
 		<Modal isOpen={isOpen} onClose={onClose} title="Change Password">
-			{success ? (
-				<div className="text-center text-(--col-success) py-8 text-xl font-bold animate-fade-in">
-					Password changed successfully!
+			<form onSubmit={handleSubmit} className="flex flex-col gap-4">
+				{error && (
+					<div className="text-(--col-fail) text-sm bg-(--col-bg-input) p-2 rounded border border-(--col-fail)">
+						{error}
+					</div>
+				)}
+
+				<div className="flex flex-col gap-1">
+					<label className="text-sm font-bold text-(--col-text-muted)">
+						Current Password
+					</label>
+					<Input
+						type="password"
+						value={currentPassword}
+						onChange={(e) => setCurrentPassword(e.target.value)}
+						required
+					/>
 				</div>
-			) : (
-				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
-					{error && (
-						<div className="text-(--col-fail) text-sm bg-(--col-bg-input) p-2 rounded border border-(--col-fail)">
-							{error}
-						</div>
-					)}
 
-					<div className="flex flex-col gap-1">
-						<label className="text-sm font-bold text-(--col-text-muted)">
-							Current Password
-						</label>
-						<Input
-							type="password"
-							value={currentPassword}
-							onChange={(e) => setCurrentPassword(e.target.value)}
-							required
-						/>
-					</div>
+				<div className="flex flex-col gap-1">
+					<label className="text-sm font-bold text-(--col-text-muted)">
+						New Password
+					</label>
+					<Input
+						type="password"
+						value={newPassword}
+						onChange={(e) => setNewPassword(e.target.value)}
+						required
+						minLength={6}
+					/>
+				</div>
 
-					<div className="flex flex-col gap-1">
-						<label className="text-sm font-bold text-(--col-text-muted)">
-							New Password
-						</label>
-						<Input
-							type="password"
-							value={newPassword}
-							onChange={(e) => setNewPassword(e.target.value)}
-							required
-							minLength={6}
-						/>
-					</div>
+				<div className="flex flex-col gap-1">
+					<label className="text-sm font-bold text-(--col-text-muted)">
+						Confirm New Password
+					</label>
+					<Input
+						type="password"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+						required
+					/>
+				</div>
 
-					<div className="flex flex-col gap-1">
-						<label className="text-sm font-bold text-(--col-text-muted)">
-							Confirm New Password
-						</label>
-						<Input
-							type="password"
-							value={confirmPassword}
-							onChange={(e) => setConfirmPassword(e.target.value)}
-							required
-						/>
-					</div>
-
-					<div className="flex justify-end gap-3 mt-4">
-						<Button
-							type="button"
-							onClick={onClose}
-							className="bg-transparent border border-(--col-border)"
-						>
-							Cancel
-						</Button>
-						<Button type="submit" disabled={isLoading} className="shadow-xl">
-							{isLoading ? "Saving..." : "Change Password"}
-						</Button>
-					</div>
-				</form>
-			)}
+				<div className="flex justify-end gap-3 mt-4">
+					<Button
+						type="button"
+						onClick={onClose}
+						className="bg-transparent border border-(--col-border)"
+					>
+						Cancel
+					</Button>
+					<Button type="submit" disabled={isLoading} className="shadow-xl">
+						{isLoading ? "Saving..." : "Change Password"}
+					</Button>
+				</div>
+			</form>
 		</Modal>
-	);
+	) : null;
 }

@@ -7,6 +7,7 @@ import ModalDescription from "@/features/quizzes/components/modals/ModalDescript
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { useNavigate } from "react-router-dom";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_FIRST = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
@@ -23,6 +24,8 @@ export default function MyQuizzes() {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const [sortOption, setSortOption] = useState("newest");
 	const navigate = useNavigate();
@@ -106,6 +109,7 @@ export default function MyQuizzes() {
 			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
+		addToast("You've deleted that bullshit quiz.");
 	};
 
 	if (!user) return null;

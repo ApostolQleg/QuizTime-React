@@ -13,6 +13,7 @@ import Textarea from "@/shared/ui/Textarea.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const DEFAULT_QUESTION = {
 	id: 0,
@@ -38,6 +39,8 @@ export default function Edit() {
 	const [description, setDescription] = useState("");
 	const [questions, setQuestions] = useState([DEFAULT_QUESTION]);
 	const [counter, setCounter] = useState(0);
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const [errors, setErrors] = useState({
 		title: false,
@@ -189,8 +192,10 @@ export default function Edit() {
 
 			if (isManagePage) {
 				await updateQuiz(quizId, quizPayload);
+				addToast("Your quiz is updated.");
 			} else {
 				await createQuiz(quizPayload);
+				addToast("Your quiz is created.");
 			}
 			clearAllQuizzesCache();
 
