@@ -8,6 +8,7 @@ import ColorGenerator from "./ColorGenerator.jsx";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import { getNicknameArray } from "../api/user.api.js";
 import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -24,6 +25,8 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 
 	const [generatedColor, setGeneratedColor] = useState(user.themeColor || "#4f46e5");
 
+	const addToast = useToastStore((state) => state.addToast);
+
 	const hasChanges =
 		nickname !== user.nickname ||
 		avatarType !== user.avatarType ||
@@ -36,6 +39,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 			avatarType,
 			themeColor: generatedColor,
 		});
+		addToast("Your profile is updated.");
 	};
 
 	const handleGoogleLinkSuccess = async (credentialResponse) => {
@@ -63,6 +67,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 				setNickname(nicknames[i]);
 				await sleep(70);
 			}
+			addToast("Nickname generated");
 		} catch (err) {
 			console.error("Failed to get nicknames", err);
 		} finally {

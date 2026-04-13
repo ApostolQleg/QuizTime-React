@@ -12,6 +12,7 @@ import Input from "@/shared/ui/Input.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
 import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Register() {
 	const navigate = useNavigate();
@@ -20,6 +21,8 @@ export default function Register() {
 	const [step, setStep] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const [formData, setFormData] = useState({
 		email: "",
@@ -41,6 +44,7 @@ export default function Register() {
 		setError("");
 		try {
 			await sendVerificationCode(formData.email);
+			addToast("We've sent code, you little bi###.");
 			setStep(2);
 		} catch (err) {
 			setError(err.message || "Failed to send code");
@@ -60,6 +64,7 @@ export default function Register() {
 		try {
 			const data = await loginWithGoogle(credentialResponse.credential);
 			login(data.user, data.token);
+			addToast("You're registered now, feel free to explore and go f#ck yourself ♥");
 			navigate("/");
 		} catch (err) {
 			setError(getGoogleAuthErrorMessage(err));
