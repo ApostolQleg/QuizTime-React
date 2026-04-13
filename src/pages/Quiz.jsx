@@ -11,6 +11,7 @@ import Question from "@/features/quizzes/components/quiz/Question.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Quiz() {
 	const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function Quiz() {
 
 	const [answers, setAnswers] = useState([]);
 	const [errors, setErrors] = useState({});
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const isResultView = Boolean(resultIdParam) || Boolean(resultData);
 
@@ -128,6 +131,7 @@ export default function Quiz() {
 				const response = await saveResult(payload);
 				clearAllResultsCache();
 				navigate(`/result/${quizId}/${response.result._id}`);
+				addToast("Result saved.");
 			} catch (error) {
 				console.error("Save error", error);
 				setAlertInfo({ isOpen: true, message: "Failed to save result" });
@@ -193,8 +197,11 @@ export default function Quiz() {
 					Submit
 				</Button>
 			) : (
-				<Button onClick={() => navigate("/")} className="w-full md:w-auto">
-					Back to Home
+				<Button
+					onClick={() => navigate(resultIdParam ? "/results" : "/")}
+					className="w-full md:w-auto"
+				>
+					{resultIdParam ? "Back to Results" : "Back to Home"}
 				</Button>
 			)}
 

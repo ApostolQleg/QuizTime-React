@@ -7,6 +7,7 @@ import ModalDescription from "@/features/quizzes/components/modals/ModalDescript
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { useNavigate } from "react-router-dom";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_FIRST = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
@@ -23,6 +24,8 @@ export default function MyQuizzes() {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	const [sortOption, setSortOption] = useState("newest");
 	const navigate = useNavigate();
@@ -101,11 +104,16 @@ export default function MyQuizzes() {
 		loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
 	};
 
-	const handleDeleteSuccess = (deletedQuizId) => {
+	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
 			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
+		addToast(
+			deletedQuizTitle
+				? `Quiz "${deletedQuizTitle}" deleted successfully.`
+				: "Quiz deleted successfully.",
+		);
 	};
 
 	if (!user) return null;
