@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
-import {
-	verifySession,
-	updateUser,
-	deleteUser,
-} from "@/features/profile/api/user.api.js";
+import { verifySession, updateUser, deleteUser } from "@/features/profile/api/user.api.js";
 
 import Container from "@/shared/ui/Container.jsx";
 import ProfileForm from "@/features/profile/components/ProfileForm.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 import ModalChangePassword from "@/features/profile/components/ModalChangePassword.jsx";
 import Button from "@/shared/ui/Button.jsx";
+
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -20,15 +18,10 @@ export default function Profile() {
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
-
-	const [modalInfo, setModalInfo] = useState({
-		isOpen: false,
-		title: "",
-		message: "",
-		isError: false,
-	});
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
 		verifySession()
@@ -48,20 +41,9 @@ export default function Profile() {
 
 			setUser(updated.user);
 			login(updated.user, token);
-
-			setModalInfo({
-				isOpen: true,
-				title: "Success",
-				message: "Profile updated successfully!",
-				isError: false,
-			});
+			addToast("Your profile has been updated successfully.");
 		} catch (error) {
-			setModalInfo({
-				isOpen: true,
-				title: "Error",
-				message: error.message || "Failed to update profile",
-				isError: true,
-			});
+			addToast(error.message || "Failed to update profile.");
 		} finally {
 			setIsSaving(false);
 		}
@@ -72,15 +54,11 @@ export default function Profile() {
 			await deleteUser();
 			logout();
 			navigate("/");
+			addToast("Your account has been deleted successfully.");
 		} catch (error) {
-			setModalInfo({
-				isOpen: true,
-				title: "Error",
-				message: "Failed to delete account. Try again later.",
-				isError: true,
-			});
 			setIsDeleteModalOpen(false);
 			console.error("Failed to delete account: ", error);
+			addToast("Failed to delete account. Try again later.");
 		}
 	};
 
@@ -135,21 +113,12 @@ export default function Profile() {
 			</div>
 
 			<ModalConfirm
-				isOpen={modalInfo.isOpen}
-				onClose={() => setModalInfo({ ...modalInfo, isOpen: false })}
-				title={modalInfo.title}
-				message={modalInfo.message}
-				isAlert={true}
-				isDanger={modalInfo.isError}
-			/>
-
-			<ModalConfirm
 				isOpen={isDeleteModalOpen}
 				onClose={() => setIsDeleteModalOpen(false)}
 				onConfirm={handleDeleteAccount}
 				title="Delete Account?"
 				message="Are you sure you want to delete your account? This action cannot be undone."
-				confirmLabel="Yes, Delete My Account"
+				confirmLabel="Yes"
 				isDanger={true}
 			/>
 

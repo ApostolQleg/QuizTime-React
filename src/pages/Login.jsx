@@ -6,8 +6,11 @@ import { loginUser, loginWithGoogle } from "@/features/auth/api/auth.api.js";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
 import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
+import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Login() {
+	const addToast = useToastStore((state) => state.addToast);
+
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -35,6 +38,7 @@ export default function Login() {
 				password: formData.password,
 			});
 			login(data.user, data.token);
+			addToast("Logged in successfully.");
 			navigate("/");
 		} catch (err) {
 			setError(err.message || "Invalid credentials");
@@ -54,6 +58,7 @@ export default function Login() {
 		try {
 			const data = await loginWithGoogle(credentialResponse.credential);
 			login(data.user, data.token);
+			addToast("Logged in successfully.");
 			navigate("/");
 		} catch (err) {
 			if (err.message === "USER_NOT_FOUND") {
