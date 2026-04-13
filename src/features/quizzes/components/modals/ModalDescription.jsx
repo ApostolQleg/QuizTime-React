@@ -26,13 +26,12 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 			await deleteQuiz(quizId);
 			clearAllQuizzesCache();
 			setIsDeleteConfirmOpen(false);
-			onClose();
 
 			if (onDeleteSuccess) {
 				onDeleteSuccess(quizId, quiz.title);
-			} else {
-				onClose();
 			}
+
+			onClose();
 		} catch (error) {
 			console.error("Error deleting quiz: ", error);
 			setErrorMessage("Failed to delete quiz. Please try again later.");
