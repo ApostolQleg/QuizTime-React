@@ -10,7 +10,7 @@ export default function Input({ type = "text", placeholder, className = "", imag
 			<input
 				type={type}
 				placeholder={placeholder}
-				className={`input ${image ? "pl-11!" : ""} ${className}`}
+				className={`input ${className} ${image ? "pl-11!" : ""} `}
 				{...props}
 			/>
 		</div>
