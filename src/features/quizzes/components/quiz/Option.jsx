@@ -42,6 +42,7 @@ export default function Option({ questionId, optionId, questionIndex, disabled }
 				id={id}
 				name={name}
 				value={value}
+				checked={selected}
 				disabled={disabled}
 				onChange={() => selectAnswer(questionIndex, option.id)}
 			/>
