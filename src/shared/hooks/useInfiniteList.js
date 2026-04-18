@@ -14,7 +14,11 @@ export function useInfiniteList(loadPage, extraParams = null) {
 					setIsLoadingMore(true);
 				}
 
-				const result = await loadPage({ pageToLoad, isInitialLoad, ...extraParams });
+				const result = await loadPage({
+					pageToLoad,
+					isInitialLoad,
+					...(extraParams ?? {}),
+				});
 				const nextItems = result?.items ?? [];
 				const nextHasMore = result?.hasMore ?? false;
 
