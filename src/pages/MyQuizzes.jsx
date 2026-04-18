@@ -8,6 +8,7 @@ import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { useNavigate } from "react-router-dom";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
+import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
@@ -15,21 +16,16 @@ const ITEMS_PER_PAGE_FIRST = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
 
 export default function MyQuizzes() {
 	const { user } = useAuth();
+	const navigate = useNavigate();
 
-	const [items, setItems] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
-	const addToast = useToastStore((state) => state.addToast);
-
 	const [sortOption, setSortOption] = useState("newest");
-	const navigate = useNavigate();
+
+	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
 		if (!user) {
@@ -38,63 +34,50 @@ export default function MyQuizzes() {
 	}, [user, navigate]);
 
 	const loadData = useCallback(
-		async (
-			pageToLoad,
-			isInitialLoad = false,
-			searchParam = "",
-			sortParam = "newest",
-			authorId,
-		) => {
-			if (!authorId) return;
-			try {
-				if (!isInitialLoad) setIsLoadingMore(true);
+		async ({ pageToLoad, authorId }) => {
+			if (!authorId) {
+				return {
+					items: [],
+					hasMore: false,
+				};
+			}
 
+			try {
 				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
 					pageToLoad,
 					ITEMS_PER_PAGE,
 					ITEMS_PER_PAGE_FIRST,
-					searchParam === "",
+					debouncedQuery === "",
 				);
 
 				const data = await getQuizzes(
 					currentSkip,
 					currentLimit,
-					searchParam,
-					sortParam,
+					debouncedQuery,
+					sortOption,
 					authorId,
 				);
 
-				if (data.quizzes.length < currentLimit) {
-					setHasMore(false);
-				}
-
-				setItems((prev) => (isInitialLoad ? data.quizzes : [...prev, ...data.quizzes]));
+				return {
+					items: data.quizzes,
+					hasMore: data.quizzes.length >= currentLimit,
+				};
 			} catch (err) {
 				console.error("Failed to load quizzes", err);
-			} finally {
-				setLoading(false);
-				setIsLoadingMore(false);
+				return {
+					items: [],
+					hasMore: false,
+				};
 			}
 		},
-		[],
+		[debouncedQuery, sortOption],
 	);
 
-	useEffect(() => {
-		if (!user) return;
-
-		setItems([]);
-		setPage(1);
-		setHasMore(true);
-		setLoading(true);
-		loadData(1, true, debouncedQuery, sortOption, `${user._id}`);
-	}, [user, loadData, debouncedQuery, sortOption]);
-
-	const handleLoadMore = () => {
-		if (!user) return;
-		const nextPage = page + 1;
-		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery, sortOption, `${user._id}`);
-	};
+	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
+		loadData,
+		[loadData],
+		{ authorId: user?._id },
+	);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
