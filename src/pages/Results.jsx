@@ -56,9 +56,7 @@ export default function Results() {
 		[user, debouncedQuery, sortOption],
 	);
 
-	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData, [
-		loadData,
-	]);
+	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."

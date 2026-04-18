@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-export function useInfiniteList(loadPage, dependencies = [], extraParams = null) {
+export function useInfiniteList(loadPage, extraParams = null) {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
@@ -34,7 +34,7 @@ export function useInfiniteList(loadPage, dependencies = [], extraParams = null)
 		setHasMore(true);
 		setLoading(true);
 		load(1, true);
-	}, dependencies);
+	}, [load]);
 
 	const handleLoadMore = useCallback(() => {
 		setPage((currentPage) => {
