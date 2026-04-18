@@ -58,35 +58,46 @@ export const useAuthStore = create((set, get) => ({
 			return false;
 		}
 
-		if (!force && sessionCheckedToken === token) {
-			return true;
-		}
+		if (!force && sessionCheckedToken === token) return true;
 
-		if (sessionCheckPromise && !force) {
-			return sessionCheckPromise;
-		}
+		if (sessionCheckPromise) return sessionCheckPromise;
 
 		set({ isSessionChecking: true });
+		const requestToken = token;
 
-		sessionCheckPromise = verifySession()
+		const currentPromise = verifySession()
 			.then((data) => {
+				if (get().token !== requestToken) {
+					return false;
+				}
+
 				if (data?.user) {
-					persistAuth(data.user, token);
+					persistAuth(data.user, requestToken);
 					set({ user: data.user });
 				}
-				sessionCheckedToken = token;
+				sessionCheckedToken = requestToken;
 				return true;
 			})
 			.catch(() => {
+				if (get().token !== requestToken) {
+					return false;
+				}
+
 				logout();
 				return false;
 			})
 			.finally(() => {
-				sessionCheckPromise = null;
-				set({ isSessionChecking: false });
+				if (sessionCheckPromise === currentPromise) {
+					sessionCheckPromise = null;
+				}
+
+				if (get().token === requestToken) {
+					set({ isSessionChecking: false });
+				}
 			});
 
-		return sessionCheckPromise;
+		sessionCheckPromise = currentPromise;
+		return currentPromise;
 	},
 }));
 
