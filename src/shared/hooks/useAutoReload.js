@@ -1,14 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
-import { isTokenExpired } from "../libs/jwt.js";
-import { verifySession } from "@/features/profile/api/user.api.js";
 import { AUTO_RELOAD_CONFIG } from "@/shared/config/config.js";
 
 export default function useAutoReload(onRefresh, timeoutMs = AUTO_RELOAD_CONFIG.TIME_OUT_MS) {
 	const lastLeaveTime = useRef(null);
 	const location = useLocation();
-	const { token, logout } = useAuth();
+	const { token, checkSession } = useAuth();
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -31,21 +29,17 @@ export default function useAutoReload(onRefresh, timeoutMs = AUTO_RELOAD_CONFIG.
 							return;
 						}
 
-						if (isTokenExpired(token)) {
-							console.log("Token expired. Logging out...");
-							logout();
-							return;
-						}
+						if (!token) return;
 
-						verifySession()
-							.then(() => {
-								console.log("Session verified. Updating data...");
-								if (onRefresh) onRefresh();
-							})
-							.catch(() => {
-								console.log("User deleted or session invalid. Logging out...");
-								logout();
-							});
+						checkSession({ force: true }).then((ok) => {
+							if (!ok) {
+								console.log("User deleted or session invalid. Logged out.");
+								return;
+							}
+
+							console.log("Session verified. Updating data...");
+							if (onRefresh) onRefresh();
+						});
 					}
 				}
 			}
@@ -56,5 +50,5 @@ export default function useAutoReload(onRefresh, timeoutMs = AUTO_RELOAD_CONFIG.
 		return () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
-	}, [timeoutMs, location.pathname, token, logout, onRefresh]);
+	}, [timeoutMs, location.pathname, token, checkSession, onRefresh]);
 }

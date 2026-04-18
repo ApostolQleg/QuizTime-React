@@ -13,7 +13,7 @@ import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Profile() {
 	const navigate = useNavigate();
-	const { logout, login, token } = useAuth();
+	const { user: authUser, logout, login, token } = useAuth();
 	const user = useProfilePageStore((state) => state.user);
 	const isLoading = useProfilePageStore((state) => state.isLoading);
 	const isSaving = useProfilePageStore((state) => state.isSaving);
@@ -30,6 +30,7 @@ export default function Profile() {
 		login,
 		logout,
 		token,
+		user: authUser,
 		addToast,
 	});
 

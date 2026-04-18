@@ -1,34 +1,31 @@
 import { useEffect, useCallback } from "react";
-import { verifySession, updateUser, deleteUser } from "@/features/profile/api/user.api.js";
+import { updateUser, deleteUser } from "@/features/profile/api/user.api.js";
 import { useProfilePageStore } from "@/features/profile/stores/profilePageStore.js";
 
-export function useProfilePageActions({ navigate, login, logout, token, addToast }) {
+export function useProfilePageActions({
+	navigate,
+	login,
+	logout,
+	token,
+	user: authUser,
+	addToast,
+}) {
 	const setUser = useProfilePageStore((state) => state.setUser);
 	const setIsLoading = useProfilePageStore((state) => state.setIsLoading);
 	const setIsSaving = useProfilePageStore((state) => state.setIsSaving);
 	const closeDeleteModal = useProfilePageStore((state) => state.closeDeleteModal);
 
 	useEffect(() => {
-		let isMounted = true;
+		if (!token) {
+			setUser(null);
+			setIsLoading(false);
+			navigate("/login");
+			return;
+		}
 
-		verifySession()
-			.then((data) => {
-				if (!isMounted) return;
-				setUser(data.user);
-			})
-			.catch(() => {
-				if (!isMounted) return;
-				navigate("/login");
-			})
-			.finally(() => {
-				if (!isMounted) return;
-				setIsLoading(false);
-			});
-
-		return () => {
-			isMounted = false;
-		};
-	}, [navigate, setIsLoading, setUser]);
+		setUser(authUser || null);
+		setIsLoading(false);
+	}, [authUser, navigate, setIsLoading, setUser, token]);
 
 	const saveProfile = useCallback(
 		async (formData) => {
