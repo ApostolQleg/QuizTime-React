@@ -8,7 +8,7 @@ import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 import Avatar from "@/shared/ui/Avatar.jsx";
 
 export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSuccess }) {
-	const { user } = useAuth();
+	const user = useAuth((state) => state.user);
 	const quizId = quiz?.id || quiz?._id;
 
 	const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
@@ -6,19 +6,15 @@ import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { getPaginationRange } from "@/shared/libs/pagination.js";
+import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_AUTH = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
 
 export default function Quizzes() {
-	const { user } = useAuth();
-
-	const [items, setItems] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const user = useAuth((state) => state.user);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -29,56 +25,39 @@ export default function Quizzes() {
 	const addToast = useToastStore((state) => state.addToast);
 
 	const loadData = useCallback(
-		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
+		async ({ pageToLoad }) => {
 			try {
-				if (!isInitialLoad) setIsLoadingMore(true);
+				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
+					pageToLoad,
+					ITEMS_PER_PAGE,
+					ITEMS_PER_PAGE_AUTH,
+					!!user && debouncedQuery === "",
+				);
 
-				let currentLimit = ITEMS_PER_PAGE;
-				let currentSkip = 0;
+				const data = await getQuizzes(
+					currentSkip,
+					currentLimit,
+					debouncedQuery,
+					sortOption,
+				);
 
-				if (user && searchParam === "") {
-					if (pageToLoad === 1) {
-						currentLimit = ITEMS_PER_PAGE_AUTH;
-						currentSkip = 0;
-					} else {
-						currentLimit = ITEMS_PER_PAGE;
-						currentSkip = ITEMS_PER_PAGE_AUTH + (pageToLoad - 2) * ITEMS_PER_PAGE;
-					}
-				} else {
-					currentLimit = ITEMS_PER_PAGE;
-					currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
-				}
-
-				const data = await getQuizzes(currentSkip, currentLimit, searchParam, sortParam);
-
-				if (data.quizzes.length < currentLimit) {
-					setHasMore(false);
-				}
-
-				setItems((prev) => (isInitialLoad ? data.quizzes : [...prev, ...data.quizzes]));
+				return {
+					items: data.quizzes,
+					hasMore: data.quizzes.length >= currentLimit,
+				};
 			} catch (err) {
 				console.error("Failed to load quizzes", err);
-			} finally {
-				setLoading(false);
-				setIsLoadingMore(false);
+				return {
+					items: [],
+					hasMore: false,
+				};
 			}
 		},
-		[user],
+		[user, debouncedQuery, sortOption],
 	);
 
-	useEffect(() => {
-		setItems([]);
-		setPage(1);
-		setHasMore(true);
-		setLoading(true);
-		loadData(1, true, debouncedQuery, sortOption);
-	}, [user, loadData, debouncedQuery, sortOption]);
-
-	const handleLoadMore = () => {
-		const nextPage = page + 1;
-		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery, sortOption);
-	};
+	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
+		useInfiniteList(loadData);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
@@ -96,11 +75,9 @@ export default function Quizzes() {
 		<>
 			<div className="flex flex-col items-center justify-between gap-3">
 				<ToolBar
-					searchQuery={searchQuery}
-					onSearchChange={setSearchQuery}
-					sortOption={sortOption}
-					onSortChange={setSortOption}
-					placeholder={"Search for quizzes..."}
+					search={{ value: searchQuery, onChange: setSearchQuery }}
+					sort={{ value: sortOption, onChange: setSortOption }}
+					placeholder="Search for quizzes..."
 				/>
 				<Grid
 					items={items}

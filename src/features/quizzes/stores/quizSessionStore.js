@@ -1,0 +1,72 @@
+import { create } from "zustand";
+
+const initialState = {
+	loading: true,
+	quizData: null,
+	resultData: null,
+	answers: [],
+	errors: {},
+	alertInfo: { isOpen: false, message: "" },
+	mode: "play",
+};
+
+export const useQuizSessionStore = create((set) => ({
+	...initialState,
+
+	resetSession: () => set({ ...initialState }),
+
+	setLoading: (loading) => set({ loading }),
+
+	loadQuizForPlay: (quiz) =>
+		set({
+			quizData: quiz,
+			resultData: null,
+			answers: [],
+			errors: {},
+			mode: "play",
+		}),
+
+	loadResultForView: (result) =>
+		set({
+			resultData: result,
+			quizData: {
+				title: result.quizTitle,
+				questions: result.questions,
+			},
+			answers: result.answers || [],
+			errors: {},
+			mode: "result",
+		}),
+
+	selectAnswer: (questionIndex, optionId) =>
+		set((state) => {
+			const nextAnswers = [...state.answers];
+			nextAnswers[questionIndex] = [optionId];
+
+			if (!state.errors[questionIndex]) {
+				return { answers: nextAnswers };
+			}
+
+			const nextErrors = { ...state.errors };
+			delete nextErrors[questionIndex];
+
+			return {
+				answers: nextAnswers,
+				errors: nextErrors,
+			};
+		}),
+
+	setValidationErrors: (errors) => set({ errors }),
+
+	setGuestResult: (result) =>
+		set({
+			resultData: result,
+			mode: "result",
+		}),
+
+	setAlertInfo: (alertInfo) => set({ alertInfo }),
+
+	closeAlert: () => set({ alertInfo: { isOpen: false, message: "" } }),
+}));
+
+export default useQuizSessionStore;

@@ -4,9 +4,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import useAutoReload from "@/shared/hooks/useAutoReload.js";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
 
-import { verifySession } from "@/features/profile/api/user.api.js";
-import { isTokenExpired } from "@/shared/libs/jwt.js";
-
 import Quizzes from "@/pages/Quizzes.jsx";
 import Results from "@/pages/Results.jsx";
 import MyQuizzes from "@/pages/MyQuizzes.jsx";
@@ -21,7 +18,8 @@ import PublicProfile from "@/pages/PublicProfile.jsx";
 
 export default function AppRoutes() {
 	const { pathname } = useLocation();
-	const { token, logout } = useAuth();
+	const token = useAuth((state) => state.token);
+	const checkSession = useAuth((state) => state.checkSession);
 
 	const [refreshKey, setRefreshKey] = useState(0);
 
@@ -33,19 +31,17 @@ export default function AppRoutes() {
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+	}, [pathname]);
 
-		if (token) {
-			if (isTokenExpired(token)) {
-				logout();
-				return;
+	useEffect(() => {
+		if (!token) return;
+
+		checkSession().then((ok) => {
+			if (!ok) {
+				console.log("User no longer exists or token expired. Logged out.");
 			}
-
-			verifySession().catch(() => {
-				console.log("User no longer exists. Logging out...");
-				logout();
-			});
-		}
-	}, [pathname, token, logout]);
+		});
+	}, [token, checkSession]);
 
 	return (
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">

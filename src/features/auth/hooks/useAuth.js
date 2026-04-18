@@ -1,6 +1,5 @@
-import { useContext } from "react";
-import { AuthContext } from "@/app/providers/AuthContext.jsx";
+import { useAuthStore } from "@/features/auth/stores/authStore.js";
 
-export const useAuth = () => {
-	return useContext(AuthContext);
+export const useAuth = (selector = (state) => state) => {
+	return useAuthStore(selector);
 };

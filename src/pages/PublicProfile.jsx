@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "@/features/profile/api/user.api.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
@@ -8,6 +8,8 @@ import Avatar from "@/shared/ui/Avatar.jsx";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { getPaginationRange } from "@/shared/libs/pagination.js";
+import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_PUBLIC_PROFILE;
 
@@ -17,12 +19,6 @@ export default function PublicProfile() {
 
 	const [user, setUser] = useState(null);
 	const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-
-	const [items, setItems] = useState([]);
-	const [loadingQuizzes, setLoadingQuizzes] = useState(true);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
 	useEffect(() => {
@@ -36,51 +32,48 @@ export default function PublicProfile() {
 				})
 				.finally(() => setIsLoadingProfile(false));
 		} else {
-			setIsLoadingProfile(false);
 			navigate("/", { replace: true });
 		}
 	}, [userId, navigate]);
 
-	const loadData = useCallback(async (pageToLoad, isInitialLoad = false, authorId) => {
-		if (!authorId) return;
+	const loadData = useCallback(async ({ pageToLoad, authorId }) => {
+		if (!authorId) {
+			return {
+				items: [],
+				hasMore: false,
+			};
+		}
 
 		try {
-			if (!isInitialLoad) setIsLoadingMore(true);
-
-			const currentLimit = ITEMS_PER_PAGE;
-			const currentSkip = (pageToLoad - 1) * ITEMS_PER_PAGE;
+			const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
+				pageToLoad,
+				ITEMS_PER_PAGE,
+			);
 
 			const data = await getQuizzes(currentSkip, currentLimit, "", "newest", authorId);
 
-			if (data.quizzes.length < currentLimit) {
-				setHasMore(false);
-			}
-
-			setItems((prev) => (isInitialLoad ? data.quizzes : [...prev, ...data.quizzes]));
+			return {
+				items: data.quizzes,
+				hasMore: data.quizzes.length >= currentLimit,
+			};
 		} catch (err) {
 			console.error("Failed to load quizzes", err);
-		} finally {
-			setLoadingQuizzes(false);
-			setIsLoadingMore(false);
+			return {
+				items: [],
+				hasMore: false,
+			};
 		}
 	}, []);
 
-	useEffect(() => {
-		if (!user) return;
+	const authorParams = useMemo(() => ({ authorId: userId }), [userId]);
 
-		setItems([]);
-		setPage(1);
-		setHasMore(true);
-		setLoadingQuizzes(true);
-		loadData(1, true, userId);
-	}, [user, loadData, userId]);
-
-	const handleLoadMore = () => {
-		if (!user) return;
-		const nextPage = page + 1;
-		setPage(nextPage);
-		loadData(nextPage, false, userId);
-	};
+	const {
+		items,
+		loading: loadingQuizzes,
+		hasMore,
+		isLoadingMore,
+		handleLoadMore,
+	} = useInfiniteList(loadData, authorParams);
 
 	if (isLoadingProfile) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;

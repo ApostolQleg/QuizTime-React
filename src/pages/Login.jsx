@@ -20,7 +20,7 @@ export default function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
-	const { login } = useAuth();
+	const login = useAuth((state) => state.login);
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
