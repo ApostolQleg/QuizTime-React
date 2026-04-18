@@ -18,7 +18,8 @@ import PublicProfile from "@/pages/PublicProfile.jsx";
 
 export default function AppRoutes() {
 	const { pathname } = useLocation();
-	const { token, checkSession } = useAuth();
+	const token = useAuth((state) => state.token);
+	const checkSession = useAuth((state) => state.checkSession);
 
 	const [refreshKey, setRefreshKey] = useState(0);
 

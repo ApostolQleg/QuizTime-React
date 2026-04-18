@@ -13,7 +13,8 @@ import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function ProfileForm({ user, onSave, isLoading }) {
-	const { login, token } = useAuth();
+	const login = useAuth((state) => state.login);
+	const token = useAuth((state) => state.token);
 
 	const [hasGoogleAccount, setHasGoogleAccount] = useState(!!user.googleId);
 	const [linkError, setLinkError] = useState(null);

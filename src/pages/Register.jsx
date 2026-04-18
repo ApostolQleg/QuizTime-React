@@ -16,7 +16,7 @@ import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Register() {
 	const navigate = useNavigate();
-	const { login } = useAuth();
+	const login = useAuth((state) => state.login);
 
 	const [step, setStep] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);

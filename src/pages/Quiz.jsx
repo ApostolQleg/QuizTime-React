@@ -17,7 +17,7 @@ import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 export default function Quiz() {
 	const navigate = useNavigate();
 	const { quizId, resultIdParam } = useParams();
-	const { user } = useAuth();
+	const user = useAuth((state) => state.user);
 	const loading = useQuizSessionStore((state) => state.loading);
 	const quizData = useQuizSessionStore((state) => state.quizData);
 	const resultData = useQuizSessionStore((state) => state.resultData);

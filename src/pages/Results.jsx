@@ -13,7 +13,7 @@ const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_RESULTS;
 
 export default function Results() {
 	const navigate = useNavigate();
-	const { user } = useAuth();
+	const user = useAuth((state) => state.user);
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
@@ -56,10 +56,9 @@ export default function Results() {
 		[user, debouncedQuery, sortOption],
 	);
 
-	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
+	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData, [
 		loadData,
-		[loadData],
-	);
+	]);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."

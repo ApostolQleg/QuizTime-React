@@ -14,7 +14,7 @@ const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_AUTH = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
 
 export default function Quizzes() {
-	const { user } = useAuth();
+	const user = useAuth((state) => state.user);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
 	const [searchQuery, setSearchQuery] = useState("");

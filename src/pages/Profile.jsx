@@ -13,7 +13,10 @@ import { useToastStore } from "@/shared/ui/toast/toastStore.js";
 
 export default function Profile() {
 	const navigate = useNavigate();
-	const { user: authUser, logout, login, token } = useAuth();
+	const authUser = useAuth((state) => state.user);
+	const logout = useAuth((state) => state.logout);
+	const login = useAuth((state) => state.login);
+	const token = useAuth((state) => state.token);
 	const user = useProfilePageStore((state) => state.user);
 	const isLoading = useProfilePageStore((state) => state.isLoading);
 	const isSaving = useProfilePageStore((state) => state.isSaving);

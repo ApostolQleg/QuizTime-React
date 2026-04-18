@@ -6,7 +6,8 @@ import { AUTO_RELOAD_CONFIG } from "@/shared/config/config.js";
 export default function useAutoReload(onRefresh, timeoutMs = AUTO_RELOAD_CONFIG.TIME_OUT_MS) {
 	const lastLeaveTime = useRef(null);
 	const location = useLocation();
-	const { token, checkSession } = useAuth();
+	const token = useAuth((state) => state.token);
+	const checkSession = useAuth((state) => state.checkSession);
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {

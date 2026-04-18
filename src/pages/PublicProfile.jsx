@@ -32,7 +32,6 @@ export default function PublicProfile() {
 				})
 				.finally(() => setIsLoadingProfile(false));
 		} else {
-			setIsLoadingProfile(false);
 			navigate("/", { replace: true });
 		}
 	}, [userId, navigate]);

@@ -6,7 +6,8 @@ import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 import Avatar from "@/shared/ui/Avatar.jsx";
 
 export default function Header() {
-	const { user, logout } = useAuth();
+	const user = useAuth((state) => state.user);
+	const logout = useAuth((state) => state.logout);
 	const navigate = useNavigate();
 
 	const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
