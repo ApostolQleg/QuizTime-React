@@ -5,9 +5,10 @@ import {
 	clearAllResultsCache,
 } from "@/features/results/api/results.api.js";
 import { getQuizById } from "@/features/quizzes/api/quizzes.api.js";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
 import Question from "@/features/quizzes/components/quiz/Question.jsx";
+import { useQuizSessionStore } from "@/features/quizzes/stores/quizSessionStore.js";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
@@ -17,51 +18,36 @@ export default function Quiz() {
 	const navigate = useNavigate();
 	const { quizId, resultIdParam } = useParams();
 	const { user } = useAuth();
-
-	const [loading, setLoading] = useState(true);
-	const [quizData, setQuizData] = useState(null);
-	const [resultData, setResultData] = useState(null);
-
-	const [alertInfo, setAlertInfo] = useState({ isOpen: false, message: "" });
-
-	const [answers, setAnswers] = useState([]);
-	const [errors, setErrors] = useState({});
+	const loading = useQuizSessionStore((state) => state.loading);
+	const quizData = useQuizSessionStore((state) => state.quizData);
+	const resultData = useQuizSessionStore((state) => state.resultData);
+	const answers = useQuizSessionStore((state) => state.answers);
+	const alertInfo = useQuizSessionStore((state) => state.alertInfo);
+	const loadQuizForPlay = useQuizSessionStore((state) => state.loadQuizForPlay);
+	const loadResultForView = useQuizSessionStore((state) => state.loadResultForView);
+	const setValidationErrors = useQuizSessionStore((state) => state.setValidationErrors);
+	const setGuestResult = useQuizSessionStore((state) => state.setGuestResult);
+	const setAlertInfo = useQuizSessionStore((state) => state.setAlertInfo);
+	const closeAlert = useQuizSessionStore((state) => state.closeAlert);
+	const setLoading = useQuizSessionStore((state) => state.setLoading);
+	const resetSession = useQuizSessionStore((state) => state.resetSession);
 
 	const addToast = useToastStore((state) => state.addToast);
 
 	const isResultView = Boolean(resultIdParam) || Boolean(resultData);
 
 	useEffect(() => {
-		if (resultIdParam && resultData && resultData._id === resultIdParam) {
-			return;
-		}
-
-		if (!resultIdParam && resultData && resultData.quizId === quizId) {
-			return;
-		}
-
+		resetSession();
 		setLoading(true);
-		setQuizData(null);
-
-		if (!resultData || resultData.quizId !== quizId) {
-			setResultData(null);
-		}
-
-		setAnswers([]);
-		setErrors({});
 
 		const loadData = async () => {
 			try {
 				if (resultIdParam) {
 					const data = await getResultById(resultIdParam);
-					setResultData(data.result);
-					setQuizData({
-						title: data.result.quizTitle,
-						questions: data.result.questions,
-					});
+					loadResultForView(data.result);
 				} else {
 					const data = await getQuizById(quizId);
-					setQuizData(data.quiz);
+					loadQuizForPlay(data.quiz);
 				}
 			} catch (error) {
 				console.error("Failed to load data", error);
@@ -72,16 +58,15 @@ export default function Quiz() {
 		};
 
 		loadData();
-	}, [quizId, resultIdParam, navigate, resultData]);
-
-	const handleRadioUpdate = (qIndex, oIndex) => {
-		const newAnswers = [...answers];
-		newAnswers[qIndex] = [oIndex];
-		setAnswers(newAnswers);
-		if (errors[qIndex]) {
-			setErrors((prev) => ({ ...prev, [qIndex]: false }));
-		}
-	};
+	}, [
+		quizId,
+		resultIdParam,
+		navigate,
+		loadQuizForPlay,
+		loadResultForView,
+		resetSession,
+		setLoading,
+	]);
 
 	const handleSubmit = async () => {
 		if (!quizData) return;
@@ -96,7 +81,7 @@ export default function Quiz() {
 			}
 		}
 
-		setErrors(newErrors);
+		setValidationErrors(newErrors);
 		if (!allAnswered) return;
 
 		let score = 0;
@@ -142,7 +127,7 @@ export default function Quiz() {
 				quizTitle: quizData.title,
 				questions: quizData.questions,
 			};
-			setResultData(localResult);
+			setGuestResult(localResult);
 			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
 	};
@@ -173,19 +158,7 @@ export default function Quiz() {
 
 			<div className="w-full flex flex-col gap-6">
 				{quizData.questions.map((question, index) => (
-					<Question
-						question={question}
-						key={index}
-						className="p-6 rounded-xl border shadow-lg transition-all bg-(--col-bg-input) border-(--col-border) hover:border-(--col-border)"
-						isResultPage={isResultView}
-						onOptionSelect={(optionId) =>
-							!isResultView && handleRadioUpdate(index, optionId)
-						}
-						error={errors[index]}
-						selected={isResultView ? resultData?.answers?.[index] : answers[index]}
-					>
-						{question.text}
-					</Question>
+					<Question key={question.id} questionId={question.id} index={index} />
 				))}
 			</div>
 
@@ -207,7 +180,7 @@ export default function Quiz() {
 
 			<ModalConfirm
 				isOpen={alertInfo.isOpen}
-				onClose={() => setAlertInfo({ ...alertInfo, isOpen: false })}
+				onClose={closeAlert}
 				title="Ooops!"
 				message={alertInfo.message}
 				isAlert={true}
