@@ -77,7 +77,6 @@ export default function MyQuizzes() {
 
 	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
 		loadData,
-		[loadData, user?._id],
 		authorParams,
 	);
 

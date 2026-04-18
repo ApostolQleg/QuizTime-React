@@ -73,7 +73,7 @@ export default function PublicProfile() {
 		hasMore,
 		isLoadingMore,
 		handleLoadMore,
-	} = useInfiniteList(loadData, [loadData, userId], authorParams);
+	} = useInfiniteList(loadData, authorParams);
 
 	if (isLoadingProfile) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;

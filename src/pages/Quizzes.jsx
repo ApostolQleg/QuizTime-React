@@ -56,10 +56,8 @@ export default function Quizzes() {
 		[user, debouncedQuery, sortOption],
 	);
 
-	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
-		loadData,
-		[loadData],
-	);
+	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
+		useInfiniteList(loadData);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
