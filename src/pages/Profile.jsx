@@ -17,6 +17,7 @@ export default function Profile() {
 	const logout = useAuth((state) => state.logout);
 	const login = useAuth((state) => state.login);
 	const token = useAuth((state) => state.token);
+	const isSessionChecking = useAuth((state) => state.isSessionChecking);
 	const user = useProfilePageStore((state) => state.user);
 	const isLoading = useProfilePageStore((state) => state.isLoading);
 	const isSaving = useProfilePageStore((state) => state.isSaving);
@@ -34,6 +35,7 @@ export default function Profile() {
 		logout,
 		token,
 		user: authUser,
+		isSessionChecking,
 		addToast,
 	});
 
