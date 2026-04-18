@@ -8,6 +8,7 @@ export function useProfilePageActions({
 	logout,
 	token,
 	user: authUser,
+	isSessionChecking,
 	addToast,
 }) {
 	const setUser = useProfilePageStore((state) => state.setUser);
@@ -23,9 +24,20 @@ export function useProfilePageActions({
 			return;
 		}
 
-		setUser(authUser || null);
+		if (isSessionChecking) {
+			setIsLoading(true);
+			return;
+		}
+
+		if (!authUser) {
+			setUser(null);
+			setIsLoading(false);
+			return;
+		}
+
+		setUser(authUser);
 		setIsLoading(false);
-	}, [authUser, navigate, setIsLoading, setUser, token]);
+	}, [authUser, isSessionChecking, navigate, setIsLoading, setUser, token]);
 
 	const saveProfile = useCallback(
 		async (formData) => {
