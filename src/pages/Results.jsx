@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getResults } from "@/features/results/api/results.api.js";
 import { useAuth } from "@/features/auth/hooks/useAuth.js";
@@ -7,6 +7,7 @@ import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
+import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_RESULTS;
 
@@ -14,60 +15,51 @@ export default function Results() {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
-	const [items, setItems] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
-
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
 
 	const [sortOption, setSortOption] = useState("newest");
 
 	const loadData = useCallback(
-		async (pageToLoad, isInitialLoad = false, searchParam = "", sortParam = "newest") => {
+		async ({ pageToLoad }) => {
 			if (!user) {
-				setLoading(false);
-				return;
+				return {
+					items: [],
+					hasMore: false,
+				};
 			}
 
 			try {
-				if (!isInitialLoad) setIsLoadingMore(true);
-
 				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
 					pageToLoad,
 					ITEMS_PER_PAGE,
 				);
-				const data = await getResults(currentSkip, currentLimit, searchParam, sortParam);
-				if (data.results.length < currentLimit) {
-					setHasMore(false);
-				}
+				const data = await getResults(
+					currentSkip,
+					currentLimit,
+					debouncedQuery,
+					sortOption,
+				);
 
-				setItems((prev) => (isInitialLoad ? data.results : [...prev, ...data.results]));
+				return {
+					items: data.results,
+					hasMore: data.results.length >= currentLimit,
+				};
 			} catch (err) {
 				console.error("Failed to load results", err);
-			} finally {
-				setLoading(false);
-				setIsLoadingMore(false);
+				return {
+					items: [],
+					hasMore: false,
+				};
 			}
 		},
-		[user],
+		[user, debouncedQuery, sortOption],
 	);
 
-	useEffect(() => {
-		setItems([]);
-		setPage(1);
-		setHasMore(true);
-		setLoading(true);
-		loadData(1, true, debouncedQuery, sortOption);
-	}, [user, loadData, debouncedQuery, sortOption]);
-
-	const handleLoadMore = () => {
-		const nextPage = page + 1;
-		setPage(nextPage);
-		loadData(nextPage, false, debouncedQuery, sortOption);
-	};
+	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
+		loadData,
+		[loadData],
+	);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
