@@ -1,55 +1,52 @@
 import Option from "./OptionEditor.jsx";
 import Input from "@/shared/ui/Input.jsx";
 import Button from "@/shared/ui/Button.jsx";
+import { useQuizEditorStore } from "@/features/quizzes/stores/quizEditorStore.js";
 
-export default function Question({
-	id,
-	text,
-	index,
-	errors,
-	options,
-	onDelete,
-	onChange,
-	onCorrect,
-	onOptionAdd,
-	onOptionDelete,
-	onOptionChange,
-}) {
+const EMPTY_ERRORS = {};
+
+export default function Question({ questionId, index }) {
+	const question = useQuizEditorStore((state) =>
+		state.questions.find((item) => item.id === questionId),
+	);
+	const errors = useQuizEditorStore(
+		(state) => state.errors.questions?.[questionId] || EMPTY_ERRORS,
+	);
+	const deleteQuestion = useQuizEditorStore((state) => state.deleteQuestion);
+	const updateQuestionText = useQuizEditorStore((state) => state.updateQuestionText);
+	const addOption = useQuizEditorStore((state) => state.addOption);
+
+	if (!question) {
+		return null;
+	}
+
+	const optionIds = question.options.map((option) => option.id);
+
 	return (
 		<div
-			className={`w-full bg-(--col-bg-input-darker) p-4 rounded-2xl flex flex-col gap-3 border border-(--col-border) ${errors?.hasRadioError ? "error" : ""}`}
-			id={id}
+			className={`w-full bg-(--col-bg-input-darker) p-4 rounded-2xl flex flex-col gap-3 border border-(--col-border) ${errors.hasRadioError ? "error" : ""}`}
+			id={questionId}
 		>
 			<div className="flex flex-row justify-between items-center border-b border-(--col-border) pb-2">
 				<div className="text-(--col-text-muted) font-bold tracking-wide ml-2">
 					Question {index + 1}
 				</div>
-				<Button onClick={onDelete}>Delete</Button>
+				<Button onClick={() => deleteQuestion(questionId)}>Delete</Button>
 			</div>
 
 			<div className="flex flex-row justify-between items-center">
 				<Input
 					placeholder="Enter question text here..."
-					className={`m-2 w-3/4 ${errors?.hasError ? "error" : ""}`}
-					value={text}
-					onChange={onChange}
+					className={`m-2 w-3/4 ${errors.hasError ? "error" : ""}`}
+					value={question.text}
+					onChange={(event) => updateQuestionText(questionId, event.target.value)}
 				/>
 			</div>
 
-			{options.map((option) => (
-				<Option
-					id={option.id}
-					key={option.id}
-					name={id}
-					text={option.text}
-					errors={errors.options?.[option.id] || {}}
-					onDelete={() => onOptionDelete(option.id)}
-					onChange={(e) => onOptionChange(option.id, e.target.value)}
-					isCorrect={option.isCorrect}
-					onCorrect={() => onCorrect(option.id)}
-				/>
+			{optionIds.map((optionId) => (
+				<Option key={optionId} questionId={questionId} optionId={optionId} />
 			))}
-			<Button onClick={onOptionAdd} className="self-start mt-1">
+			<Button onClick={() => addOption(questionId)} className="self-start mt-1">
 				Add Option
 			</Button>
 		</div>
