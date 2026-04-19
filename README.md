@@ -109,8 +109,7 @@ It currently includes:
 
 ## Prerequisites
 
-- Node.js 18+ (recommended)
-- bun 1+
+- Bun 1.0+
 
 ## Installation
 
