@@ -5,7 +5,7 @@ Frontend application for QuizTime, built with React and Vite.
 You can visit our website [here](https://quiz-time-with-react.vercel.app/).
 
 [Here](https://github.com/ApostolQleg/QuizTime-backend/) is backend of our website.
- 
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -110,20 +110,20 @@ It currently includes:
 ## Prerequisites
 
 - Node.js 18+ (recommended)
-- npm 9+
+- bun 1+
 
 ## Installation
 
 ```bash
 git clone <your-repository-url>
 cd QuizTime
-npm install
+bun install
 ```
 
 Start development server:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 ## Environment Variables
@@ -143,12 +143,12 @@ Notes:
 
 ## Available Scripts
 
-- `npm run dev` - Start Vite dev server.
-- `npm run build` - Create production build.
-- `npm run preview` - Preview production build locally.
-- `npm run lint` - Run ESLint.
-- `npm run test` - Run Vitest once, allowing projects without test files.
-- `npm run test:watch` - Run Vitest in watch mode, allowing projects without test files.
+- `bun run dev` - Start Vite dev server.
+- `bun run build` - Create production build.
+- `bun run preview` - Preview production build locally.
+- `bun run lint` - Run ESLint.
+- `bun run test` - Run Vitest once, allowing projects without test files.
+- `bun run test:watch` - Run Vitest in watch mode, allowing projects without test files.
 
 ## Backend Integration
 
@@ -174,7 +174,7 @@ Vercel SPA rewrite is configured in `vercel.json`:
 Build command:
 
 ```bash
-npm run build
+bun run build
 ```
 
 Output directory:
