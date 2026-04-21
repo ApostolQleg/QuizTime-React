@@ -1,5 +1,5 @@
-import { useEffect, useCallback } from "react";
-import { updateUser, deleteUser } from "@/features/profile/api/user.api.js";
+import { useCallback, useEffect } from "react";
+import { deleteUser, updateUser } from "@/features/profile/api/user.api.js";
 import { useProfilePageActions as useProfilePageStoreActions } from "@/features/profile/stores/profilePageStore.js";
 
 export function useProfilePageActions({
@@ -11,7 +11,8 @@ export function useProfilePageActions({
 	isSessionChecking,
 	addToast,
 }) {
-	const { setUser, setIsLoading, setIsSaving, closeDeleteModal } = useProfilePageStoreActions();
+	const { setUser, setIsLoading, setIsSaving, closeDeleteModal } =
+		useProfilePageStoreActions();
 
 	useEffect(() => {
 		if (!token) {

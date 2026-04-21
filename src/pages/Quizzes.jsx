@@ -1,14 +1,14 @@
-import { useState, useCallback } from "react";
-import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
+import { useCallback, useState } from "react";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import { useDebounce } from "@/shared/hooks/useDebounce.js";
-import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
+import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
-import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
-import { getPaginationRange } from "@/shared/libs/pagination.js";
+import { useDebounce } from "@/shared/hooks/useDebounce.js";
 import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { getPaginationRange } from "@/shared/libs/pagination.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
+import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
+import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_QUIZZES;
 const ITEMS_PER_PAGE_AUTH = API_CONFIG.ITEMS_PER_PAGE_QUIZZES_AUTH;
@@ -61,7 +61,9 @@ export default function Quizzes() {
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
-			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
+			prevItems.filter(
+				(item) => item.id !== deletedQuizId && item._id !== deletedQuizId,
+			),
 		);
 		setSelectedQuiz(null);
 		addToast(

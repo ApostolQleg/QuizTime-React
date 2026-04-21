@@ -1,5 +1,5 @@
-import { useToastListState } from "./toastStore.js";
 import Toast from "./Toast.jsx";
+import { useToastListState } from "./toastStore.js";
 
 export default function ToastContainer() {
 	const { toasts } = useToastListState();

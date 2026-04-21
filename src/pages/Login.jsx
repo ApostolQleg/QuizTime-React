@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuthActions } from "@/features/auth/hooks/useAuth.js";
 import { GoogleLogin } from "@react-oauth/google";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser, loginWithGoogle } from "@/features/auth/api/auth.api.js";
+import { useAuthActions } from "@/features/auth/hooks/useAuth.js";
+import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
-import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 
 export default function Login() {
@@ -85,7 +85,10 @@ export default function Login() {
 
 			<div className="flex flex-col md:flex-row w-full items-stretch justify-between gap-8 md:gap-0 animate-fade-in">
 				<div className="flex-1 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-(--col-border) pb-8 md:pb-0 md:pr-12">
-					<form onSubmit={handleSubmit} className="w-full max-w-xs flex flex-col gap-5">
+					<form
+						onSubmit={handleSubmit}
+						className="w-full max-w-xs flex flex-col gap-5"
+					>
 						<div className="flex flex-col gap-2">
 							<label
 								htmlFor="login-email"
@@ -168,7 +171,10 @@ export default function Login() {
 
 			<div className="text-(--col-text-muted) text-sm mt-4">
 				Don't have an account?{" "}
-				<Link to="/register" className="font-bold text-(--col-primary) hover:underline">
+				<Link
+					to="/register"
+					className="font-bold text-(--col-primary) hover:underline"
+				>
 					Sign Up
 				</Link>
 			</div>

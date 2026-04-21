@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import azIcon from "@/shared/assets/sort-AZ-icon.png";
 import newoldIcon from "@/shared/assets/sort-newold-icon.png";
 import oldnewIcon from "@/shared/assets/sort-oldnew-icon.png";
-import azIcon from "@/shared/assets/sort-AZ-icon.png";
 import zaIcon from "@/shared/assets/sort-ZA-icon.png";
 import { SORT_OPTIONS as BASE_SORT_OPTIONS } from "@/shared/config/config.js";
 
@@ -21,7 +21,8 @@ export default function Sort({ currentSort, onSortChange }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef(null);
 
-	const currentOption = SORT_OPTIONS.find((opt) => opt.id === currentSort) || SORT_OPTIONS[0];
+	const currentOption =
+		SORT_OPTIONS.find((opt) => opt.id === currentSort) || SORT_OPTIONS[0];
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {

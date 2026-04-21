@@ -1,4 +1,4 @@
-import { client, AUTH_URL } from "@/shared/api/client.js";
+import { AUTH_URL, client } from "@/shared/api/client.js";
 
 const omitEmpty = (obj) => {
 	return Object.fromEntries(

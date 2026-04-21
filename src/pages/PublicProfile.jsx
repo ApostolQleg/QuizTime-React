@@ -1,15 +1,14 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "@/features/profile/api/user.api.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
-
-import Container from "@/shared/ui/Container.jsx";
-import Avatar from "@/shared/ui/Avatar.jsx";
-import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import { API_CONFIG } from "@/shared/config/config.js";
-import { getPaginationRange } from "@/shared/libs/pagination.js";
 import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { getPaginationRange } from "@/shared/libs/pagination.js";
+import Avatar from "@/shared/ui/Avatar.jsx";
+import Container from "@/shared/ui/Container.jsx";
+import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_PUBLIC_PROFILE;
 
@@ -51,7 +50,13 @@ export default function PublicProfile() {
 				ITEMS_PER_PAGE,
 			);
 
-			const data = await getQuizzes(currentSkip, currentLimit, "", "newest", authorId);
+			const data = await getQuizzes(
+				currentSkip,
+				currentLimit,
+				"",
+				"newest",
+				authorId,
+			);
 
 			return {
 				items: data.quizzes,
@@ -76,7 +81,8 @@ export default function PublicProfile() {
 		handleLoadMore,
 	} = useInfiniteList(loadData, authorParams);
 
-	if (isLoading) return <Container className="text-center">Loading...</Container>;
+	if (isLoading)
+		return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
 
 	return (

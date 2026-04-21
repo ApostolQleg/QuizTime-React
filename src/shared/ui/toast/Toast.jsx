@@ -1,8 +1,7 @@
-import { useToastActions } from "./toastStore.js";
+import systemIcon from "@/shared/assets/logo-icon.png";
 
 import { TOAST_CONFIG } from "@/shared/config/config.js";
-
-import systemIcon from "@/shared/assets/logo-icon.png";
+import { useToastActions } from "./toastStore.js";
 
 const { TOAST_LIFETIME, TOAST_ANIM_TIME } = TOAST_CONFIG;
 

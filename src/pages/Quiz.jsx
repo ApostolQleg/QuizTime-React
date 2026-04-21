@@ -1,17 +1,17 @@
-import { useParams, useNavigate } from "react-router-dom";
-import {
-	saveResult,
-	getResultById,
-	clearAllResultsCache,
-} from "@/features/results/api/results.api.js";
-import { getQuizById } from "@/features/quizzes/api/quizzes.api.js";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
+import { getQuizById } from "@/features/quizzes/api/quizzes.api.js";
 import Question from "@/features/quizzes/components/quiz/Question.jsx";
 import {
 	useQuizSessionActions,
 	useQuizSessionViewState,
 } from "@/features/quizzes/stores/quizSessionStore.js";
+import {
+	clearAllResultsCache,
+	getResultById,
+	saveResult,
+} from "@/features/results/api/results.api.js";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
@@ -21,7 +21,8 @@ export default function Quiz() {
 	const navigate = useNavigate();
 	const { quizId, resultIdParam } = useParams();
 	const { user } = useAuthUserState();
-	const { loading, quizData, resultData, answers, alertInfo } = useQuizSessionViewState();
+	const { loading, quizData, resultData, answers, alertInfo } =
+		useQuizSessionViewState();
 	const {
 		loadQuizForPlay,
 		loadResultForView,
@@ -88,7 +89,9 @@ export default function Quiz() {
 		let score = 0;
 
 		for (const [qIndex, question] of quizData.questions.entries()) {
-			const correctIds = question.options.filter((o) => o.isCorrect).map((o) => o.id);
+			const correctIds = question.options
+				.filter((o) => o.isCorrect)
+				.map((o) => o.id);
 			const selectedIds = answers[qIndex] || [];
 
 			if (
@@ -134,7 +137,11 @@ export default function Quiz() {
 	};
 
 	if (loading) {
-		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
+		return (
+			<Container className="text-center text-(--col-text-main)">
+				Loading...
+			</Container>
+		);
 	}
 
 	if (!quizData) return null;

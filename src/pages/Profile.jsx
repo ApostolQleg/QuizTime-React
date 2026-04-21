@@ -1,22 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import {
 	useAuthActions,
-	useAuthUserState,
 	useAuthSessionState,
+	useAuthUserState,
 } from "@/features/auth/hooks/useAuth.js";
+import ModalChangePassword from "@/features/profile/components/ModalChangePassword.jsx";
+import ProfileForm from "@/features/profile/components/ProfileForm.jsx";
+import useProfilePageActions from "@/features/profile/hooks/useProfilePageActions.js";
 import {
-	useProfilePageActions as useProfilePageStoreActions,
 	useProfilePageIdentityState,
 	useProfilePageModalState,
 	useProfilePageStatusState,
+	useProfilePageActions as useProfilePageStoreActions,
 } from "@/features/profile/stores/profilePageStore.js";
-import useProfilePageActions from "@/features/profile/hooks/useProfilePageActions.js";
-
-import Container from "@/shared/ui/Container.jsx";
-import ProfileForm from "@/features/profile/components/ProfileForm.jsx";
-import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
-import ModalChangePassword from "@/features/profile/components/ModalChangePassword.jsx";
 import Button from "@/shared/ui/Button.jsx";
+import Container from "@/shared/ui/Container.jsx";
+import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 
@@ -28,8 +27,12 @@ export default function Profile() {
 	const { user } = useProfilePageIdentityState();
 	const { isLoading, isSaving } = useProfilePageStatusState();
 	const { isDeleteModalOpen, isPasswordModalOpen } = useProfilePageModalState();
-	const { openDeleteModal, closeDeleteModal, openPasswordModal, closePasswordModal } =
-		useProfilePageStoreActions();
+	const {
+		openDeleteModal,
+		closeDeleteModal,
+		openPasswordModal,
+		closePasswordModal,
+	} = useProfilePageStoreActions();
 
 	const { addToast } = useToastActions();
 	const { saveProfile, removeAccount } = useProfilePageActions({
@@ -42,7 +45,8 @@ export default function Profile() {
 		addToast,
 	});
 
-	if (isLoading) return <Container className="text-center">Loading...</Container>;
+	if (isLoading)
+		return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
 
 	return (
@@ -102,7 +106,10 @@ export default function Profile() {
 				isDanger={true}
 			/>
 
-			<ModalChangePassword isOpen={isPasswordModalOpen} onClose={closePasswordModal} />
+			<ModalChangePassword
+				isOpen={isPasswordModalOpen}
+				onClose={closePasswordModal}
+			/>
 		</Container>
 	);
 }

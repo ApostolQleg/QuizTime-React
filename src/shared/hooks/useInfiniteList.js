@@ -22,7 +22,9 @@ export function useInfiniteList(loadPage, extraParams = null) {
 				const nextItems = result?.items ?? [];
 				const nextHasMore = result?.hasMore ?? false;
 
-				setItems((prevItems) => (isInitialLoad ? nextItems : [...prevItems, ...nextItems]));
+				setItems((prevItems) =>
+					isInitialLoad ? nextItems : [...prevItems, ...nextItems],
+				);
 				setHasMore(nextHasMore);
 			} finally {
 				setLoading(false);

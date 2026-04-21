@@ -1,11 +1,11 @@
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+	clearAllQuizzesCache,
 	createQuiz,
 	getQuizById,
 	updateQuiz,
-	clearAllQuizzesCache,
 } from "@/features/quizzes/api/quizzes.api.js";
-import { useEffect } from "react";
 import Question from "@/features/quizzes/components/edit/QuestionEditor.jsx";
 import useQuizEditorValidation from "@/features/quizzes/hooks/useQuizEditorValidation.js";
 import {
@@ -13,12 +13,12 @@ import {
 	useQuizEditorMetaState,
 	useQuizEditorStore,
 } from "@/features/quizzes/stores/quizEditorStore.js";
+import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 import Textarea from "@/shared/ui/Textarea.jsx";
-import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 
 export default function Edit() {
@@ -28,7 +28,8 @@ export default function Edit() {
 
 	const isManagePage = location.pathname.startsWith("/manage");
 	const { loading, alertInfo } = useQuizEditorMetaState();
-	const { title, description, counter, errors, questions } = useQuizEditorContentState();
+	const { title, description, counter, errors, questions } =
+		useQuizEditorContentState();
 	const editorActions = useQuizEditorStore.getState().actions;
 	const { validate, showSaveError, closeAlert } = useQuizEditorValidation();
 	const { addToast } = useToastActions();
@@ -80,7 +81,11 @@ export default function Edit() {
 	};
 
 	if (loading) {
-		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
+		return (
+			<Container className="text-center text-(--col-text-main)">
+				Loading...
+			</Container>
+		);
 	}
 
 	return (
@@ -126,7 +131,10 @@ export default function Edit() {
 				Add Question
 			</Button>
 
-			<Button className="self-center mt-auto min-w-full shadow-xl" onClick={handleSaveQuiz}>
+			<Button
+				className="self-center mt-auto min-w-full shadow-xl"
+				onClick={handleSaveQuiz}
+			>
 				Save Quiz
 			</Button>
 			<ModalConfirm

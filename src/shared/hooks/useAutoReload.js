@@ -1,9 +1,15 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuthActions, useAuthSessionState } from "@/features/auth/hooks/useAuth.js";
+import {
+	useAuthActions,
+	useAuthSessionState,
+} from "@/features/auth/hooks/useAuth.js";
 import { AUTO_RELOAD_CONFIG } from "@/shared/config/config.js";
 
-export default function useAutoReload(onRefresh, timeoutMs = AUTO_RELOAD_CONFIG.TIME_OUT_MS) {
+export default function useAutoReload(
+	onRefresh,
+	timeoutMs = AUTO_RELOAD_CONFIG.TIME_OUT_MS,
+) {
 	const lastLeaveTime = useRef(null);
 	const location = useLocation();
 	const { token } = useAuthSessionState();

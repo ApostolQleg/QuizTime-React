@@ -1,13 +1,13 @@
-import { useState, useCallback } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { getResults } from "@/features/results/api/results.api.js";
+import { useCallback, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
+import { getResults } from "@/features/results/api/results.api.js";
+import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
+import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
-import { API_CONFIG } from "@/shared/config/config.js";
-import { getPaginationRange } from "@/shared/libs/pagination.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 
 const ITEMS_PER_PAGE = API_CONFIG.ITEMS_PER_PAGE_RESULTS;
 
@@ -56,7 +56,8 @@ export default function Results() {
 		[user, debouncedQuery, sortOption],
 	);
 
-	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
+	const { items, loading, hasMore, isLoadingMore, handleLoadMore } =
+		useInfiniteList(loadData);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
@@ -65,7 +66,10 @@ export default function Results() {
 			<span className="text-xl font-bold">
 				History is available only for registered users
 			</span>
-			<Link to="/register" className="text-(--col-primary) hover:underline text-base">
+			<Link
+				to="/register"
+				className="text-(--col-primary) hover:underline text-base"
+			>
 				Sign up to save your progress
 			</Link>
 		</>

@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuthActions } from "@/features/auth/hooks/useAuth.js";
 import { GoogleLogin } from "@react-oauth/google";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
+	loginWithGoogle,
 	registerUser,
 	sendVerificationCode,
-	loginWithGoogle,
 } from "@/features/auth/api/auth.api.js";
+import { useAuthActions } from "@/features/auth/hooks/useAuth.js";
+import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
+import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
+import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
-import Button from "@/shared/ui/Button.jsx";
-import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
-import getGoogleAuthErrorMessage from "@/features/auth/libs/getGoogleAuthErrorMessage.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 
 export default function Register() {
@@ -75,7 +75,8 @@ export default function Register() {
 
 	const handleVerifyCodeNext = (e) => {
 		e.preventDefault();
-		if (formData.code.length < 4) return setError("Please enter the valid code");
+		if (formData.code.length < 4)
+			return setError("Please enter the valid code");
 		setError("");
 		setStep(3);
 	};

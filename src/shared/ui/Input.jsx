@@ -1,4 +1,10 @@
-export default function Input({ type = "text", placeholder, className = "", image, ...props }) {
+export default function Input({
+	type = "text",
+	placeholder,
+	className = "",
+	image,
+	...props
+}) {
 	return (
 		<div className="relative w-full">
 			{image && (

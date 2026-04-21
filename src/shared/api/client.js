@@ -12,7 +12,9 @@ export function getHeaders(extraHeaders = {}) {
 		...extraHeaders,
 	};
 
-	return Object.fromEntries(Object.entries(headers).filter(([, value]) => value !== undefined));
+	return Object.fromEntries(
+		Object.entries(headers).filter(([, value]) => value !== undefined),
+	);
 }
 
 async function parseResponse(response) {
@@ -42,7 +44,8 @@ async function request(endpoint, options = {}) {
 	const data = await parseResponse(response);
 
 	if (!response.ok) {
-		const errorMessage = data.error || data.message || data.raw || "API Request Failed";
+		const errorMessage =
+			data.error || data.message || data.raw || "API Request Failed";
 		const error = new Error(errorMessage);
 		error.status = response.status;
 		throw error;
@@ -53,10 +56,16 @@ async function request(endpoint, options = {}) {
 
 export const client = {
 	get: (endpoint, options) => request(endpoint, { method: "GET", ...options }),
-	post: (endpoint, body, options) => request(endpoint, { method: "POST", body, ...options }),
-	put: (endpoint, body, options) => request(endpoint, { method: "PUT", body, ...options }),
+	post: (endpoint, body, options) =>
+		request(endpoint, { method: "POST", body, ...options }),
+	put: (endpoint, body, options) =>
+		request(endpoint, { method: "PUT", body, ...options }),
 	delete: (endpoint, options) =>
-		request(endpoint, { method: "DELETE", headers: { "Content-Type": undefined }, ...options }),
+		request(endpoint, {
+			method: "DELETE",
+			headers: { "Content-Type": undefined },
+			...options,
+		}),
 };
 
 export default client;

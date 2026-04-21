@@ -1,5 +1,5 @@
-import Modal from "./Modal";
 import Button from "./Button";
+import Modal from "./Modal";
 
 export default function ModalConfirm({
 	isOpen,
@@ -12,13 +12,19 @@ export default function ModalConfirm({
 	isAlert = false,
 }) {
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} className="w-[90vw] max-w-100 min-h-50">
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			className="w-[90vw] max-w-100 min-h-50"
+		>
 			<div className="flex flex-col h-full justify-between gap-6">
 				<div>
 					<h3 className="text-2xl font-bold mb-4 text-(--col-text-accent) drop-shadow-md">
 						{title}
 					</h3>
-					<p className="text-(--col-text-main) opacity-90 leading-relaxed">{message}</p>
+					<p className="text-(--col-text-main) opacity-90 leading-relaxed">
+						{message}
+					</p>
 				</div>
 
 				<div className="flex justify-end gap-4 mt-auto">
