@@ -40,7 +40,7 @@ export default function Option({
 
 	return (
 		<label
-			htmlFor="id"
+			htmlFor={id}
 			className={`${disabled ? (isCorrect ? "option-true" : selected ? "option-false" : "") : ""} flex flex-row gap-2 text-(--col-text-muted)`}
 		>
 			<Radio
@@ -51,7 +51,7 @@ export default function Option({
 				disabled={disabled}
 				onChange={() => selectAnswer(questionIndex, option.id)}
 			/>
-			{text}
+			<span className="cursor-pointer">{text}</span>
 		</label>
 	);
 }
