@@ -9,9 +9,9 @@ import {
 import Question from "@/features/quizzes/components/edit/QuestionEditor.jsx";
 import useQuizEditorValidation from "@/features/quizzes/hooks/useQuizEditorValidation.js";
 import {
+	useQuizEditorActions,
 	useQuizEditorContentState,
 	useQuizEditorMetaState,
-	useQuizEditorStore,
 } from "@/features/quizzes/stores/quizEditorStore.js";
 import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
 import Button from "@/shared/ui/Button.jsx";
@@ -28,9 +28,8 @@ export default function Edit() {
 
 	const isManagePage = location.pathname.startsWith("/manage");
 	const { loading, alertInfo } = useQuizEditorMetaState();
-	const { title, description, counter, errors, questions } =
-		useQuizEditorContentState();
-	const editorActions = useQuizEditorStore.getState().actions;
+	const { title, description, counter, errors, questions } = useQuizEditorContentState();
+	const editorActions = useQuizEditorActions();
 	const { validate, showSaveError, closeAlert } = useQuizEditorValidation();
 	const { addToast } = useToastActions();
 
@@ -81,11 +80,7 @@ export default function Edit() {
 	};
 
 	if (loading) {
-		return (
-			<Container className="text-center text-(--col-text-main)">
-				Loading...
-			</Container>
-		);
+		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
 	}
 
 	return (
@@ -131,10 +126,7 @@ export default function Edit() {
 				Add Question
 			</Button>
 
-			<Button
-				className="self-center mt-auto min-w-full shadow-xl"
-				onClick={handleSaveQuiz}
-			>
+			<Button className="self-center mt-auto min-w-full shadow-xl" onClick={handleSaveQuiz}>
 				Save Quiz
 			</Button>
 			<ModalConfirm

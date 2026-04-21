@@ -28,7 +28,7 @@ const initialState = {
 
 const EMPTY_OBJECT = {};
 
-export const useQuizEditorStore = create((set) => ({
+const useQuizEditorStore = create((set) => ({
 	...initialState,
 	actions: {
 		initEditor: (isManagePage) => set({ loading: Boolean(isManagePage) }),
@@ -71,9 +71,7 @@ export const useQuizEditorStore = create((set) => ({
 
 		deleteQuestion: (questionId) =>
 			set((state) => ({
-				questions: state.questions.filter(
-					(question) => question.id !== questionId,
-				),
+				questions: state.questions.filter((question) => question.id !== questionId),
 			})),
 
 		updateQuestionText: (questionId, text) =>
@@ -109,9 +107,7 @@ export const useQuizEditorStore = create((set) => ({
 					if (question.id !== questionId) return question;
 					return {
 						...question,
-						options: question.options.filter(
-							(option) => option.id !== optionId,
-						),
+						options: question.options.filter((option) => option.id !== optionId),
 					};
 				}),
 			})),
@@ -180,13 +176,11 @@ export const useQuizEditorOptionState = (questionId, optionId) =>
 			const question = state.questions.find((item) => item.id === questionId);
 			return {
 				option: question?.options.find((item) => item.id === optionId),
-				errors:
-					state.errors.questions?.[questionId]?.options?.[optionId] ||
-					EMPTY_OBJECT,
+				errors: state.errors.questions?.[questionId]?.options?.[optionId] || EMPTY_OBJECT,
 			};
 		}),
 	);
 
-export const useQuizEditorActions = () => useQuizEditorStore.getState().actions;
+export const getQuizEditorState = () => useQuizEditorStore.getState();
 
-export default useQuizEditorStore;
+export const useQuizEditorActions = () => getQuizEditorState().actions;
