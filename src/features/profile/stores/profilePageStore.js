@@ -9,7 +9,7 @@ const initialState = {
 	isPasswordModalOpen: false,
 };
 
-export const useProfilePageStore = create((set) => ({
+const useProfilePageStore = create((set) => ({
 	...initialState,
 	actions: {
 		setUser: (user) => set({ user }),
@@ -49,7 +49,4 @@ export const useProfilePageModalState = () =>
 		})),
 	);
 
-export const useProfilePageActions = () =>
-	useProfilePageStore.getState().actions;
-
-export default useProfilePageStore;
+export const useProfilePageActions = () => useProfilePageStore.getState().actions;

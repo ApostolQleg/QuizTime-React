@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import {
+	getQuizEditorState,
 	useQuizEditorActions,
-	useQuizEditorStore,
 } from "@/features/quizzes/stores/quizEditorStore.js";
 
 export function useQuizEditorValidation() {
 	const { setErrors, setAlertInfo, closeAlert } = useQuizEditorActions();
 
 	const validate = useCallback(() => {
-		const { title, description, questions } = useQuizEditorStore.getState();
+		const { title, description, questions } = getQuizEditorState();
 
 		const newErrors = {
 			title: title.trim() === "",
@@ -29,9 +29,7 @@ export function useQuizEditorValidation() {
 				}
 			}
 
-			const hasCorrectOption = question.options.some(
-				(option) => option.isCorrect,
-			);
+			const hasCorrectOption = question.options.some((option) => option.isCorrect);
 			const questionTextEmpty = question.text.trim() === "";
 
 			if (questionTextEmpty || !hasCorrectOption || optionHasError) {

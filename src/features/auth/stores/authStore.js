@@ -32,7 +32,7 @@ const persistAuth = (user, token) => {
 	}
 };
 
-export const useAuthStore = create((set, get) => ({
+const useAuthStore = create((set, get) => ({
 	user: getStoredUser(),
 	token: getStoredToken(),
 	isSessionChecking: false,
@@ -119,5 +119,3 @@ export const useAuthSessionState = () =>
 	);
 
 export const useAuthActions = () => useAuthStore.getState().actions;
-
-export default useAuthStore;

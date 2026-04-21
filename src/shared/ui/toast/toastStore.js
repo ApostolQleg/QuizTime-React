@@ -8,7 +8,7 @@ const { MAX_TOASTS, TOAST_LIFETIME, TOAST_ANIM_TIME } = TOAST_CONFIG;
 const queue = new Queue();
 const timers = new Map();
 
-export const useToastStore = create((set, get) => ({
+const useToastStore = create((set, get) => ({
 	toasts: [],
 	actions: {
 		addToast: (message, image) => {
