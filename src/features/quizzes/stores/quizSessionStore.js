@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 
+const EMPTY_SELECTED = [];
+
 const initialState = {
 	loading: true,
 	quizData: null,
@@ -99,7 +101,7 @@ export const useQuizSessionOptionState = (questionId, questionIndex) =>
 			question: state.quizData?.questions?.find((item) => item.id === questionId),
 			mode: state.mode,
 			answers: state.answers,
-			resultAnswers: state.resultData?.answers || [],
+			resultAnswers: state.resultData?.answers ?? EMPTY_SELECTED,
 			questionIndex,
 		})),
 	);
