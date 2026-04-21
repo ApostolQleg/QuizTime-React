@@ -1,14 +1,15 @@
-import Option from "./OptionEditor.jsx";
-import Input from "@/shared/ui/Input.jsx";
-import Button from "@/shared/ui/Button.jsx";
 import {
 	useQuizEditorActions,
 	useQuizEditorQuestionState,
 } from "@/features/quizzes/stores/quizEditorStore.js";
+import Button from "@/shared/ui/Button.jsx";
+import Input from "@/shared/ui/Input.jsx";
+import Option from "./OptionEditor.jsx";
 
 export default function Question({ questionId, index }) {
 	const { question, errors } = useQuizEditorQuestionState(questionId);
-	const { deleteQuestion, updateQuestionText, addOption } = useQuizEditorActions();
+	const { deleteQuestion, updateQuestionText, addOption } =
+		useQuizEditorActions();
 
 	if (!question) {
 		return null;
@@ -33,7 +34,9 @@ export default function Question({ questionId, index }) {
 					placeholder="Enter question text here..."
 					className={`m-2 w-3/4 ${errors.hasError ? "error" : ""}`}
 					value={question.text}
-					onChange={(event) => updateQuestionText(questionId, event.target.value)}
+					onChange={(event) =>
+						updateQuestionText(questionId, event.target.value)
+					}
 				/>
 			</div>
 

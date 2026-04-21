@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-
-import useAutoReload from "@/shared/hooks/useAutoReload.js";
-import { useAuthActions, useAuthSessionState } from "@/features/auth/hooks/useAuth.js";
-
-import Quizzes from "@/pages/Quizzes.jsx";
-import Results from "@/pages/Results.jsx";
-import MyQuizzes from "@/pages/MyQuizzes.jsx";
-import Help from "@/pages/Help.jsx";
-import Quiz from "@/pages/Quiz.jsx";
+import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import {
+	useAuthActions,
+	useAuthSessionState,
+} from "@/features/auth/hooks/useAuth.js";
 import Edit from "@/pages/Edit.jsx";
+import Help from "@/pages/Help.jsx";
 import Login from "@/pages/Login.jsx";
-import Register from "@/pages/Register.jsx";
-import Profile from "@/pages/Profile.jsx";
+import MyQuizzes from "@/pages/MyQuizzes.jsx";
 import NotFound from "@/pages/NotFound.jsx";
+import Profile from "@/pages/Profile.jsx";
 import PublicProfile from "@/pages/PublicProfile.jsx";
+import Quiz from "@/pages/Quiz.jsx";
+import Quizzes from "@/pages/Quizzes.jsx";
+import Register from "@/pages/Register.jsx";
+import Results from "@/pages/Results.jsx";
+import useAutoReload from "@/shared/hooks/useAutoReload.js";
 
 export default function AppRoutes() {
 	const { token } = useAuthSessionState();

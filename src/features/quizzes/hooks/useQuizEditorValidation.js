@@ -29,7 +29,9 @@ export function useQuizEditorValidation() {
 				}
 			}
 
-			const hasCorrectOption = question.options.some((option) => option.isCorrect);
+			const hasCorrectOption = question.options.some(
+				(option) => option.isCorrect,
+			);
 			const questionTextEmpty = question.text.trim() === "";
 
 			if (questionTextEmpty || !hasCorrectOption || optionHasError) {

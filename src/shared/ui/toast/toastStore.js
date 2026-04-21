@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
+import { TOAST_CONFIG } from "@/shared/config/config.js";
 import { Queue } from "@/shared/libs/queue.js";
 
-import { TOAST_CONFIG } from "@/shared/config/config.js";
 const { MAX_TOASTS, TOAST_LIFETIME, TOAST_ANIM_TIME } = TOAST_CONFIG;
 
 const queue = new Queue();

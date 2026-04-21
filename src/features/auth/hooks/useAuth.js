@@ -4,6 +4,4 @@ import {
 	useAuthUserState,
 } from "@/features/auth/stores/authStore.js";
 
-export { useAuthUserState };
-export { useAuthSessionState };
-export { useAuthActions };
+export { useAuthActions, useAuthSessionState, useAuthUserState };

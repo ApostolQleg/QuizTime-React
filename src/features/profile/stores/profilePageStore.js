@@ -49,6 +49,7 @@ export const useProfilePageModalState = () =>
 		})),
 	);
 
-export const useProfilePageActions = () => useProfilePageStore.getState().actions;
+export const useProfilePageActions = () =>
+	useProfilePageStore.getState().actions;
 
 export default useProfilePageStore;

@@ -1,12 +1,17 @@
-import Radio from "@/shared/ui/Radio.jsx";
 import {
 	useQuizSessionActions,
 	useQuizSessionOptionState,
 } from "@/features/quizzes/stores/quizSessionStore.js";
+import Radio from "@/shared/ui/Radio.jsx";
 
 const EMPTY_SELECTED = [];
 
-export default function Option({ questionId, optionId, questionIndex, disabled }) {
+export default function Option({
+	questionId,
+	optionId,
+	questionIndex,
+	disabled,
+}) {
 	const { question, mode, answers, resultAnswers } = useQuizSessionOptionState(
 		questionId,
 		questionIndex,

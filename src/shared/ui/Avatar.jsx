@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-export default function Avatar({ src, name, type = "google", color, size = "md", className = "" }) {
+export default function Avatar({
+	src,
+	name,
+	type = "google",
+	color,
+	size = "md",
+	className = "",
+}) {
 	const [error, setError] = useState(false);
 
 	const sizeClasses = {

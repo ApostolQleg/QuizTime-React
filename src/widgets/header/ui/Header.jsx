@@ -1,9 +1,12 @@
-import logoImage from "@/shared/assets/logo-icon.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthActions, useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { useState } from "react";
-import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import {
+	useAuthActions,
+	useAuthUserState,
+} from "@/features/auth/hooks/useAuth.js";
+import logoImage from "@/shared/assets/logo-icon.png";
 import Avatar from "@/shared/ui/Avatar.jsx";
+import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 
 export default function Header() {
 	const { user } = useAuthUserState();
@@ -120,7 +123,10 @@ export default function Header() {
 
 			{/* NAVIGATION */}
 			<nav className="justify-center flex flex-row space-x-8 text-lg sm:text-xl my-6 font-medium text-(--col-text-muted)">
-				<Link to="/" className="nav-link hover:text-(--col-text-accent) transition-colors">
+				<Link
+					to="/"
+					className="nav-link hover:text-(--col-text-accent) transition-colors"
+				>
 					Quizzes
 				</Link>
 				<Link

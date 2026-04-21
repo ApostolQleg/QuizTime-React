@@ -1,14 +1,15 @@
-import Input from "@/shared/ui/Input.jsx";
-import Radio from "@/shared/ui/Radio.jsx";
-import Button from "@/shared/ui/Button.jsx";
 import {
 	useQuizEditorActions,
 	useQuizEditorOptionState,
 } from "@/features/quizzes/stores/quizEditorStore.js";
+import Button from "@/shared/ui/Button.jsx";
+import Input from "@/shared/ui/Input.jsx";
+import Radio from "@/shared/ui/Radio.jsx";
 
 export default function Option({ questionId, optionId }) {
 	const { option, errors } = useQuizEditorOptionState(questionId, optionId);
-	const { deleteOption, updateOptionText, setCorrectOption } = useQuizEditorActions();
+	const { deleteOption, updateOptionText, setCorrectOption } =
+		useQuizEditorActions();
 
 	if (!option) {
 		return null;
@@ -26,7 +27,9 @@ export default function Option({ questionId, optionId }) {
 				placeholder="Enter option text here..."
 				className={`flex-1 bg-(--col-bg-card) border-(--col-border) ${errors.hasError ? "error" : ""}`}
 				value={option.text}
-				onChange={(event) => updateOptionText(questionId, optionId, event.target.value)}
+				onChange={(event) =>
+					updateOptionText(questionId, optionId, event.target.value)
+				}
 			/>
 			<Button onClick={() => deleteOption(questionId, optionId)}>Delete</Button>
 		</div>

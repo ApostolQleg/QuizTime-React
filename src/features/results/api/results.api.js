@@ -4,7 +4,11 @@ import Memoizer from "@/shared/libs/memoizer.js";
 const cache = new Memoizer();
 
 function getAllResults(skip = 0, limit = 36, search = "", sort = "newest") {
-	const params = new URLSearchParams({ skip: String(skip), limit: String(limit), sort });
+	const params = new URLSearchParams({
+		skip: String(skip),
+		limit: String(limit),
+		sort,
+	});
 	if (search) params.append("search", search);
 
 	return client.get(`/results?${params.toString()}`);

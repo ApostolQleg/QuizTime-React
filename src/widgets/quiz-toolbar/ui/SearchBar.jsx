@@ -1,7 +1,11 @@
-import Input from "@/shared/ui/Input.jsx";
 import searchIcon from "@/shared/assets/search-icon.png";
+import Input from "@/shared/ui/Input.jsx";
 
-export default function SearchBar({ searchTerm, onSearchChange, placeholder = "Search..." }) {
+export default function SearchBar({
+	searchTerm,
+	onSearchChange,
+	placeholder = "Search...",
+}) {
 	return (
 		<Input
 			value={searchTerm}

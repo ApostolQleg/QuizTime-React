@@ -89,7 +89,9 @@ export const useQuizSessionViewState = () =>
 export const useQuizSessionQuestionState = (questionId, index) =>
 	useQuizSessionStore(
 		useShallow((state) => ({
-			question: state.quizData?.questions?.find((item) => item.id === questionId),
+			question: state.quizData?.questions?.find(
+				(item) => item.id === questionId,
+			),
 			hasError: Boolean(state.errors[index]),
 			mode: state.mode,
 		})),
@@ -98,7 +100,9 @@ export const useQuizSessionQuestionState = (questionId, index) =>
 export const useQuizSessionOptionState = (questionId, questionIndex) =>
 	useQuizSessionStore(
 		useShallow((state) => ({
-			question: state.quizData?.questions?.find((item) => item.id === questionId),
+			question: state.quizData?.questions?.find(
+				(item) => item.id === questionId,
+			),
 			mode: state.mode,
 			answers: state.answers,
 			resultAnswers: state.resultData?.answers ?? EMPTY_SELECTED,
@@ -106,6 +110,7 @@ export const useQuizSessionOptionState = (questionId, questionIndex) =>
 		})),
 	);
 
-export const useQuizSessionActions = () => useQuizSessionStore.getState().actions;
+export const useQuizSessionActions = () =>
+	useQuizSessionStore.getState().actions;
 
 export default useQuizSessionStore;

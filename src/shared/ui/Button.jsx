@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-export default function Button({ children, className = "", to, onClick, ...props }) {
+export default function Button({
+	children,
+	className = "",
+	to,
+	onClick,
+	...props
+}) {
 	const navigate = useNavigate();
 	return (
 		<button

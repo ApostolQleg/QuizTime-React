@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Modal from "@/shared/ui/Modal.jsx";
-import Input from "@/shared/ui/Input.jsx";
-import Button from "@/shared/ui/Button.jsx";
 import { changePassword } from "@/features/profile/api/user.api.js";
+import Button from "@/shared/ui/Button.jsx";
+import Input from "@/shared/ui/Input.jsx";
+import Modal from "@/shared/ui/Modal.jsx";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 
 export default function ModalChangePassword({ isOpen, onClose }) {
