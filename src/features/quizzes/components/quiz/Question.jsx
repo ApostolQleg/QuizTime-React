@@ -2,10 +2,7 @@ import { useQuizSessionQuestionState } from "@/features/quizzes/stores/quizSessi
 import Option from "./Option.jsx";
 
 export default function Question({ questionId, index }) {
-	const { question, hasError, mode } = useQuizSessionQuestionState(
-		questionId,
-		index,
-	);
+	const { question, hasError, mode } = useQuizSessionQuestionState(questionId, index);
 
 	if (!question) {
 		return null;

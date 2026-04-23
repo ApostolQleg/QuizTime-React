@@ -27,12 +27,8 @@ export default function Profile() {
 	const { user } = useProfilePageIdentityState();
 	const { isLoading, isSaving } = useProfilePageStatusState();
 	const { isDeleteModalOpen, isPasswordModalOpen } = useProfilePageModalState();
-	const {
-		openDeleteModal,
-		closeDeleteModal,
-		openPasswordModal,
-		closePasswordModal,
-	} = useProfilePageStoreActions();
+	const { openDeleteModal, closeDeleteModal, openPasswordModal, closePasswordModal } =
+		useProfilePageStoreActions();
 
 	const { addToast } = useToastActions();
 	const { saveProfile, removeAccount } = useProfilePageActions({
@@ -45,8 +41,7 @@ export default function Profile() {
 		addToast,
 	});
 
-	if (isLoading)
-		return <Container className="text-center">Loading...</Container>;
+	if (isLoading) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
 
 	return (
@@ -106,10 +101,7 @@ export default function Profile() {
 				isDanger={true}
 			/>
 
-			<ModalChangePassword
-				isOpen={isPasswordModalOpen}
-				onClose={closePasswordModal}
-			/>
+			<ModalChangePassword isOpen={isPasswordModalOpen} onClose={closePasswordModal} />
 		</Container>
 	);
 }

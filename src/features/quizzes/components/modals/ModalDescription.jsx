@@ -1,21 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import {
-	clearAllQuizzesCache,
-	deleteQuiz,
-} from "@/features/quizzes/api/quizzes.api.js";
+import { clearAllQuizzesCache, deleteQuiz } from "@/features/quizzes/api/quizzes.api.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import Modal from "@/shared/ui/Modal.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 
-export default function ModalDescription({
-	quiz,
-	onClose,
-	isOpen,
-	onDeleteSuccess,
-}) {
+export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSuccess }) {
 	const { user } = useAuthUserState();
 	const quizId = quiz?.id || quiz?._id;
 
@@ -46,17 +38,12 @@ export default function ModalDescription({
 		}
 	};
 
-	const isOwner =
-		user && quiz.authorId && String(user._id) === String(quiz.authorId);
+	const isOwner = user && quiz.authorId && String(user._id) === String(quiz.authorId);
 	const canManage = isOwner;
 
 	return (
 		<>
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				className="min-h-[60vh] max-h-[80vh] w-[80vw]"
-			>
+			<Modal isOpen={isOpen} onClose={onClose} className="min-h-[60vh] max-h-[80vh] w-[80vw]">
 				<div className="flex flex-col flex-1 overflow-y-auto gap-4">
 					<div className="text-5xl font-bold drop-shadow-md text-(--col-text-accent)">
 						{quiz.title}
@@ -90,9 +77,7 @@ export default function ModalDescription({
 								</button>
 							</div>
 						) : (
-							quiz.isSystem && (
-								<span className="text-yellow-500">System Quiz</span>
-							)
+							quiz.isSystem && <span className="text-yellow-500">System Quiz</span>
 						)}
 					</div>
 
