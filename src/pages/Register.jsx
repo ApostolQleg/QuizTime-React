@@ -75,8 +75,7 @@ export default function Register() {
 
 	const handleVerifyCodeNext = (e) => {
 		e.preventDefault();
-		if (formData.code.length < 4)
-			return setError("Please enter the valid code");
+		if (formData.code.length < 4) return setError("Please enter the valid code");
 		setError("");
 		setStep(3);
 	};

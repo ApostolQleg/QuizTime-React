@@ -3,13 +3,7 @@ import Memoizer from "@/shared/libs/memoizer.js";
 
 const cache = new Memoizer();
 
-function getAllQuizzes(
-	skip = 0,
-	limit = 36,
-	search = "",
-	sort = "newest",
-	authorId = "",
-) {
+function getAllQuizzes(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
 	const params = new URLSearchParams({
 		skip: String(skip),
 		limit: String(limit),

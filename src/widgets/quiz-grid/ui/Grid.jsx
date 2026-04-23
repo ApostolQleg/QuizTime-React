@@ -15,11 +15,7 @@ export default function Grid({
 	onCardClick,
 }) {
 	if (loading) {
-		return (
-			<Container className="text-center text-(--col-text-main)">
-				Loading...
-			</Container>
-		);
+		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
 	}
 
 	return (

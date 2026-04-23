@@ -2,11 +2,7 @@ import { formatDateTime } from "@/shared/libs/formatDateTime.js";
 
 export default function QuizCard({ item, isResultsPage, onClick }) {
 	return (
-		<button
-			type="button"
-			className="quiz-card flex flex-col justify-between"
-			onClick={onClick}
-		>
+		<button type="button" className="quiz-card flex flex-col justify-between" onClick={onClick}>
 			<div className="font-bold text-lg mb-2 pt-4 px-2">
 				{isResultsPage ? item.quizTitle : item.title}
 			</div>

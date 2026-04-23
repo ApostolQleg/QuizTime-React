@@ -21,8 +21,7 @@ export default function Quiz() {
 	const navigate = useNavigate();
 	const { quizId, resultIdParam } = useParams();
 	const { user } = useAuthUserState();
-	const { loading, quizData, resultData, answers, alertInfo } =
-		useQuizSessionViewState();
+	const { loading, quizData, resultData, answers, alertInfo } = useQuizSessionViewState();
 	const {
 		loadQuizForPlay,
 		loadResultForView,
@@ -89,9 +88,7 @@ export default function Quiz() {
 		let score = 0;
 
 		for (const [qIndex, question] of quizData.questions.entries()) {
-			const correctIds = question.options
-				.filter((o) => o.isCorrect)
-				.map((o) => o.id);
+			const correctIds = question.options.filter((o) => o.isCorrect).map((o) => o.id);
 			const selectedIds = answers[qIndex] || [];
 
 			if (
@@ -137,11 +134,7 @@ export default function Quiz() {
 	};
 
 	if (loading) {
-		return (
-			<Container className="text-center text-(--col-text-main)">
-				Loading...
-			</Container>
-		);
+		return <Container className="text-center text-(--col-text-main)">Loading...</Container>;
 	}
 
 	if (!quizData) return null;

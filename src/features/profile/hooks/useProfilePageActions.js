@@ -11,8 +11,7 @@ export function useProfilePageActions({
 	isSessionChecking,
 	addToast,
 }) {
-	const { setUser, setIsLoading, setIsSaving, closeDeleteModal } =
-		useProfilePageStoreActions();
+	const { setUser, setIsLoading, setIsSaving, closeDeleteModal } = useProfilePageStoreActions();
 
 	useEffect(() => {
 		if (!token) {
