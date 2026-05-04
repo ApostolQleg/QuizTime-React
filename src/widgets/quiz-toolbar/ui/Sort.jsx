@@ -21,8 +21,7 @@ export default function Sort({ currentSort, onSortChange }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef(null);
 
-	const currentOption =
-		SORT_OPTIONS.find((opt) => opt.id === currentSort) || SORT_OPTIONS[0];
+	const currentOption = SORT_OPTIONS.find((opt) => opt.id === currentSort) || SORT_OPTIONS[0];
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {

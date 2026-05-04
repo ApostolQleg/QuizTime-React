@@ -50,13 +50,7 @@ export default function PublicProfile() {
 				ITEMS_PER_PAGE,
 			);
 
-			const data = await getQuizzes(
-				currentSkip,
-				currentLimit,
-				"",
-				"newest",
-				authorId,
-			);
+			const data = await getQuizzes(currentSkip, currentLimit, "", "newest", authorId);
 
 			return {
 				items: data.quizzes,
@@ -81,8 +75,7 @@ export default function PublicProfile() {
 		handleLoadMore,
 	} = useInfiniteList(loadData, authorParams);
 
-	if (isLoading)
-		return <Container className="text-center">Loading...</Container>;
+	if (isLoading) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
 
 	return (

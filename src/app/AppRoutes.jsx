@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import {
-	useAuthActions,
-	useAuthSessionState,
-} from "@/features/auth/hooks/useAuth.js";
+import { useAuthActions, useAuthSessionState } from "@/features/auth/hooks/useAuth.js";
 import Edit from "@/pages/Edit.jsx";
 import Help from "@/pages/Help.jsx";
 import Login from "@/pages/Login.jsx";

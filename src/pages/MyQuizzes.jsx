@@ -75,14 +75,14 @@ export default function MyQuizzes() {
 
 	const authorParams = useMemo(() => ({ authorId: user?._id }), [user?._id]);
 
-	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
-		useInfiniteList(loadData, authorParams);
+	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(
+		loadData,
+		authorParams,
+	);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
-			prevItems.filter(
-				(item) => item.id !== deletedQuizId && item._id !== deletedQuizId,
-			),
+			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
 		addToast(
