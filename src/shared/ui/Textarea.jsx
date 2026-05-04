@@ -1,9 +1,4 @@
-export default function Textarea({
-	placeholder,
-	className = "",
-	onChange,
-	...props
-}) {
+export default function Textarea({ placeholder, className = "", onChange, ...props }) {
 	return (
 		<textarea
 			rows="1"

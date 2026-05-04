@@ -56,8 +56,7 @@ export default function Results() {
 		[user, debouncedQuery, sortOption],
 	);
 
-	const { items, loading, hasMore, isLoadingMore, handleLoadMore } =
-		useInfiniteList(loadData);
+	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
@@ -66,10 +65,7 @@ export default function Results() {
 			<span className="text-xl font-bold">
 				History is available only for registered users
 			</span>
-			<Link
-				to="/register"
-				className="text-(--col-primary) hover:underline text-base"
-			>
+			<Link to="/register" className="text-(--col-primary) hover:underline text-base">
 				Sign up to save your progress
 			</Link>
 		</>

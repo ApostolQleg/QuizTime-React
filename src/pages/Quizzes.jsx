@@ -61,9 +61,7 @@ export default function Quizzes() {
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
-			prevItems.filter(
-				(item) => item.id !== deletedQuizId && item._id !== deletedQuizId,
-			),
+			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
 		);
 		setSelectedQuiz(null);
 		addToast(

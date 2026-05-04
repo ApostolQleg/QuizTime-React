@@ -1,10 +1,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { linkGoogleAccount } from "@/features/auth/api/auth.api.js";
-import {
-	useAuthActions,
-	useAuthSessionState,
-} from "@/features/auth/hooks/useAuth.js";
+import { useAuthActions, useAuthSessionState } from "@/features/auth/hooks/useAuth.js";
 import { QUIZ_CONSTRAINTS } from "@/shared/config/config.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Button from "@/shared/ui/Button.jsx";
@@ -27,9 +24,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 
 	const [avatarType, setAvatarType] = useState(user.avatarType || "generated");
 
-	const [generatedColor, setGeneratedColor] = useState(
-		user.themeColor || "#4f46e5",
-	);
+	const [generatedColor, setGeneratedColor] = useState(user.themeColor || "#4f46e5");
 
 	const { addToast } = useToastActions();
 
@@ -81,10 +76,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit}
-			className="flex flex-col gap-6 w-full max-w-lg"
-		>
+		<form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-lg">
 			<div className="flex flex-col gap-2">
 				<label
 					htmlFor="profile-nickname"
@@ -104,20 +96,14 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 						required
 						disabled={isAnimating}
 					/>
-					<Button
-						type="button"
-						onClick={handleRandomNickname}
-						disabled={isAnimating}
-					>
+					<Button type="button" onClick={handleRandomNickname} disabled={isAnimating}>
 						{isAnimating ? "Rolling..." : "Random"}
 					</Button>
 				</div>
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<p className="text-sm font-bold text-(--col-text-muted)">
-					Avatar Source
-				</p>
+				<p className="text-sm font-bold text-(--col-text-muted)">Avatar Source</p>
 
 				<div className="flex gap-4 p-1 bg-(--col-bg-input) rounded-lg border border-(--col-border)">
 					<button
@@ -175,8 +161,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 									Connect Google Account
 								</p>
 								<p className="text-xs text-(--col-text-muted) mt-1 max-w-50">
-									Link your account to use your Google profile photo as an
-									avatar.
+									Link your account to use your Google profile photo as an avatar.
 								</p>
 							</div>
 
@@ -190,9 +175,7 @@ export default function ProfileForm({ user, onSave, isLoading }) {
 									text="continue_with"
 								/>
 							</div>
-							{linkError && (
-								<p className="text-xs text-(--col-error)">{linkError}</p>
-							)}
+							{linkError && <p className="text-xs text-(--col-error)">{linkError}</p>}
 						</div>
 					)
 				) : (
