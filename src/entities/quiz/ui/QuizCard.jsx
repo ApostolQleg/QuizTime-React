@@ -8,7 +8,7 @@ export default function QuizCard({ item, isResultsPage, onClick }) {
 			</div>
 			<div className="">{item.category}</div>
 			<div className="flex flex-wrap gap-1 mt-2 px-2">
-				{item.tags.map((tag) => (
+				{item.tags?.map((tag) => (
 					<span
 						key={tag}
 						className="inline-block bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full mb-2"
