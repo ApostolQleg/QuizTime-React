@@ -81,9 +81,9 @@ const useQuizEditorStore = create((set) => ({
 				return { tags: newTags };
 			}),
 
-		deleteTag: (index) =>
+		deleteTag: (id) =>
 			set((state) => ({
-				tags: state.tags.filter((_, i) => i !== index),
+				tags: state.tags.filter((tag) => tag.id !== id),
 			})),
 
 		addQuestion: () =>
