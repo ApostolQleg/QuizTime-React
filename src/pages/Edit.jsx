@@ -28,7 +28,8 @@ export default function Edit() {
 
 	const isManagePage = location.pathname.startsWith("/manage");
 	const { loading, alertInfo } = useQuizEditorMetaState();
-	const { title, description, counter, errors, questions } = useQuizEditorContentState();
+	const { title, category, tags, description, counter, errors, questions } =
+		useQuizEditorContentState();
 	const editorActions = useQuizEditorActions();
 	const { validate, showSaveError, closeAlert } = useQuizEditorValidation();
 	const { addToast } = useToastActions();
@@ -58,6 +59,8 @@ export default function Edit() {
 		try {
 			const quizPayload = {
 				title,
+				category,
+				tags: tags.map(tag => tag.text.trim()),
 				description,
 				questions,
 				...(isManagePage ? {} : { id: Date.now().toString() }),
@@ -85,7 +88,8 @@ export default function Edit() {
 
 	return (
 		<Container className={"flex flex-col gap-4 flex-1"}>
-			<div className="w-full flex flex-row justify-between items-center p-4 rounded-xl border bg-(--col-bg-input-darker) border-(--col-border)">
+			<div className="w-full flex flex-col gap-4 p-4 rounded-xl border bg-(--col-bg-input-darker) border-(--col-border)">
+				<div className="flex flex-row">
 				<Input
 					placeholder="Enter quiz title here..."
 					className={`text-xs lg:text-lg font-bold w-3/4 ${errors.title ? "error" : ""}`}
@@ -104,6 +108,50 @@ export default function Edit() {
 					{counter}/{QUIZ_CONSTRAINTS.TITLE_MAX_LENGTH}
 				</div>
 				<Button onClick={editorActions.clearTitle}>Clear</Button>
+                </div>
+				<Input
+					placeholder="Enter quiz category here..."
+					className={`resize-y w-50 font-bold text-xs lg:text-lg ${errors.description ? "error" : ""}`}
+					value={category}
+					onChange={(event) => editorActions.setCategory(event.target.value)}
+				/>
+
+				<div className="flex flex-col gap-2 p-4 rounded-xl border bg-(--col-bg-input-darker) border-(--col-border)">
+					<span className="font-bold text-xs sm:text-sm text-(--col-text-muted)">
+						Tags:
+					</span>
+					<div className="flex flex-wrap gap-2 items-center">
+						{tags.map((tag, index) => (
+							<div key={tag.id} className="flex items-center gap-1">
+								<Input
+									placeholder="tag name"
+									className="w-24 sm:w-32 text-xs lg:text-sm font-bold"
+									value={tag.text}
+									onChange={(event) =>
+										editorActions.updateTag(index, { ...tag, text: event.target.value })
+									}
+								/>
+								{tags.length > 1 && (
+									<Button
+										onClick={() => editorActions.deleteTag(index)}
+										className="text-red-500 font-bold px-2 hover:text-red-700 transition-colors"
+										title="Remove tag"
+									>
+										x
+									</Button>
+								)}
+							</div>
+						))}
+
+						<Button
+							onClick={editorActions.addTag}
+							className="px-3 py-1 bg-(--col-bg-input) hover:bg-(--col-border) shadow-none"
+							title="Add new tag"
+						>
+							+
+						</Button>
+					</div>
+				</div>
 			</div>
 
 			<Textarea
