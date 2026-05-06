@@ -12,6 +12,8 @@ const DEFAULT_QUESTION = {
 
 const initialErrors = {
 	title: false,
+	category: false,
+	tags: false,
 	description: false,
 	questions: {},
 };
