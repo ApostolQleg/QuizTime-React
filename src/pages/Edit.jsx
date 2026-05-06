@@ -60,7 +60,7 @@ export default function Edit() {
 			const quizPayload = {
 				title,
 				category,
-				tags: tags.map((tag) => tag.text.trim()).filter(t => t !== ""),
+				tags: tags.map((tag) => tag.text.trim()).filter((t) => t !== ""),
 				description,
 				questions,
 				...(isManagePage ? {} : { id: Date.now().toString() }),
@@ -141,7 +141,7 @@ export default function Edit() {
 						value=""
 						onChange={(event) => {
 							const selectedTagText = event.target.value;
-
+							if (tags.length < 5)
 							editorActions.setTags([
 								...tags,
 								{ id: crypto.randomUUID(), text: selectedTagText },
@@ -155,11 +155,7 @@ export default function Edit() {
 						{QUIZ_TAGS.map((tagText) => {
 							const isAlreadySelected = tags.some((t) => t.text === tagText);
 							return (
-								<option
-									key={tagText}
-									value={tagText}
-									disabled={isAlreadySelected}
-								>
+								<option key={tagText} value={tagText} disabled={isAlreadySelected}>
 									{tagText} {isAlreadySelected ? "(Added)" : ""}
 								</option>
 							);
