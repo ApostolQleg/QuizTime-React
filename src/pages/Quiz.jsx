@@ -7,11 +7,7 @@ import {
 	useQuizSessionActions,
 	useQuizSessionViewState,
 } from "@/features/quizzes/stores/quizSessionStore.js";
-import {
-	clearAllResultsCache,
-	getResultById,
-	saveResult,
-} from "@/features/results/api/results.api.js";
+import { getResultById, saveResult } from "@/features/results/api/results.api.js";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
@@ -115,7 +111,6 @@ export default function Quiz() {
 		if (user) {
 			try {
 				const response = await saveResult(payload);
-				clearAllResultsCache();
 				navigate(`/result/${quizId}/${response.result._id}`);
 				addToast("Result saved.");
 			} catch (error) {
