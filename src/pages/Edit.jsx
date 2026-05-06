@@ -60,7 +60,7 @@ export default function Edit() {
 			const quizPayload = {
 				title,
 				category,
-				tags: tags.map((tag) => tag.text.trim()),
+				tags: tags.map((tag) => tag.text.trim()).filter(t => t !== ""),
 				description,
 				questions,
 				...(isManagePage ? {} : { id: Date.now().toString() }),
@@ -167,7 +167,7 @@ export default function Edit() {
 					</select>
 
 					{tags.length > 0 && tags[0].text !== "" && (
-						<div className="flex flex-wrap gap-2 items-center mt-2 p-3 rounded-xl border border-dashed border-(--col-border) min-h-[50px]">
+						<div className="flex flex-wrap gap-2 items-center mt-2 p-3 rounded-xl border border-dashed border-(--col-border) min-h-12.5">
 							{tags
 								.filter((tag) => tag.text !== "")
 								.map((tag) => (
