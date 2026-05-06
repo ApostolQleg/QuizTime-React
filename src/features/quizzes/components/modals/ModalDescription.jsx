@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import { clearAllQuizzesCache, deleteQuiz } from "@/features/quizzes/api/quizzes.api.js";
+import { deleteQuiz } from "@/features/quizzes/api/quizzes.api.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import Modal from "@/shared/ui/Modal.jsx";
@@ -24,7 +24,6 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 
 		try {
 			await deleteQuiz(quizId);
-			clearAllQuizzesCache();
 			setIsDeleteConfirmOpen(false);
 
 			if (onDeleteSuccess) {

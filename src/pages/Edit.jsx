@@ -1,11 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-	clearAllQuizzesCache,
-	createQuiz,
-	getQuizById,
-	updateQuiz,
-} from "@/features/quizzes/api/quizzes.api.js";
+import { createQuiz, getQuizById, updateQuiz } from "@/features/quizzes/api/quizzes.api.js";
 import Question from "@/features/quizzes/components/edit/QuestionEditor.jsx";
 import useQuizEditorValidation from "@/features/quizzes/hooks/useQuizEditorValidation.js";
 import {
@@ -70,7 +65,6 @@ export default function Edit() {
 				await createQuiz(quizPayload);
 				addToast("Your quiz has been created.");
 			}
-			clearAllQuizzesCache();
 
 			navigate("/");
 		} catch (error) {

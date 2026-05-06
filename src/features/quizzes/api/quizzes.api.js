@@ -1,9 +1,6 @@
 import client from "@/shared/api/client.js";
-import Memoizer from "@/shared/libs/memoizer.js";
 
-const cache = new Memoizer();
-
-function getAllQuizzes(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
+export function getQuizzes(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
 	const params = new URLSearchParams({
 		skip: String(skip),
 		limit: String(limit),
@@ -15,18 +12,9 @@ function getAllQuizzes(skip = 0, limit = 36, search = "", sort = "newest", autho
 	return client.get(`/quizzes?${params.toString()}`);
 }
 
-export const getQuizzes = cache.memoize(getAllQuizzes, 180000);
-
 export const createQuiz = (data) => client.post("/quizzes", data);
 
-const getQuiz = (id) => client.get(`/quizzes/${id}`);
-
-export const getQuizById = cache.memoize(getQuiz);
-
-export const clearAllQuizzesCache = () => {
-	cache.clear(getAllQuizzes);
-	cache.clear(getQuiz);
-};
+export const getQuizById = (id) => client.get(`/quizzes/${id}`);
 
 export const updateQuiz = (id, data) => client.put(`/quizzes/${id}`, data);
 
