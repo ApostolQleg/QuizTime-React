@@ -8,15 +8,18 @@ export function useQuizEditorValidation() {
 	const { setErrors, setAlertInfo, closeAlert } = useQuizEditorActions();
 
 	const validate = useCallback(() => {
-		const { title, description, questions } = getQuizEditorState();
+		const { title, category, tags, description, questions } = getQuizEditorState();
 
 		const newErrors = {
 			title: title.trim() === "",
+			category: category.trim() === "",
+			tags: tags.length === 0 || tags[0] === "",
 			description: description.trim() === "",
 			questions: {},
 		};
 
-		let hasError = newErrors.title || newErrors.description;
+		let hasError =
+			newErrors.title || newErrors.description || newErrors.category || newErrors.tags;
 
 		for (const question of questions) {
 			const optionsErrors = {};
