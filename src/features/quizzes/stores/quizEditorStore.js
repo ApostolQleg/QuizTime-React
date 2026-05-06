@@ -19,7 +19,7 @@ const initialErrors = {
 const initialState = {
 	title: "",
 	category: "",
-	tags: [{ id: crypto.randomUUID(), text: "" }],
+	tags: [],
 	description: "",
 	questions: [DEFAULT_QUESTION],
 	counter: 0,
@@ -59,7 +59,7 @@ const useQuizEditorStore = create((set) => ({
 			set({
 				title: quiz.title,
 				description: quiz.description,
-				category: quiz.category,
+				category: quiz.category ?? "",
 				tags:
 					quiz.tags && quiz.tags.length > 0
 						? quiz.tags.map((tagText) => ({ id: crypto.randomUUID(), text: tagText }))
@@ -67,18 +67,6 @@ const useQuizEditorStore = create((set) => ({
 				questions: quiz.questions,
 				counter: quiz.title.length,
 				loading: false,
-			}),
-
-		addTag: () =>
-			set((state) => ({
-				tags: [...state.tags, { id: crypto.randomUUID(), text: '' }],
-			})),
-
-		updateTag: (index, updatedTag) =>
-			set((state) => {
-				const newTags = [...state.tags];
-				newTags[index] = updatedTag;
-				return { tags: newTags };
 			}),
 
 		deleteTag: (id) =>
