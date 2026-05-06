@@ -115,7 +115,7 @@ export default function Edit() {
 						Category:
 					</span>
 					<select
-						className={`w-3/8 p-3 rounded-xl border bg-(--col-bg-input) border-(--col-border) text-(--col-text-main) font-bold text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-opacity-50 ${errors.category ? "error" : ""}`}
+						className={`w-3/8 p-3 rounded-xl border bg-(--col-bg-input) border-(--col-border) text-(--col-text-muted) font-bold text-xs lg:text-sm focus:ring-(--col-primary-glow) focus:border-1 focus:border-(--col-primary) focus:ring-2 focus:ring-opacity-50 ${errors.category ? "error" : ""}`}
 						value={category}
 						onChange={(event) => editorActions.setCategory(event.target.value)}
 					>
@@ -137,7 +137,7 @@ export default function Edit() {
 					</span>
 
 					<select
-						className={`w-full p-3 rounded-xl border bg-(--col-bg-input) border-(--col-border) text-(--col-text-main) font-bold text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-opacity-50`}
+						className={`w-full p-3 rounded-xl border bg-(--col-bg-input) border-(--col-border) text-(--col-text-muted) font-bold text-xs lg:text-sm focus:ring-(--col-primary-glow) focus:border-1 focus:border-(--col-primary) focus:ring-2 focus:ring-opacity-50 ${errors.tags ? "error" : ""}`}
 						value=""
 						onChange={(event) => {
 							const selectedTagText = event.target.value;
