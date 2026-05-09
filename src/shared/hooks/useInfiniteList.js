@@ -1,5 +1,28 @@
 import { useCallback, useEffect, useState } from "react";
 
+function getItemKey(item) {
+	return item?._id ?? item?.id ?? item?.quizId ?? null;
+}
+
+function mergeUniqueItems(previousItems, nextItems) {
+	const mergedItems = [...previousItems, ...nextItems];
+	const seenKeys = new Set();
+
+	return mergedItems.filter((item) => {
+		const key = getItemKey(item);
+		if (key === null) {
+			return true;
+		}
+
+		if (seenKeys.has(key)) {
+			return false;
+		}
+
+		seenKeys.add(key);
+		return true;
+	});
+}
+
 export function useInfiniteList(loadPage, extraParams = null) {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -22,7 +45,11 @@ export function useInfiniteList(loadPage, extraParams = null) {
 				const nextItems = result?.items ?? [];
 				const nextHasMore = result?.hasMore ?? false;
 
-				setItems((prevItems) => (isInitialLoad ? nextItems : [...prevItems, ...nextItems]));
+				setItems((prevItems) =>
+					isInitialLoad
+						? mergeUniqueItems([], nextItems)
+						: mergeUniqueItems(prevItems, nextItems),
+				);
 				setHasMore(nextHasMore);
 			} finally {
 				setLoading(false);

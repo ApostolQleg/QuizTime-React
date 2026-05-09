@@ -34,7 +34,7 @@ export default function Grid({
 
 					{items.map((item) => (
 						<QuizCard
-							key={item._id}
+							key={item._id ?? item.id ?? item.quizId}
 							item={item}
 							isResultsPage={isResultsPage}
 							onClick={() => onCardClick(item)}
