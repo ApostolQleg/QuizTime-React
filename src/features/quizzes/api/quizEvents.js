@@ -29,22 +29,26 @@ const normalizeQuiz = (rawQuiz, existingQuiz = {}) => {
 
 export const handleQuizCreated = (data) => {
 	const rawQuiz = getQuizPayload(data);
+	console.log("Received SSE message QUIZ_CREATED:", rawQuiz);
 
 	if (typeof rawQuiz !== "object" || rawQuiz === null || !getQuizId(rawQuiz)) {
-		console.warn("CREATE_QUIZ: expected whole quiz object, not ", rawQuiz);
+		console.warn("CREATE_QUIZ: expected whole quiz object, not", rawQuiz);
 		return;
 	}
 
 	const normalizedQuiz = normalizeQuiz(rawQuiz);
-	console.log("Quiz created (normalized):", normalizedQuiz);
+
 	useQuizzesListStore.getState().upsertItem(normalizedQuiz);
+
+	console.log("Created quiz:", normalizedQuiz);
 };
 
 export const handleQuizUpdated = (data) => {
 	const rawQuiz = getQuizPayload(data);
+	console.log("Received SSE message QUIZ_UPDATED:", rawQuiz);
 
 	if (typeof rawQuiz !== "object" || rawQuiz === null || !getQuizId(rawQuiz)) {
-		console.warn("UPDATE_QUIZ: expected whole quiz object, not ", rawQuiz);
+		console.warn("UPDATE_QUIZ: expected whole quiz object, not", rawQuiz);
 		return;
 	}
 
@@ -52,16 +56,20 @@ export const handleQuizUpdated = (data) => {
 	const existingQuiz = store.items.find((item) => getQuizId(item) === getQuizId(rawQuiz));
 
 	const normalizedQuiz = normalizeQuiz(rawQuiz, existingQuiz);
-	console.log("Quiz updated (normalized):", normalizedQuiz);
+
 	store.upsertItem(normalizedQuiz);
+
+	console.log("Updated quiz:", normalizedQuiz);
 };
 
 export const handleQuizDeleted = (data) => {
-	console.log("Quiz deleted:", data);
+	console.log("Received SSE message QUIZ_DELETED:", data);
 	const quiz = getQuizPayload(data);
 	const quizId = getQuizId(quiz);
 
 	if (quizId === null) return;
 
 	useQuizzesListStore.getState().removeItem(quizId);
+
+	console.log("Deleted quiz by id:", data);
 };

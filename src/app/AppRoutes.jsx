@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useAuthActions, useAuthSessionState } from "@/features/auth/hooks/useAuth.js";
+import {
+	useAuthActions,
+	useAuthSessionState,
+	useAuthUserState,
+} from "@/features/auth/hooks/useAuth.js";
 import Edit from "@/pages/Edit.jsx";
 import Help from "@/pages/Help.jsx";
 import Login from "@/pages/Login.jsx";
@@ -13,9 +17,11 @@ import Quizzes from "@/pages/Quizzes.jsx";
 import Register from "@/pages/Register.jsx";
 import Results from "@/pages/Results.jsx";
 import useAutoReload from "@/shared/hooks/useAutoReload.js";
+import { sseClient } from "@/shared/api/sseClient.js";
 
 export default function AppRoutes() {
 	const { token } = useAuthSessionState();
+	const { user } = useAuthUserState();
 	const { checkSession } = useAuthActions();
 
 	const [refreshKey, setRefreshKey] = useState(0);
@@ -39,6 +45,16 @@ export default function AppRoutes() {
 			}
 		});
 	}, [token, checkSession]);
+
+	useEffect(() => {
+		if (user) {
+			sseClient.connect();
+		} else {
+			sseClient.disconnect();
+		}
+
+		return () => sseClient.disconnect();
+	}, [user]);
 
 	return (
 		<div key={refreshKey} className="flex-1 flex flex-col w-full">
