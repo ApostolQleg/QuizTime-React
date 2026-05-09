@@ -3,7 +3,7 @@ import {
 	handleQuizDeleted,
 	handleQuizUpdated,
 } from "@/features/quizzes/api/quizEvents";
-import { sseClient } from "@/shared/api/sseClient";
+import { sseClient } from "@/shared/api/sseClient.js";
 
 export const initGlobalEvents = () => {
 	sseClient.subscribe("CREATE_QUIZ", handleQuizCreated);

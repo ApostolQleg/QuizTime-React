@@ -1,4 +1,4 @@
-import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore";
+import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
 
 const getQuizId = (quiz) => {
 	if (typeof quiz === "string" || typeof quiz === "number") return quiz;
