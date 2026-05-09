@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getResults } from "@/features/results/api/results.api.js";
+import { useResultsListStore } from "@/features/results/stores/resultsListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
 import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
@@ -57,6 +58,12 @@ export default function Results() {
 	);
 
 	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
+
+	const setResults = useResultsListStore((state) => state.setItems);
+
+	useEffect(() => {
+		setResults(items);
+	}, [items, setResults]);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."

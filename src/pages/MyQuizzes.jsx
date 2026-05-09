@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
+import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
 import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
@@ -79,6 +80,12 @@ export default function MyQuizzes() {
 		loadData,
 		authorParams,
 	);
+
+	const setQuizzes = useQuizzesListStore((state) => state.setItems);
+
+	useEffect(() => {
+		setQuizzes(items);
+	}, [items, setQuizzes]);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>

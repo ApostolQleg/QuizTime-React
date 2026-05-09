@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
+import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
 import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
@@ -58,6 +59,12 @@ export default function Quizzes() {
 
 	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
 		useInfiniteList(loadData);
+
+	const setQuizzes = useQuizzesListStore((state) => state.setItems);
+
+	useEffect(() => {
+		setQuizzes(items);
+	}, [items, setQuizzes]);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
 		setItems((prevItems) =>
