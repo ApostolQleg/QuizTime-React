@@ -40,18 +40,11 @@ export const useQuizzesListStore = create((set) => ({
 
 	upsertItem: (quiz) =>
 		set((state) => {
-			const targetId1 = quiz?._id;
-			const targetId2 = quiz?.id;
+			const targetId = getPrimaryId(quiz);
 
-			if (!targetId1 && !targetId2) {
-				return { items: [quiz, ...state.items] };
-			}
-
-			const nextItems = state.items.filter((item) => {
-				const match1 = targetId1 ? isMatchingQuiz(item, targetId1) : false;
-				const match2 = targetId2 ? isMatchingQuiz(item, targetId2) : false;
-				return !match1 && !match2;
-			});
+			const nextItems = targetId
+				? state.items.filter((item) => !isMatchingQuiz(item, targetId))
+				: state.items;
 
 			return { items: dedupeItems([quiz, ...nextItems]) };
 		}),
