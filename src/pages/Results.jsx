@@ -5,7 +5,6 @@ import { getResults } from "@/features/results/api/results.api.js";
 import { useResultsListStore } from "@/features/results/stores/resultsListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
@@ -21,49 +20,63 @@ export default function Results() {
 
 	const [sortOption, setSortOption] = useState("newest");
 
-	const loadData = useCallback(
-		async ({ pageToLoad }) => {
+	const {
+		items,
+		loading,
+		page,
+		hasMore,
+		setItems,
+		appendItems,
+		setLoading,
+		setPage,
+		setHasMore,
+		clear,
+	} = useResultsListStore();
+
+	const fetchResults = useCallback(
+		async (pageToLoad) => {
 			if (!user) {
-				return {
-					items: [],
-					hasMore: false,
-				};
+				setItems([]);
+				setHasMore(false);
+				setLoading(false);
+				return;
 			}
 
+			setLoading(true);
 			try {
-				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
-					pageToLoad,
-					ITEMS_PER_PAGE,
-				);
-				const data = await getResults(
-					currentSkip,
-					currentLimit,
-					debouncedQuery,
-					sortOption,
-				);
+				const { skip, limit } = getPaginationRange(pageToLoad, ITEMS_PER_PAGE);
+				const data = await getResults(skip, limit, debouncedQuery, sortOption);
+				const fetchedResults = data.results;
+				const moreAvailable = fetchedResults.length >= limit;
 
-				return {
-					items: data.results,
-					hasMore: data.results.length >= currentLimit,
-				};
+				if (pageToLoad === 1) {
+					setItems(fetchedResults);
+				} else {
+					appendItems(fetchedResults);
+				}
+
+				setHasMore(moreAvailable);
+				setPage(pageToLoad);
 			} catch (err) {
 				console.error("Failed to load results", err);
-				return {
-					items: [],
-					hasMore: false,
-				};
+				setHasMore(false);
+			} finally {
+				setLoading(false);
 			}
 		},
-		[user, debouncedQuery, sortOption],
+		[appendItems, debouncedQuery, setHasMore, setItems, setLoading, setPage, sortOption, user],
 	);
 
-	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
-
-	const setResults = useResultsListStore((state) => state.setItems);
-
 	useEffect(() => {
-		setResults(items);
-	}, [items, setResults]);
+		clear();
+		fetchResults(1);
+	}, [clear, fetchResults]);
+
+	const handleLoadMore = useCallback(() => {
+		if (!loading && hasMore) {
+			fetchResults(page + 1);
+		}
+	}, [fetchResults, hasMore, loading, page]);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
@@ -87,10 +100,10 @@ export default function Results() {
 			/>
 			<Grid
 				items={items}
-				loading={loading}
+				loading={loading && page === 1}
 				hasMore={hasMore}
 				onLoadMore={handleLoadMore}
-				isLoadingMore={isLoadingMore}
+				isLoadingMore={loading && page > 1}
 				showAddButton={false}
 				isResultsPage={true}
 				onCardClick={(item) => navigate(`/result/${item.quizId}/${item._id}`)}
