@@ -5,7 +5,6 @@ import ModalDescription from "@/features/quizzes/components/modals/ModalDescript
 import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
@@ -25,51 +24,66 @@ export default function Quizzes() {
 
 	const { addToast } = useToastActions();
 
-	const loadData = useCallback(
-		async ({ pageToLoad }) => {
+	const {
+		items,
+		loading,
+		page,
+		hasMore,
+		setItems,
+		appendItems,
+		setLoading,
+		setPage,
+		setHasMore,
+		clear,
+		removeItem,
+	} = useQuizzesListStore();
+
+	const fetchQuizzes = useCallback(
+		async (pageToLoad) => {
+			setLoading(true);
 			try {
-				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
+				const { skip, limit } = getPaginationRange(
 					pageToLoad,
 					ITEMS_PER_PAGE,
 					ITEMS_PER_PAGE_AUTH,
 					!!user && debouncedQuery === "",
 				);
 
-				const data = await getQuizzes(
-					currentSkip,
-					currentLimit,
-					debouncedQuery,
-					sortOption,
-				);
+				const data = await getQuizzes(skip, limit, debouncedQuery, sortOption);
+				const fetchedQuizzes = data.quizzes;
+				const moreAvailable = fetchedQuizzes.length >= limit;
 
-				return {
-					items: data.quizzes,
-					hasMore: data.quizzes.length >= currentLimit,
-				};
+				if (pageToLoad === 1) {
+					setItems(fetchedQuizzes);
+				} else {
+					appendItems(fetchedQuizzes);
+				}
+
+				setHasMore(moreAvailable);
+				setPage(pageToLoad);
 			} catch (err) {
 				console.error("Failed to load quizzes", err);
-				return {
-					items: [],
-					hasMore: false,
-				};
+				setHasMore(false);
+			} finally {
+				setLoading(false);
 			}
 		},
-		[user, debouncedQuery, sortOption],
+		[user, debouncedQuery, sortOption, setItems, appendItems, setHasMore, setPage, setLoading],
 	);
 
-	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
-		useInfiniteList(loadData);
-
-	const setQuizzes = useQuizzesListStore((state) => state.setItems);
-
 	useEffect(() => {
-		setQuizzes(items);
-	}, [items, setQuizzes]);
+		clear();
+		fetchQuizzes(1);
+	}, [fetchQuizzes, clear]);
+
+	const handleLoadMore = useCallback(() => {
+		if (!loading && hasMore) {
+			fetchQuizzes(page + 1);
+		}
+	}, [loading, hasMore, page, fetchQuizzes]);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
-		setItems((prevItems) =>
-			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
-		);
+		removeItem(deletedQuizId);
 		setSelectedQuiz(null);
 		addToast(
 			deletedQuizTitle
@@ -88,10 +102,10 @@ export default function Quizzes() {
 				/>
 				<Grid
 					items={items}
-					loading={loading}
+					loading={loading && page === 1}
 					hasMore={hasMore}
 					onLoadMore={handleLoadMore}
-					isLoadingMore={isLoadingMore}
+					isLoadingMore={loading && page > 1}
 					showAddButton={!!user && searchQuery === ""}
 					isResultsPage={false}
 					onCardClick={setSelectedQuiz}
