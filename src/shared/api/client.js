@@ -20,7 +20,7 @@ export class ApiClient {
 		this.apiUrl = apiUrl;
 	}
 
-	async parseResponse(response) {
+	parseResponse = async (response) => {
 		const text = await response.text();
 		if (!text) return {};
 
@@ -29,9 +29,9 @@ export class ApiClient {
 		} catch {
 			return { raw: text };
 		}
-	}
+	};
 
-	async request(endpoint, options = {}) {
+	request = async (endpoint, options = {}) => {
 		const url = endpoint.startsWith("http") ? endpoint : `${this.apiUrl}${endpoint}`;
 
 		const config = {
@@ -54,27 +54,27 @@ export class ApiClient {
 		}
 
 		return data;
-	}
+	};
 
-	get(endpoint, options) {
+	get = (endpoint, options) => {
 		return this.request(endpoint, { method: "GET", ...options });
-	}
+	};
 
-	post(endpoint, body, options) {
+	post = (endpoint, body, options) => {
 		return this.request(endpoint, { method: "POST", body, ...options });
-	}
+	};
 
-	put(endpoint, body, options) {
+	put = (endpoint, body, options) => {
 		return this.request(endpoint, { method: "PUT", body, ...options });
-	}
+	};
 
-	delete(endpoint, options) {
+	delete = (endpoint, options) => {
 		return this.request(endpoint, {
 			method: "DELETE",
 			headers: { "Content-Type": undefined },
 			...options,
 		});
-	}
+	};
 }
 
 export const client = new ApiClient();
