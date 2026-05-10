@@ -118,10 +118,10 @@ export default function PublicProfile() {
 
 				<Grid
 					items={items}
-					loading={loading && page === 1}
+					loading={loading && page === 1 && items.length === 0}
 					hasMore={hasMore}
 					onLoadMore={handleLoadMore}
-					isLoadingMore={loading && page > 1}
+					isLoadingMore={loading && (page > 1 || items.length > 0)}
 					showAddButton={false}
 					isResultsPage={false}
 					onCardClick={setSelectedQuiz}
