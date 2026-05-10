@@ -3,7 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "@/features/profile/api/user.api.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
-import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
+import {
+	useQuizzesListActions,
+	useQuizzesListState,
+} from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
@@ -20,18 +23,9 @@ export default function PublicProfile() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-	const {
-		items,
-		loading,
-		page,
-		hasMore,
-		setItems,
-		appendItems,
-		setLoading,
-		setPage,
-		setHasMore,
-		clear,
-	} = useQuizzesListStore();
+	const { items, loading, page, hasMore } = useQuizzesListState();
+	const { setItems, appendItems, setLoading, setPage, setHasMore, clear } =
+		useQuizzesListActions();
 
 	useEffect(() => {
 		if (userId) {

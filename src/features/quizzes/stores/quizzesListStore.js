@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 
 const initialState = {
 	items: [],
@@ -30,34 +31,49 @@ const dedupeItems = (items) => {
 
 export const useQuizzesListStore = create((set) => ({
 	...initialState,
+	actions: {
+		setItems: (items) => set({ items: dedupeItems(items) }),
 
-	setItems: (items) => set({ items: dedupeItems(items) }),
+		appendItems: (items) =>
+			set((state) => ({
+				items: dedupeItems([...state.items, ...items]),
+			})),
 
-	appendItems: (items) =>
-		set((state) => ({
-			items: dedupeItems([...state.items, ...items]),
-		})),
+		upsertItem: (quiz) =>
+			set((state) => {
+				const targetId = getPrimaryId(quiz);
 
-	upsertItem: (quiz) =>
-		set((state) => {
-			const targetId = getPrimaryId(quiz);
+				const nextItems = targetId
+					? state.items.filter((item) => !isMatchingQuiz(item, targetId))
+					: state.items;
 
-			const nextItems = targetId
-				? state.items.filter((item) => !isMatchingQuiz(item, targetId))
-				: state.items;
+				return { items: dedupeItems([quiz, ...nextItems]) };
+			}),
 
-			return { items: dedupeItems([quiz, ...nextItems]) };
-		}),
+		removeItem: (quizId) =>
+			set((state) => ({
+				items: state.items.filter((item) => !isMatchingQuiz(item, quizId)),
+			})),
 
-	removeItem: (quizId) =>
-		set((state) => ({
-			items: state.items.filter((item) => !isMatchingQuiz(item, quizId)),
-		})),
-
-	clear: () => set({ ...initialState }),
-	setLoading: (loading) => set({ loading }),
-	setPage: (page) => set({ page }),
-	setHasMore: (hasMore) => set({ hasMore }),
+		clear: () => set({ ...initialState }),
+		setLoading: (loading) => set({ loading }),
+		setPage: (page) => set({ page }),
+		setHasMore: (hasMore) => set({ hasMore }),
+	},
 }));
+
+export const useQuizzesListState = () =>
+	useQuizzesListStore(
+		useShallow((state) => ({
+			items: state.items,
+			loading: state.loading,
+			page: state.page,
+			hasMore: state.hasMore,
+		})),
+	);
+
+export const getQuizzesListState = () => useQuizzesListStore.getState();
+
+export const useQuizzesListActions = () => getQuizzesListState().actions;
 
 export default useQuizzesListStore;

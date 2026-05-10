@@ -1,4 +1,4 @@
-import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
+import { getQuizzesListState } from "@/features/quizzes/stores/quizzesListStore.js";
 
 const getQuizId = (quiz) => {
 	if (typeof quiz === "string" || typeof quiz === "number") return quiz;
@@ -37,8 +37,8 @@ export const handleQuizCreated = (data) => {
 	}
 
 	const normalizedQuiz = normalizeQuiz(rawQuiz);
-
-	useQuizzesListStore.getState().upsertItem(normalizedQuiz);
+	const { upsertItem } = getQuizzesListState().actions;
+	upsertItem(normalizedQuiz);
 
 	console.log("Created quiz:", normalizedQuiz);
 };
@@ -52,12 +52,12 @@ export const handleQuizUpdated = (data) => {
 		return;
 	}
 
-	const store = useQuizzesListStore.getState();
-	const existingQuiz = store.items.find((item) => getQuizId(item) === getQuizId(rawQuiz));
+	const { items } = getQuizzesListState();
+	const existingQuiz = items.find((item) => getQuizId(item) === getQuizId(rawQuiz));
 
 	const normalizedQuiz = normalizeQuiz(rawQuiz, existingQuiz);
-
-	store.upsertItem(normalizedQuiz);
+	const { upsertItem } = getQuizzesListState().actions;
+	upsertItem(normalizedQuiz);
 
 	console.log("Updated quiz:", normalizedQuiz);
 };
@@ -68,8 +68,8 @@ export const handleQuizDeleted = (data) => {
 	const quizId = getQuizId(quiz);
 
 	if (quizId === null) return;
-
-	useQuizzesListStore.getState().removeItem(quizId);
+	const { removeItem } = getQuizzesListState().actions;
+	removeItem(quizId);
 
 	console.log("Deleted quiz by id:", data);
 };

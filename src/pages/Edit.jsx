@@ -8,7 +8,7 @@ import {
 	useQuizEditorContentState,
 	useQuizEditorMetaState,
 } from "@/features/quizzes/stores/quizEditorStore.js";
-import { QUIZ_CONSTRAINTS, QUIZ_CATEGORIES, QUIZ_TAGS } from "@/shared/config/config.js";
+import { QUIZ_CATEGORIES, QUIZ_CONSTRAINTS, QUIZ_TAGS } from "@/shared/config/config.js";
 import Button from "@/shared/ui/Button.jsx";
 import Container from "@/shared/ui/Container.jsx";
 import Input from "@/shared/ui/Input.jsx";
@@ -136,10 +136,10 @@ export default function Edit() {
 						onChange={(event) => {
 							const selectedTagText = event.target.value;
 							if (tags.length < 5)
-							editorActions.setTags([
-								...tags,
-								{ id: crypto.randomUUID(), text: selectedTagText },
-							]);
+								editorActions.setTags([
+									...tags,
+									{ id: crypto.randomUUID(), text: selectedTagText },
+								]);
 						}}
 					>
 						<option value="" disabled>

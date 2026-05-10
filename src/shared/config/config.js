@@ -36,8 +36,8 @@ export const SORT_OPTIONS = [
 	{ id: "za", label: "Alphabetical (Z-A)" },
 ];
 
-// const API_URL = "http://localhost:3000/api";
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:3000/api";
+// const API_URL = import.meta.env.VITE_API_URL;
 
 export const URL_CONFIG = {
 	API_URL: API_URL,
@@ -45,18 +45,29 @@ export const URL_CONFIG = {
 };
 
 export const QUIZ_CATEGORIES = [
-    "Programming",
-    "Music",
-    "Gaming",
-    "History",
-    "Science",
-    "Literature",
-    "Other"
+	"Programming",
+	"Music",
+	"Gaming",
+	"History",
+	"Science",
+	"Literature",
+	"Other",
 ];
 
 export const QUIZ_TAGS = [
-	"Test", "Dev",
-    "Easy", "Medium", "Hard", "Expert",
-    "Fun", "Educational", "Trivia", "Challenge", "Quick",
-    "Interview", "Exam", "Logic", "Math"
+	"Test",
+	"Dev",
+	"Easy",
+	"Medium",
+	"Hard",
+	"Expert",
+	"Fun",
+	"Educational",
+	"Trivia",
+	"Challenge",
+	"Quick",
+	"Interview",
+	"Exam",
+	"Logic",
+	"Math",
 ];

@@ -16,8 +16,8 @@ import Quiz from "@/pages/Quiz.jsx";
 import Quizzes from "@/pages/Quizzes.jsx";
 import Register from "@/pages/Register.jsx";
 import Results from "@/pages/Results.jsx";
-import useAutoReload from "@/shared/hooks/useAutoReload.js";
 import { sseClient } from "@/shared/api/sseClient.js";
+import useAutoReload from "@/shared/hooks/useAutoReload.js";
 
 export default function AppRoutes() {
 	const { token } = useAuthSessionState();

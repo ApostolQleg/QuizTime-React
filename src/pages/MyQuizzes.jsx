@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
-import { useQuizzesListStore } from "@/features/quizzes/stores/quizzesListStore.js";
+import {
+	useQuizzesListActions,
+	useQuizzesListState,
+} from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
@@ -27,19 +30,9 @@ export default function MyQuizzes() {
 
 	const { addToast } = useToastActions();
 
-	const {
-		items,
-		loading,
-		page,
-		hasMore,
-		setItems,
-		appendItems,
-		setLoading,
-		setPage,
-		setHasMore,
-		clear,
-		removeItem,
-	} = useQuizzesListStore();
+	const { items, loading, page, hasMore } = useQuizzesListState();
+	const { setItems, appendItems, setLoading, setPage, setHasMore, clear, removeItem } =
+		useQuizzesListActions();
 
 	useEffect(() => {
 		if (!user) {
