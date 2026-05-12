@@ -8,6 +8,7 @@ import {
 	useQuizzesListState,
 } from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Container from "@/shared/ui/Container.jsx";
@@ -26,6 +27,13 @@ export default function PublicProfile() {
 	const { items, loading: loadingQuizzes, page, hasMore } = useQuizzesListState();
 	const { setItems, appendItems, clear, setLoading, setPage, setHasMore } =
 		useQuizzesListActions();
+
+	const removeItemLocally = useCallback(
+		(idToRemove) => {
+			setItems(items.filter((item) => item._id !== idToRemove));
+		},
+		[items, setItems],
+	);
 
 	useEffect(() => {
 		if (userId) {
@@ -85,6 +93,48 @@ export default function PublicProfile() {
 			fetchUserQuizzes(page + 1);
 		}
 	}, [loadingQuizzes, hasMore, page, fetchUserQuizzes]);
+
+	useSSE(
+		"CREATE_QUIZ",
+		useCallback(
+			(newQuiz) => {
+				if (newQuiz.authorId === userId) {
+					setItems([newQuiz, ...items]);
+				}
+			},
+			[items, setItems, userId],
+		),
+	);
+
+	useSSE(
+		"UPDATE_QUIZ",
+		useCallback(
+			(updatedQuiz) => {
+				if (updatedQuiz.authorId === userId) {
+					setItems(
+						items.map((item) => (item._id === updatedQuiz._id ? updatedQuiz : item)),
+					);
+					if (selectedQuiz?._id === updatedQuiz._id) {
+						setSelectedQuiz(updatedQuiz);
+					}
+				}
+			},
+			[items, setItems, selectedQuiz, userId],
+		),
+	);
+
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				removeItemLocally(deletedQuizId);
+				if (selectedQuiz?._id === deletedQuizId) {
+					setSelectedQuiz(null);
+				}
+			},
+			[removeItemLocally, selectedQuiz],
+		),
+	);
 
 	if (isProfileLoading) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
