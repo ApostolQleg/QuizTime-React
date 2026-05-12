@@ -9,6 +9,7 @@ import {
 } from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
@@ -104,6 +105,52 @@ export default function MyQuizzes() {
 				: "Quiz deleted successfully.",
 		);
 	};
+
+	useSSE(
+		"CREATE_QUIZ",
+		useCallback(
+			(newQuiz) => {
+				if (
+					newQuiz.authorId === user?._id &&
+					searchQuery === "" &&
+					sortOption === "newest"
+				) {
+					setItems([newQuiz, ...items]);
+				}
+			},
+			[items, searchQuery, sortOption, setItems, user?._id],
+		),
+	);
+
+	useSSE(
+		"UPDATE_QUIZ",
+		useCallback(
+			(updatedQuiz) => {
+				if (updatedQuiz.authorId === user?._id) {
+					setItems(
+						items.map((item) => (item._id === updatedQuiz._id ? updatedQuiz : item)),
+					);
+					if (selectedQuiz?._id === updatedQuiz._id) {
+						setSelectedQuiz(updatedQuiz);
+					}
+				}
+			},
+			[items, setItems, selectedQuiz, user?._id],
+		),
+	);
+
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				removeItem(deletedQuizId);
+				if (selectedQuiz?._id === deletedQuizId) {
+					setSelectedQuiz(null);
+				}
+			},
+			[removeItem, selectedQuiz],
+		),
+	);
 
 	if (!user) return null;
 
