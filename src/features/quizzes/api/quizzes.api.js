@@ -1,4 +1,4 @@
-import client from "@/shared/api/client.js";
+import client from "@/shared/api/apiClient.js";
 
 export function getQuizzes(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
 	const params = new URLSearchParams({
