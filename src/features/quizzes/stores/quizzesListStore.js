@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 
 const initialState = {
 	items: [],
@@ -7,14 +8,39 @@ const initialState = {
 	hasMore: true,
 };
 
-export const useQuizzesListStore = create((set) => ({
+const useQuizzesListStore = create((set) => ({
 	...initialState,
-	setItems: (items) => set({ items }),
-	appendItems: (items) => set((state) => ({ items: [...state.items, ...items] })),
-	clear: () => set({ ...initialState }),
-	setLoading: (loading) => set({ loading }),
-	setPage: (page) => set({ page }),
-	setHasMore: (hasMore) => set({ hasMore }),
+	actions: {
+		setItems: (items) => set({ items }),
+
+		appendItems: (items) =>
+			set((state) => ({
+				items: [...state.items, ...items],
+			})),
+
+		clear: () => set({ ...initialState }),
+
+		setLoading: (loading) => set({ loading }),
+
+		setPage: (page) => set({ page }),
+
+		setHasMore: (hasMore) => set({ hasMore }),
+
+		removeItem: (quizId) =>
+			set((state) => ({
+				items: state.items.filter((item) => item._id !== quizId),
+			})),
+	},
 }));
 
-export default useQuizzesListStore;
+export const useQuizzesListState = () =>
+	useQuizzesListStore(
+		useShallow((state) => ({
+			items: state.items,
+			loading: state.loading,
+			page: state.page,
+			hasMore: state.hasMore,
+		})),
+	);
+
+export const useQuizzesListActions = () => useQuizzesListStore.getState().actions;
