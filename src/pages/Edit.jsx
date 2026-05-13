@@ -58,7 +58,6 @@ export default function Edit() {
 				tags: tags.map((tag) => tag.text.trim()).filter((t) => t !== ""),
 				description,
 				questions,
-				...(isManagePage ? {} : { id: Date.now().toString() }),
 			};
 
 			if (isManagePage) {
