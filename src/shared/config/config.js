@@ -45,18 +45,29 @@ export const URL_CONFIG = {
 };
 
 export const QUIZ_CATEGORIES = [
-    "Programming",
-    "Music",
-    "Gaming",
-    "History",
-    "Science",
-    "Literature",
-    "Other"
+	"Programming",
+	"Music",
+	"Gaming",
+	"History",
+	"Science",
+	"Literature",
+	"Other",
 ];
 
 export const QUIZ_TAGS = [
-	"Test", "Dev",
-    "Easy", "Medium", "Hard", "Expert",
-    "Fun", "Educational", "Trivia", "Challenge", "Quick",
-    "Interview", "Exam", "Logic", "Math"
+	"Test",
+	"Dev",
+	"Easy",
+	"Medium",
+	"Hard",
+	"Expert",
+	"Fun",
+	"Educational",
+	"Trivia",
+	"Challenge",
+	"Quick",
+	"Interview",
+	"Exam",
+	"Logic",
+	"Math",
 ];
