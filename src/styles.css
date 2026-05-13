@@ -75,7 +75,7 @@
 		@apply rounded-lg border;
 		border-color: var(--col-fail);
 		background-color: var(--col-fail-bg);
-		color: var(--col-text-main);
+		color: var(--col-text-muted);
 	}
 
 	.quiz-error {
