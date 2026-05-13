@@ -1,14 +1,14 @@
 import client from "@/shared/api/apiClient.js";
 
 export function getResults(skip = 0, limit = 36, search = "", sort = "newest") {
-	const params = new URLSearchParams({
-		skip: String(skip),
-		limit: String(limit),
-		sort,
+	return client.get("/results", {
+		params: {
+			skip,
+			limit,
+			sort,
+			search: search || undefined,
+		},
 	});
-	if (search) params.append("search", search);
-
-	return client.get(`/results?${params.toString()}`);
 }
 
 export const getResultById = (id) => client.get(`/results/${id}`);
