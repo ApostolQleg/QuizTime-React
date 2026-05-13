@@ -8,6 +8,7 @@ import {
 } from "@/features/results/stores/resultsListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
@@ -62,6 +63,16 @@ export default function Results() {
 		}
 		return () => clear();
 	}, [fetchResults, clear, user]);
+
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				setItems(items.filter((item) => item.quizId !== deletedQuizId));
+			},
+			[items, setItems],
+		),
+	);
 
 	const handleLoadMore = useCallback(() => {
 		if (!loading && hasMore) {

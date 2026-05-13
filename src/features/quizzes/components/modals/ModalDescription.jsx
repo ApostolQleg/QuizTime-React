@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import { deleteQuiz } from "@/features/quizzes/api/quizzes.api.js";
+import { deleteQuiz, getQuizById } from "@/features/quizzes/api/quizzes.api.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Button from "@/shared/ui/Button.jsx";
 import Modal from "@/shared/ui/Modal.jsx";
@@ -9,12 +9,33 @@ import ModalConfirm from "@/shared/ui/ModalConfirm.jsx";
 
 export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSuccess }) {
 	const { user } = useAuthUserState();
-	const quizId = quiz?.id || quiz?._id;
+	const quizId = quiz?._id;
 
 	const navigate = useNavigate();
 
 	const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
+	const [fullQuizData, setFullQuizData] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		if (!isOpen || !quizId) return;
+
+		const fetchFullQuizData = async () => {
+			setIsLoading(true);
+			try {
+				const response = await getQuizById(quizId);
+				setFullQuizData(response.quiz);
+			} catch (error) {
+				console.error("Error fetching full quiz data:", error);
+				setErrorMessage("Failed to load quiz details. Please try again.");
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchFullQuizData();
+	}, [isOpen, quizId]);
 
 	const handleDelete = async () => {
 		if (!quizId) {
@@ -37,80 +58,104 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 		}
 	};
 
-	const isOwner = user && quiz.authorId && String(user._id) === String(quiz.authorId);
+	const isOwner =
+		user &&
+		(fullQuizData?.authorId || quiz?.authorId) &&
+		String(user._id) === String(fullQuizData?.authorId || quiz?.authorId);
 	const canManage = isOwner;
+
+	const renderLoadingSkeleton = () => (
+		<div className="flex flex-col flex-1 overflow-y-auto gap-4">
+			<div className="h-12 bg-(--col-bg-card) rounded animate-pulse w-3/4"></div>
+			<div className="h-10 bg-(--col-bg-card) rounded animate-pulse w-1/2"></div>
+			<div className="h-24 bg-(--col-bg-card) animate-pulse w-full"></div>
+			<div className="h-20 bg-(--col-bg-card) animate-pulse w-full"></div>
+		</div>
+	);
+
+	const displayData = fullQuizData || quiz;
 
 	return (
 		<>
 			<Modal isOpen={isOpen} onClose={onClose} className="min-h-[60vh] max-h-[80vh] w-[80vw]">
-				<div className="flex flex-col flex-1 overflow-y-auto gap-4">
-					<div className="text-5xl font-bold drop-shadow-md text-(--col-text-accent)">
-						{quiz.title}
-					</div>
+				{isLoading ? (
+					renderLoadingSkeleton()
+				) : (
+					<div className="flex flex-col flex-1 overflow-y-auto gap-4">
+						<div className="text-5xl font-bold drop-shadow-md text-(--col-text-accent)">
+							{displayData.title}
+						</div>
 
-					<div className="text-sm">
-						{quiz.authorName ? (
-							<div className="flex items-center gap-2 mt-1 pb-4 border-(--col-border) border-b">
-								<span>Author:</span>
+						<div className="text-sm">
+							{displayData.authorName ? (
+								<div className="flex items-center gap-2 mt-1 pb-4 border-(--col-border) border-b">
+									<span>Author:</span>
 
-								<button
-									type="button"
-									className="flex items-center gap-2 p-1 pr-3 rounded-full bg-(--col-bg-card) border border-(--col-border) w-fit"
-									onClick={() => navigate(`/user/${quiz.authorId}`)}
-								>
-									<Avatar
-										src={quiz.authorAvatarUrl}
-										name={quiz.authorName}
-										type={quiz.authorAvatarType}
-										color={quiz.authorThemeColor}
-										size="sm"
-									/>
-									<span
-										className="font-bold text-sm"
-										style={{
-											color: quiz.authorThemeColor || "var(--col-primary)",
-										}}
+									<button
+										type="button"
+										className="flex items-center gap-2 p-1 pr-3 rounded-full bg-(--col-bg-card) border border-(--col-border) w-fit"
+										onClick={() => navigate(`/user/${displayData.authorId}`)}
 									>
-										{quiz.authorName}
-									</span>
-								</button>
+										<Avatar
+											src={displayData.authorAvatarUrl}
+											name={displayData.authorName}
+											type={displayData.authorAvatarType}
+											color={displayData.authorThemeColor}
+											size="sm"
+										/>
+										<span
+											className="font-bold text-sm"
+											style={{
+												color:
+													displayData.authorThemeColor ||
+													"var(--col-primary)",
+											}}
+										>
+											{displayData.authorName}
+										</span>
+									</button>
+								</div>
+							) : (
+								displayData.isSystem && (
+									<span className="text-yellow-500">System Quiz</span>
+								)
+							)}
+						</div>
+
+						{displayData.category && displayData.tags && (
+							<div className="border-b border-(--col-border) pb-4">
+								<div className="font-bold text-xl px-2 py-1 rounded-full mb-2">
+									Category: {displayData.category}
+								</div>
+								<div className="flex flex-wrap gap-1 mt-2 px-2">
+									{displayData.tags.map((tag) => (
+										<span
+											key={tag}
+											className="inline-block bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full mb-2"
+										>
+											{tag}
+										</span>
+									))}
+								</div>
 							</div>
-						) : (
-							quiz.isSystem && <span className="text-yellow-500">System Quiz</span>
+						)}
+						<div className="text-2xl w-full break-all leading-relaxed text-(--col-text-muted)">
+							{displayData.description}
+						</div>
+					</div>
+				)}
+
+				{!isLoading && (
+					<div className="flex justify-between items-center pt-6 mt-2 gap-4">
+						{canManage && <Button to={`/manage/${quizId}`}>Manage</Button>}
+						<Button to={`/quiz/${quizId}`} className="flex-1">
+							Start Quiz
+						</Button>
+						{canManage && (
+							<Button onClick={() => setIsDeleteConfirmOpen(true)}>Delete</Button>
 						)}
 					</div>
-
-					{quiz.category && quiz.tags && (
-						<div className="border-b border-(--col-border) pb-4">
-							<div className="font-bold text-xl px-2 py-1 rounded-full mb-2">
-								Category: {quiz.category}
-							</div>
-							<div className="flex flex-wrap gap-1 mt-2 px-2">
-								{quiz.tags.map((tag) => (
-									<span
-										key={tag}
-										className="inline-block bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full mb-2"
-									>
-										{tag}
-									</span>
-								))}
-							</div>
-						</div>
-					)}
-					<div className="text-2xl w-full break-all leading-relaxed text-(--col-text-muted)">
-						{quiz.description}
-					</div>
-				</div>
-
-				<div className="flex justify-between items-center pt-6 mt-2 gap-4">
-					{canManage && <Button to={`/manage/${quizId}`}>Manage</Button>}
-					<Button to={`/quiz/${quizId}`} className="flex-1">
-						Start Quiz
-					</Button>
-					{canManage && (
-						<Button onClick={() => setIsDeleteConfirmOpen(true)}>Delete</Button>
-					)}
-				</div>
+				)}
 			</Modal>
 
 			<ModalConfirm
@@ -118,7 +163,7 @@ export default function ModalDescription({ quiz, onClose, isOpen, onDeleteSucces
 				onClose={() => setIsDeleteConfirmOpen(false)}
 				onConfirm={handleDelete}
 				title="Delete Quiz?"
-				message={`Are you sure you want to delete "${quiz.title}"? This action cannot be undone.`}
+				message={`Are you sure you want to delete "${displayData.title}"? This action cannot be undone.`}
 				confirmLabel="Delete"
 				isDanger={true}
 			/>

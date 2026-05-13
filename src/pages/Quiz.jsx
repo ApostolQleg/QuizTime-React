@@ -32,6 +32,7 @@ export default function Quiz() {
 	const { addToast } = useToastActions();
 
 	const isResultView = Boolean(resultIdParam) || Boolean(resultData);
+	const currentQuizId = quizData?._id ?? quizId;
 
 	useEffect(() => {
 		resetSession();
@@ -102,7 +103,7 @@ export default function Quiz() {
 		};
 
 		const payload = {
-			quizId: quizData.id || quizId,
+			quizId: currentQuizId,
 			answers,
 			summary,
 			createdAt: Date.now(),
@@ -111,7 +112,7 @@ export default function Quiz() {
 		if (user) {
 			try {
 				const response = await saveResult(payload);
-				navigate(`/result/${quizId}/${response.result._id}`);
+				navigate(`/result/${currentQuizId}/${response.result._id}`);
 				addToast("Result saved.");
 			} catch (error) {
 				console.error("Save error", error);
