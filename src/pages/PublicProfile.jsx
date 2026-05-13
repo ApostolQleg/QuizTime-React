@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "@/features/profile/api/user.api.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
+import {
+	useQuizzesListActions,
+	useQuizzesListState,
+} from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Avatar from "@/shared/ui/Avatar.jsx";
 import Container from "@/shared/ui/Container.jsx";
@@ -17,8 +21,19 @@ export default function PublicProfile() {
 	const { userId } = useParams();
 
 	const [user, setUser] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isProfileLoading, setIsProfileLoading] = useState(true);
 	const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+	const { items, loading: loadingQuizzes, page, hasMore } = useQuizzesListState();
+	const { setItems, appendItems, clear, setLoading, setPage, setHasMore } =
+		useQuizzesListActions();
+
+	const removeItemLocally = useCallback(
+		(idToRemove) => {
+			setItems(items.filter((item) => item._id !== idToRemove));
+		},
+		[items, setItems],
+	);
 
 	useEffect(() => {
 		if (userId) {
@@ -30,52 +45,98 @@ export default function PublicProfile() {
 					console.error(err);
 					navigate("/", { replace: true });
 				})
-				.finally(() => setIsLoading(false));
+				.finally(() => setIsProfileLoading(false));
 		} else {
 			navigate("/", { replace: true });
 		}
 	}, [userId, navigate]);
 
-	const loadData = useCallback(async ({ pageToLoad, authorId }) => {
-		if (!authorId) {
-			return {
-				items: [],
-				hasMore: false,
-			};
+	const fetchUserQuizzes = useCallback(
+		async (pageToLoad) => {
+			if (!userId) return;
+
+			setLoading(true);
+			try {
+				const { skip, limit } = getPaginationRange(pageToLoad, ITEMS_PER_PAGE);
+
+				const data = await getQuizzes(skip, limit, "", "newest", userId);
+				const fetchedQuizzes = data.quizzes;
+
+				if (pageToLoad === 1) {
+					setItems(fetchedQuizzes);
+				} else {
+					appendItems(fetchedQuizzes);
+				}
+
+				setHasMore(fetchedQuizzes.length >= limit);
+				setPage(pageToLoad);
+			} catch (err) {
+				console.error("Failed to load quizzes", err);
+				setHasMore(false);
+			} finally {
+				setLoading(false);
+			}
+		},
+		[userId, setItems, appendItems, setHasMore, setPage, setLoading],
+	);
+
+	useEffect(() => {
+		if (userId) {
+			clear();
+			fetchUserQuizzes(1);
 		}
+		return () => clear();
+	}, [fetchUserQuizzes, clear, userId]);
 
-		try {
-			const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
-				pageToLoad,
-				ITEMS_PER_PAGE,
-			);
-
-			const data = await getQuizzes(currentSkip, currentLimit, "", "newest", authorId);
-
-			return {
-				items: data.quizzes,
-				hasMore: data.quizzes.length >= currentLimit,
-			};
-		} catch (err) {
-			console.error("Failed to load quizzes", err);
-			return {
-				items: [],
-				hasMore: false,
-			};
+	const handleLoadMore = useCallback(() => {
+		if (!loadingQuizzes && hasMore) {
+			fetchUserQuizzes(page + 1);
 		}
-	}, []);
+	}, [loadingQuizzes, hasMore, page, fetchUserQuizzes]);
 
-	const authorParams = useMemo(() => ({ authorId: userId }), [userId]);
+	useSSE(
+		"CREATE_QUIZ",
+		useCallback(
+			(newQuiz) => {
+				if (newQuiz.authorId === userId) {
+					setItems([newQuiz, ...items]);
+				}
+			},
+			[items, setItems, userId],
+		),
+	);
 
-	const {
-		items,
-		loading: loadingQuizzes,
-		hasMore,
-		isLoadingMore,
-		handleLoadMore,
-	} = useInfiniteList(loadData, authorParams);
+	useSSE(
+		"UPDATE_QUIZ",
+		useCallback(
+			(updatedQuiz) => {
+				if (updatedQuiz.authorId === userId) {
+					setItems(
+						items.map((item) => (item._id === updatedQuiz._id ? updatedQuiz : item)),
+					);
+					if (selectedQuiz?._id === updatedQuiz._id) {
+						setSelectedQuiz(updatedQuiz);
+					}
+				}
+			},
+			[items, setItems, selectedQuiz, userId],
+		),
+	);
 
-	if (isLoading) return <Container className="text-center">Loading...</Container>;
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				removeItemLocally(deletedQuizId);
+				if (selectedQuiz?._id === deletedQuizId) {
+					setSelectedQuiz(null);
+				}
+			},
+			[removeItemLocally, selectedQuiz],
+		),
+	);
+
+	if (isProfileLoading) return <Container className="text-center">Loading...</Container>;
 	if (!user) return null;
 
 	return (
@@ -106,10 +167,10 @@ export default function PublicProfile() {
 
 				<Grid
 					items={items}
-					loading={loadingQuizzes}
+					loading={loadingQuizzes && page === 1}
 					hasMore={hasMore}
 					onLoadMore={handleLoadMore}
-					isLoadingMore={isLoadingMore}
+					isLoadingMore={loadingQuizzes && page > 1}
 					showAddButton={false}
 					isResultsPage={false}
 					onCardClick={setSelectedQuiz}

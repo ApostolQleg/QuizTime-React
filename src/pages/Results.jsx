@@ -1,10 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getResults } from "@/features/results/api/results.api.js";
+import {
+	useResultsListActions,
+	useResultsListState,
+} from "@/features/results/stores/resultsListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
 import ToolBar from "@/widgets/quiz-toolbar/ui/ToolBar.jsx";
@@ -17,58 +21,76 @@ export default function Results() {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
-
 	const [sortOption, setSortOption] = useState("newest");
 
-	const loadData = useCallback(
-		async ({ pageToLoad }) => {
-			if (!user) {
-				return {
-					items: [],
-					hasMore: false,
-				};
-			}
+	const { items, loading, page, hasMore } = useResultsListState();
+	const { setItems, appendItems, clear, setLoading, setPage, setHasMore } =
+		useResultsListActions();
 
+	const fetchResults = useCallback(
+		async (pageToLoad) => {
+			if (!user) return;
+
+			setLoading(true);
 			try {
-				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
-					pageToLoad,
-					ITEMS_PER_PAGE,
-				);
-				const data = await getResults(
-					currentSkip,
-					currentLimit,
-					debouncedQuery,
-					sortOption,
-				);
+				const { skip, limit } = getPaginationRange(pageToLoad, ITEMS_PER_PAGE);
 
-				return {
-					items: data.results,
-					hasMore: data.results.length >= currentLimit,
-				};
+				const data = await getResults(skip, limit, debouncedQuery, sortOption);
+				const fetchedResults = data.results;
+
+				if (pageToLoad === 1) {
+					setItems(fetchedResults);
+				} else {
+					appendItems(fetchedResults);
+				}
+
+				setHasMore(fetchedResults.length >= limit);
+				setPage(pageToLoad);
 			} catch (err) {
 				console.error("Failed to load results", err);
-				return {
-					items: [],
-					hasMore: false,
-				};
+				setHasMore(false);
+			} finally {
+				setLoading(false);
 			}
 		},
-		[user, debouncedQuery, sortOption],
+		[user, debouncedQuery, sortOption, setItems, appendItems, setHasMore, setPage, setLoading],
 	);
 
-	const { items, loading, hasMore, isLoadingMore, handleLoadMore } = useInfiniteList(loadData);
+	useEffect(() => {
+		if (user) {
+			clear();
+			fetchResults(1);
+		}
+		return () => clear();
+	}, [fetchResults, clear, user]);
+
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				setItems(items.filter((item) => item.quizId !== deletedQuizId));
+			},
+			[items, setItems],
+		),
+	);
+
+	const handleLoadMore = useCallback(() => {
+		if (!loading && hasMore) {
+			fetchResults(page + 1);
+		}
+	}, [loading, hasMore, page, fetchResults]);
 
 	const emptyMessage = user ? (
 		"You have no quiz results yet."
 	) : (
-		<>
+		<div className="flex flex-col items-center gap-2">
 			<span className="text-xl font-bold">
 				History is available only for registered users
 			</span>
 			<Link to="/register" className="text-(--col-primary) hover:underline text-base">
 				Sign up to save your progress
 			</Link>
-		</>
+		</div>
 	);
 
 	return (
@@ -80,10 +102,10 @@ export default function Results() {
 			/>
 			<Grid
 				items={items}
-				loading={loading}
+				loading={loading && page === 1}
 				hasMore={hasMore}
 				onLoadMore={handleLoadMore}
-				isLoadingMore={isLoadingMore}
+				isLoadingMore={loading && page > 1}
 				showAddButton={false}
 				isResultsPage={true}
 				onCardClick={(item) => navigate(`/result/${item.quizId}/${item._id}`)}

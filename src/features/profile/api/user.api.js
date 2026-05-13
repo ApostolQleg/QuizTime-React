@@ -1,4 +1,4 @@
-import client from "@/shared/api/client.js";
+import client from "@/shared/api/apiClient.js";
 
 export const verifySession = () => client.get("/user");
 

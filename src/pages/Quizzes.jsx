@@ -1,10 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
 import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
+import {
+	useQuizzesListActions,
+	useQuizzesListState,
+} from "@/features/quizzes/stores/quizzesListStore.js";
 import { API_CONFIG } from "@/shared/config/config.js";
 import { useDebounce } from "@/shared/hooks/useDebounce.js";
-import { useInfiniteList } from "@/shared/hooks/useInfiniteList.js";
+import { useSSE } from "@/shared/hooks/useSSE.js";
 import { getPaginationRange } from "@/shared/libs/pagination.js";
 import { useToastActions } from "@/shared/ui/toast/toastStore.js";
 import Grid from "@/widgets/quiz-grid/ui/Grid.jsx";
@@ -19,50 +23,61 @@ export default function Quizzes() {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const debouncedQuery = useDebounce(searchQuery, 500);
-
 	const [sortOption, setSortOption] = useState("newest");
 
 	const { addToast } = useToastActions();
 
-	const loadData = useCallback(
-		async ({ pageToLoad }) => {
+	const { items, loading, page, hasMore } = useQuizzesListState();
+	const { setItems, appendItems, clear, setLoading, setPage, setHasMore, removeItem } =
+		useQuizzesListActions();
+
+	const fetchQuizzes = useCallback(
+		async (pageToLoad) => {
+			setLoading(true);
 			try {
-				const { skip: currentSkip, limit: currentLimit } = getPaginationRange(
+				const { skip, limit } = getPaginationRange(
 					pageToLoad,
 					ITEMS_PER_PAGE,
 					ITEMS_PER_PAGE_AUTH,
 					!!user && debouncedQuery === "",
 				);
 
-				const data = await getQuizzes(
-					currentSkip,
-					currentLimit,
-					debouncedQuery,
-					sortOption,
-				);
+				const data = await getQuizzes(skip, limit, debouncedQuery, sortOption);
+				const fetchedQuizzes = data.quizzes;
 
-				return {
-					items: data.quizzes,
-					hasMore: data.quizzes.length >= currentLimit,
-				};
+				if (pageToLoad === 1) {
+					setItems(fetchedQuizzes);
+				} else {
+					appendItems(fetchedQuizzes);
+				}
+
+				setHasMore(fetchedQuizzes.length >= limit);
+				setPage(pageToLoad);
 			} catch (err) {
 				console.error("Failed to load quizzes", err);
-				return {
-					items: [],
-					hasMore: false,
-				};
+				setHasMore(false);
+			} finally {
+				setLoading(false);
 			}
 		},
-		[user, debouncedQuery, sortOption],
+		[user, debouncedQuery, sortOption, setItems, appendItems, setHasMore, setPage, setLoading],
 	);
 
-	const { items, setItems, loading, hasMore, isLoadingMore, handleLoadMore } =
-		useInfiniteList(loadData);
+	useEffect(() => {
+		clear();
+		fetchQuizzes(1);
+
+		return () => clear();
+	}, [fetchQuizzes, clear]);
+
+	const handleLoadMore = useCallback(() => {
+		if (!loading && hasMore) {
+			fetchQuizzes(page + 1);
+		}
+	}, [loading, hasMore, page, fetchQuizzes]);
 
 	const handleDeleteSuccess = (deletedQuizId, deletedQuizTitle) => {
-		setItems((prevItems) =>
-			prevItems.filter((item) => item.id !== deletedQuizId && item._id !== deletedQuizId),
-		);
+		removeItem(deletedQuizId);
 		setSelectedQuiz(null);
 		addToast(
 			deletedQuizTitle
@@ -70,6 +85,44 @@ export default function Quizzes() {
 				: "Quiz deleted successfully.",
 		);
 	};
+
+	useSSE(
+		"CREATE_QUIZ",
+		useCallback(
+			(newQuiz) => {
+				if (searchQuery === "" && sortOption === "newest") {
+					setItems([newQuiz, ...items]);
+				}
+			},
+			[items, searchQuery, sortOption, setItems],
+		),
+	);
+
+	useSSE(
+		"UPDATE_QUIZ",
+		useCallback(
+			(updatedQuiz) => {
+				setItems(items.map((item) => (item._id === updatedQuiz._id ? updatedQuiz : item)));
+				if (selectedQuiz?._id === updatedQuiz._id) {
+					setSelectedQuiz(updatedQuiz);
+				}
+			},
+			[items, setItems, selectedQuiz],
+		),
+	);
+
+	useSSE(
+		"DELETE_QUIZ",
+		useCallback(
+			(deletedQuizId) => {
+				removeItem(deletedQuizId);
+				if (selectedQuiz?._id === deletedQuizId) {
+					setSelectedQuiz(null);
+				}
+			},
+			[removeItem, selectedQuiz],
+		),
+	);
 
 	return (
 		<>
@@ -81,10 +134,10 @@ export default function Quizzes() {
 				/>
 				<Grid
 					items={items}
-					loading={loading}
+					loading={loading && page === 1}
 					hasMore={hasMore}
 					onLoadMore={handleLoadMore}
-					isLoadingMore={isLoadingMore}
+					isLoadingMore={loading && page > 1}
 					showAddButton={!!user && searchQuery === ""}
 					isResultsPage={false}
 					onCardClick={setSelectedQuiz}
