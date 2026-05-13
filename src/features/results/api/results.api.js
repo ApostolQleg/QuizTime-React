@@ -1,4 +1,4 @@
-import client from "@/shared/api/client.js";
+import client from "@/shared/api/apiClient.js";
 
 export function getResults(skip = 0, limit = 36, search = "", sort = "newest") {
 	const params = new URLSearchParams({
