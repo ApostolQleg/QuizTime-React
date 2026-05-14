@@ -1,6 +1,7 @@
 import client from "@/shared/api/apiClient.js";
+import { LogLevel, withLogger } from "@/shared/libs/logger.js";
 
-export function getQuizList(skip = 0, limit = 36, search = "", sort = "newest", authorId = "") {
+const rawGetQuizList = (skip = 0, limit = 36, search = "", sort = "newest", authorId = "") => {
 	return client.get("/quizzes", {
 		params: {
 			skip,
@@ -10,9 +11,21 @@ export function getQuizList(skip = 0, limit = 36, search = "", sort = "newest", 
 			authorId: authorId || undefined,
 		},
 	});
-}
+};
 
-export const createQuiz = (data) => client.post("/quizzes", data);
+const rawCreateQuiz = (data) => client.post("/quizzes", data);
+
+const rawUpdateQuiz = async (id, data) => {
+	const response = await client.put(`/quizzes/${id}`, data);
+	invalidateQuizCache(id);
+	return response;
+};
+
+const rawDeleteQuiz = async (id) => {
+	const response = await client.delete(`/quizzes/${id}`);
+	invalidateQuizCache(id);
+	return response;
+};
 
 const quizCache = new Map();
 
@@ -25,7 +38,7 @@ export const invalidateQuizCache = (id) => {
 
 const rawGetQuizById = (id) => client.get(`/quizzes/${id}`);
 
-export const getQuizById = new Proxy(rawGetQuizById, {
+const proxiedGetQuizById = new Proxy(rawGetQuizById, {
 	apply: async (target, thisArg, argList) => {
 		const id = argList[0];
 
@@ -42,14 +55,27 @@ export const getQuizById = new Proxy(rawGetQuizById, {
 	},
 });
 
-export const updateQuiz = async (id, data) => {
-	const response = await client.put(`/quizzes/${id}`, data);
-	invalidateQuizCache(id);
-	return response;
-};
+export const getQuizList = withLogger(rawGetQuizList, {
+	level: LogLevel.INFO,
+	actionName: "getQuizList",
+});
 
-export const deleteQuiz = async (id) => {
-	const response = await client.delete(`/quizzes/${id}`);
-	invalidateQuizCache(id);
-	return response;
-};
+export const createQuiz = withLogger(rawCreateQuiz, {
+	level: LogLevel.DEBUG,
+	actionName: "createQuiz",
+});
+
+export const getQuizById = withLogger(proxiedGetQuizById, {
+	level: LogLevel.INFO,
+	actionName: "getQuizById",
+});
+
+export const updateQuiz = withLogger(rawUpdateQuiz, {
+	level: LogLevel.INFO,
+	actionName: "updateQuiz",
+});
+
+export const deleteQuiz = withLogger(rawDeleteQuiz, {
+	level: LogLevel.ERROR,
+	actionName: "deleteQuiz",
+});
