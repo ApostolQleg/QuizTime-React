@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
+import { getQuizList, invalidateQuizCache } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import {
 	useQuizzesListActions,
@@ -52,7 +52,7 @@ export default function MyQuizzes() {
 					debouncedQuery === "",
 				);
 
-				const data = await getQuizzes(skip, limit, debouncedQuery, sortOption, user._id);
+				const data = await getQuizList(skip, limit, debouncedQuery, sortOption, user._id);
 				const fetchedQuizzes = data.quizzes;
 
 				if (pageToLoad === 1) {
@@ -133,6 +133,7 @@ export default function MyQuizzes() {
 					if (selectedQuiz?._id === updatedQuiz._id) {
 						setSelectedQuiz(updatedQuiz);
 					}
+					invalidateQuizCache(updatedQuiz._id);
 				}
 			},
 			[items, setItems, selectedQuiz, user?._id],
@@ -147,6 +148,7 @@ export default function MyQuizzes() {
 				if (selectedQuiz?._id === deletedQuizId) {
 					setSelectedQuiz(null);
 				}
+				invalidateQuizCache(deletedQuizId);
 			},
 			[removeItem, selectedQuiz],
 		),

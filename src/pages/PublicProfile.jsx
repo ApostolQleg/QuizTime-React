@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserProfile } from "@/features/profile/api/user.api.js";
-import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
+import { getQuizList, invalidateQuizCache } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import {
 	useQuizzesListActions,
@@ -59,7 +59,7 @@ export default function PublicProfile() {
 			try {
 				const { skip, limit } = getPaginationRange(pageToLoad, ITEMS_PER_PAGE);
 
-				const data = await getQuizzes(skip, limit, "", "newest", userId);
+				const data = await getQuizList(skip, limit, "", "newest", userId);
 				const fetchedQuizzes = data.quizzes;
 
 				if (pageToLoad === 1) {
@@ -117,6 +117,7 @@ export default function PublicProfile() {
 					if (selectedQuiz?._id === updatedQuiz._id) {
 						setSelectedQuiz(updatedQuiz);
 					}
+					invalidateQuizCache(updatedQuiz._id);
 				}
 			},
 			[items, setItems, selectedQuiz, userId],
@@ -131,6 +132,7 @@ export default function PublicProfile() {
 				if (selectedQuiz?._id === deletedQuizId) {
 					setSelectedQuiz(null);
 				}
+				invalidateQuizCache(deletedQuizId);
 			},
 			[removeItemLocally, selectedQuiz],
 		),

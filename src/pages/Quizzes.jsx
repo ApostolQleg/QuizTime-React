@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthUserState } from "@/features/auth/hooks/useAuth.js";
-import { getQuizzes } from "@/features/quizzes/api/quizzes.api.js";
+import { getQuizList, invalidateQuizCache } from "@/features/quizzes/api/quizzes.api.js";
 import ModalDescription from "@/features/quizzes/components/modals/ModalDescription.jsx";
 import {
 	useQuizzesListActions,
@@ -42,7 +42,7 @@ export default function Quizzes() {
 					!!user && debouncedQuery === "",
 				);
 
-				const data = await getQuizzes(skip, limit, debouncedQuery, sortOption);
+				const data = await getQuizList(skip, limit, debouncedQuery, sortOption);
 				const fetchedQuizzes = data.quizzes;
 
 				if (pageToLoad === 1) {
@@ -106,6 +106,7 @@ export default function Quizzes() {
 				if (selectedQuiz?._id === updatedQuiz._id) {
 					setSelectedQuiz(updatedQuiz);
 				}
+				invalidateQuizCache(updatedQuiz._id);
 			},
 			[items, setItems, selectedQuiz],
 		),
@@ -119,6 +120,7 @@ export default function Quizzes() {
 				if (selectedQuiz?._id === deletedQuizId) {
 					setSelectedQuiz(null);
 				}
+				invalidateQuizCache(deletedQuizId);
 			},
 			[removeItem, selectedQuiz],
 		),
