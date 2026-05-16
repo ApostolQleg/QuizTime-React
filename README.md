@@ -138,18 +138,19 @@ src/
 │   └── NotFound.jsx           # 404 page
 ├── shared/                     # Cross-feature utilities
 │   ├── api/
-│   │   └── client.js          # Fetch-based API client with interceptors
+│   │   ├── apiClient.js       # Axios-based API client with interceptors
+│   │   └── sseClient.js       # Server-Sent Events client
 │   ├── assets/                # Icons, images
 │   ├── config/
 │   │   └── config.js          # Global constants
 │   ├── hooks/
 │   │   ├── useAutoReload.js   # Periodic refresh hook
 │   │   ├── useDebounce.js     # Debounce hook
-│   │   └── useInfiniteList.js # Infinite scroll hook
+│   │   └── useSSE.js          # Server-Sent Events hook
 │   ├── libs/
 │   │   ├── formatDateTime.js  # Date formatting
 │   │   ├── jwt.js             # JWT parsing
-│   │   ├── memoizer.js        # Caching utility
+│   │   ├── logger.js          # Logging utility
 │   │   ├── pagination.js      # Pagination logic
 │   │   └── queue.js           # Task queue
 │   └── ui/                     # Reusable UI components
@@ -326,9 +327,9 @@ bun run test:watch
 
 ## API Integration
 
-**Client Configuration:** [src/shared/api/client.js](src/shared/api/client.js)
+**Client Configuration:** [src/shared/api/apiClient.js](src/shared/api/apiClient.js)
 
-Fetch-based API client with interceptors:
+Axios-based API client with interceptors:
 
 - Automatic JWT token in `Authorization` header
 - Request/response error handling
