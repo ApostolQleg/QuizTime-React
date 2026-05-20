@@ -106,7 +106,6 @@ export default function Quiz() {
 			quizId: currentQuizId,
 			answers,
 			summary,
-			createdAt: Date.now(),
 		};
 
 		if (user) {
